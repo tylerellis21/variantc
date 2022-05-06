@@ -1,0 +1,99 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Variant C",
+	
+	"patterns": [
+		{
+			"include": "#import"
+		},
+		{
+			"include": "#function"
+		},
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#types"
+		},
+		{
+			"include": "#declarations"
+		}
+	],
+	
+	"repository": {
+
+		"declarations": {
+			"patterns": [
+				{
+					"name": "storage.type.vc",
+					"match": "\\b(allocator|attribute|align|interface|package|static|struct|union|volatile)\\b"
+				}
+			]
+		},
+		
+		"statements": {
+			"patterns": [
+				{
+					"name": "storage.type.vc",
+					"match": "\\b(allocator|attribute|align|interface|package|static|struct|union|volatile)\\b"
+				}
+			]
+		},
+		
+		"expressions": {
+		
+		},
+
+		"import": {
+			"patterns": [
+				{
+					"name": "keyword.import.vc",
+					"match": "\\b(import)\\b"
+				}
+			]
+		},
+
+		"function": {
+			"patterns": [
+				{
+					"name": "keyword.function.vc",
+					"match": "\\b(def)\\b"
+				}
+			]
+		},
+
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.vc",
+					"match": "\\b(if|else|while|for|return)\\b"
+				}
+			]
+		},
+
+		"types": {
+			"patterns": [
+				{
+					"name": "keyword.types.vc",
+					"match": "\\b(u8|utf8)\\b"
+				}
+			]
+		},
+
+		"strings": {
+			"name": "string.quoted.double.vc",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.vc",
+					"match": "\\\\."
+				}
+			]
+		}
+	},
+	"scopeName": "source.vc"
+}

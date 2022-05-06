@@ -1,0 +1,4 @@
+#ifndef VC_STMT_H_INCLUDE
+#define VC_STMT_H_INCLUDE
+
+#endif // VC_STMT_H_INCLUDE

@@ -1,0 +1,4 @@
+#ifndef VC_TYPE_H_INCLUDE
+#define VC_TYPE_H_INCLUDE
+
+#endif // VC_TYPE_H_INCLUDE

@@ -1,0 +1,25 @@
+{
+    "name": "vclang",
+    "displayName": "Variant C",
+    "description": "Variant C Language Support",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.47.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "vc",
+            "aliases": ["Variant C", "vc"],
+            "extensions": [".vc"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "vc",
+            "scopeName": "source.vc",
+            "path": "./syntaxes/vc.tmLanguage.json"
+        }]
+    }
+}

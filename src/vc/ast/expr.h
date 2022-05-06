@@ -1,0 +1,4 @@
+#ifndef VC_EXPR_H_INCLUDE
+#define VC_EXPR_H_INCLUDE
+
+#endif // VC_EXPR_H_INCLUDE
