@@ -3,6 +3,12 @@
 
 namespace vc {
 
+struct opcode_mov {
+    int type;
+    int src;
+    int dest;
+};
+
 enum class OpcodeTypeX64 {
 
 };
@@ -14,10 +20,7 @@ struct OpcodeX64 {
     };
 };
 
-struct opcode_mov {
 
-};
-
-}
+} // namespace vc
 
 #endif // VC_X64_H_INCLUDE

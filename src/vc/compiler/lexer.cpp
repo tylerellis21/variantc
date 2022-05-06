@@ -1,4 +1,4 @@
-#include <vc/lexer.h>
+#include <vc/compiler/lexer.h>
 
 namespace vc {
 

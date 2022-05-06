@@ -3,6 +3,6 @@
 
 namespace vc {
 
-}
+} // namespace vc
 
 #endif // VC_X86_H_INCLUDE 

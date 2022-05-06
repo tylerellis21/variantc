@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
 
-#include <vc/lexer.h>
+#include <vc/compiler/lexer.h>
 #include <vc/basic/filebuffer.h>
 
 // Let's work backwards. Let's build the ast structure then attempt to build the ir code generation before we 

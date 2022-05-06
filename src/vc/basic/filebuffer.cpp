@@ -13,7 +13,7 @@ bool FileBuffer::load(std::string filePath) {
     // seek to end, to get the length
     input.seekg(0, std::ios::end);
 
-    std::streampos fsize = input.tellg() - fsize;
+    std::streampos fsize = input.tellg();
 
     // reset so we can read from the start of the file.
     input.seekg(0, std::ios::beg);

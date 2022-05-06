@@ -7,12 +7,26 @@ set (SRC
     ${SRC_DIR}/asm/x64.h
     ${SRC_DIR}/asm/x86.h
 
+    ${SRC_DIR}/assembler/assembler.h
+    ${SRC_DIR}/assembler/assembler.cpp
+
+    ${SRC_DIR}/ast/decl.h
+    ${SRC_DIR}/ast/declgroup.h
+    ${SRC_DIR}/ast/expr.h
+    ${SRC_DIR}/ast/stmt.h
+    ${SRC_DIR}/ast/type.h
+
+    ${SRC_DIR}/basic/filebuffer.h
     ${SRC_DIR}/basic/filebuffer.cpp
     ${SRC_DIR}/basic/sourcelocation.h
     ${SRC_DIR}/basic/token.h
 
     ${SRC_DIR}/compiler/lexer.h
     ${SRC_DIR}/compiler/lexer.cpp
+
+    ${SRC_DIR}/ir/ir_gen.h
+    ${SRC_DIR}/ir/ir_opcode.h
+    ${SRC_DIR}/ir/ir_optimizer.h
 )
 
 include_directories (${VC_INCLUDE})

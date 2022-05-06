@@ -23,6 +23,6 @@ struct Lexer {
     Token nextToken();
 };
 
-}
+} // namespace vc
 
 #endif // VC_LEXER_H_INCLUDE
