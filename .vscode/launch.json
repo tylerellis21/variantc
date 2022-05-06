@@ -5,13 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch",
+            "name": "(gdb) Launch Debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/src/vcc/vcc",
+            "program": "${workspaceFolder}/build/debug/bin/vcc",
             "args": ["${workspaceFolder}/src/tests/basic.vc"],
             "stopAtEntry": false,
-            "cwd": "${fileDirname}",
+            "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
@@ -26,7 +26,8 @@
                     "text": "-gdb-set disassembly-flavor intel",
                     "ignoreFailures": true
                 }
-            ]
+            ],
+            "preLaunchTask": "make-debug"
         }
 
     ]
