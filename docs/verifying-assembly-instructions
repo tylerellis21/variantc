@@ -1,0 +1,5 @@
+$ cat > foo.asm
+db 0x48, 0x83, 0xC4, 0x38
+$ nasm foo.asm     # create a flat binary with those bytes, not an object file
+$ ndisasm -b64 foo
+00000000  4883C438          add rsp,byte +0x38

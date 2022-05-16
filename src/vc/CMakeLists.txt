@@ -4,6 +4,8 @@ set (LIB_NAME "vc")
 set (SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 set (SRC
+    ${SRC_DIR}/types.h
+
     ${SRC_DIR}/asm/x64.h
     ${SRC_DIR}/asm/x86.h
 
@@ -25,6 +27,8 @@ set (SRC
     ${SRC_DIR}/compiler/lexer.cpp
 
     ${SRC_DIR}/ir/ir_gen.h
+    ${SRC_DIR}/ir/ir_gen.cpp
+    
     ${SRC_DIR}/ir/ir_opcode.h
     ${SRC_DIR}/ir/ir_optimizer.h
 )

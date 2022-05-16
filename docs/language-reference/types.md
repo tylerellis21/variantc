@@ -1,5 +1,9 @@
 # Types
 
+- General types
+  - void
+  - bool
+
 ---
 
 - Unsigned Types
@@ -34,6 +38,7 @@
   - r128
   - r256
   - r512
+  - r1024
 
 ---
 
@@ -43,6 +48,8 @@
 ---
 
 - String Types
+  - char
+  - rune
   - cstr
   - utf8
   - utf16

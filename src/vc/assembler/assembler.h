@@ -7,7 +7,7 @@
 namespace vc {
 
 struct Assembler {
-
+    void assemble();
 };
 
 } // namespace vc
