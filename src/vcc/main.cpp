@@ -12,12 +12,15 @@
 #include <vc/ast/expr.h>
 #include <vc/ast/stmt.h>
 #include <vc/ast/type.h>
+#include <vc/ast/name.h>
 
 #include <vc/ir/ir_gen.h>
 #include <vc/ir/ir_opcode.h>
 #include <vc/ir/ir_optimizer.h>
 
 using namespace vc;
+
+#include <iostream>
 
 int main(int argc, char** args) {
 
@@ -37,6 +40,9 @@ int main(int argc, char** args) {
         moduleGroup
     };
 
-    
+    Name* name = new Name();
+    name->identifiers.push_back(vc::Token{TokenKind::Null, none, "test world"});
+
+    std::cout << (name->identifiers.front().string) << std::endl;
     return 0;
 }

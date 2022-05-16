@@ -124,7 +124,21 @@ struct ImportDecl : Decl {
 };
 
 struct InterfaceDecl : Decl {
+    SourceRange sourceRange;
+    Name* name;
+    DeclGroup* declGroup;
 
+    InterfaceDecl(
+        Decl* parent, 
+        SourceRange sourceRange,
+        Name* name,
+        DeclGroup* declGroup
+    ) :
+        Decl(DeclKind::InterfaceDecl, parent, sourceRange.begin),
+        sourceRange(sourceRange),
+        name(name),
+        declGroup(declGroup)
+    { }
 };
 
 struct ModuleDecl : Decl {
@@ -202,9 +216,6 @@ struct TypedefDecl : Decl {
     { }
 };
 
-/*
-VarDecl,
-*/
 struct UsingDecl : Decl {
     Name* name;
 
