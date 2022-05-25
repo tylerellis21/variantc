@@ -8,11 +8,15 @@ namespace vc {
 struct SourceLocation {
     u64 line;
     u64 column;
+    
+    const static SourceLocation None;
 };
 
 struct SourceRange {
     SourceLocation begin;
     SourceLocation end;
+
+    const static SourceRange None;
 };
 
 }

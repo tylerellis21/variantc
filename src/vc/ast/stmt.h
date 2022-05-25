@@ -1,6 +1,8 @@
 #ifndef VC_STMT_H_INCLUDE
 #define VC_STMT_H_INCLUDE
 
+#include <vc/basic/sourcelocation.h>
+
 #include <vector>
 
 namespace vc {
@@ -96,19 +98,131 @@ struct DefaultStmt : Stmt {
 };
 
 struct DeferStmt : Stmt { 
-e
+    Stmt* stmt;
+    
+    DeferStmt(Stmt* stmtParent, SourceLocation sourceLocation, Stmt* stmt) :
+        Stmt(StmtKind::DeferStmt, stmtParent, sourceLocation),
+        stmt(stmt)
+    { }
 };
 
-struct DoStmt : Stmt { };
-struct ExprStmt : Stmt { };
-struct ForStmt : Stmt { };
-struct GotoStmt : Stmt { };
-struct IfStmt : Stmt { };
-struct LabelStmt : Stmt { };
-struct ReturnStmt : Stmt { };
-struct SwitchStmt : Stmt { };
-struct UseStmt : Stmt { };
-struct WhileStmt : Stmt { };
+struct WhileStmt;
+
+struct DoStmt : Stmt { 
+    Stmt* body;
+    WhileStmt* whileStmt;
+
+    DoStmt(Stmt* stmtParent, SourceLocation sourceLocation, Stmt* body, WhileStmt* whileStmt) :
+        Stmt(StmtKind::WhileStmt, stmtParent, sourceLocation),
+        body(body),
+        whileStmt(whileStmt)
+    { }
+};
+
+struct ForStmt : Stmt {
+    SourceRange sourceRange;
+    Stmt* init;
+    Expr* condition;
+    Expr* increment;
+    Stmt* body;
+
+    ForStmt(
+        Stmt* stmtParent, 
+        SourceRange sourceRange, 
+        Stmt* init, 
+        Expr* condition,
+        Expr* increment,
+        Stmt* body
+    ) :
+        Stmt(StmtKind::ForStmt, stmtParent, sourceRange.begin),
+        sourceRange(sourceRange),
+        init(init),
+        condition(condition),
+        increment(increment),
+        body(body)
+    { }
+};
+
+struct GotoStmt : Stmt { 
+    Name* name;
+
+    GotoStmt(Stmt* stmtParent, SourceLocation sourceLocation, Name* name) :
+        Stmt(StmtKind::GotoStmt, stmtParent, sourceLocation),
+        name(name)
+    { }
+};
+
+struct IfStmt : Stmt { 
+    SourceRange sourceRange;
+    Expr* condition;
+    Stmt* body;
+    Stmt* elseStmt;
+    
+    IfStmt(
+        Stmt* stmtParent, 
+        SourceRange sourceRange,
+        Expr* condition,
+        Stmt* body,
+        Stmt* elseStmt
+    ) :
+        Stmt(StmtKind::IfStmt, stmtParent, sourceRange.begin),
+        sourceRange(sourceRange),
+        condition(condition),
+        body(body),
+        elseStmt(elseStmt)
+    { }
+};
+
+struct LabelStmt : Stmt { 
+    Name* name;
+
+    LabelStmt(Stmt* stmtParent, SourceLocation sourceLocation, Name* name) :
+        Stmt(StmtKind::LabelStmt, stmtParent, sourceLocation),
+        name(name)
+    { }
+};
+
+struct ReturnStmt : Stmt { 
+    Expr* expr;
+
+    ReturnStmt(Stmt* stmtParent, SourceLocation sourceLocation, Expr* expr) :
+        Stmt(StmtKind::ReturnStmt, stmtParent, sourceLocation),
+        expr(expr)
+    { }
+};
+
+struct SwitchStmt : Stmt { 
+    SourceRange sourceRange;
+    Expr* expr;
+    Stmt* stmt;
+
+    SwitchStmt(Stmt* stmtParent, SourceRange sourceRange, Expr* expr, Stmt* stmt) :
+        Stmt(StmtKind::SwitchStmt, stmtParent, sourceRange.begin),
+        expr(expr),
+        stmt(stmt)
+    { }
+};
+
+struct UseStmt : Stmt { 
+    Expr* expr;
+
+    UseStmt(Stmt* stmtParent, SourceLocation sourceLocation, Expr* expr) :
+        Stmt(StmtKind::UseStmt, stmtParent, sourceLocation),
+        expr(expr)
+    { }
+};
+
+struct WhileStmt : Stmt { 
+    SourceRange sourceRange;
+    Expr* condition;
+    Stmt* body;
+
+    WhileStmt(Stmt* stmtParent, SourceRange sourceRange, Expr* condition, Stmt* body) :
+        Stmt(StmtKind::WhileStmt, stmtParent, sourceLocation),
+        condition(condition),
+        body(body)
+    { }
+};
 
 } // namespace vc
 

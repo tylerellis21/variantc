@@ -21,6 +21,7 @@ set (SRC
     ${SRC_DIR}/basic/filebuffer.h
     ${SRC_DIR}/basic/filebuffer.cpp
     ${SRC_DIR}/basic/sourcelocation.h
+    ${SRC_DIR}/basic/sourcelocation.cpp
     ${SRC_DIR}/basic/token.h
 
     ${SRC_DIR}/compiler/lexer.h
