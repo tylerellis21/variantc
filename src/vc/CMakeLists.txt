@@ -26,6 +26,8 @@ set (SRC
 
     ${SRC_DIR}/compiler/lexer.h
     ${SRC_DIR}/compiler/lexer.cpp
+    ${SRC_DIR}/compiler/parser.h
+    ${SRC_DIR}/compiler/parser.cpp
 
     ${SRC_DIR}/ir/ir_gen.h
     ${SRC_DIR}/ir/ir_gen.cpp

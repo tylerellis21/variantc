@@ -2,6 +2,8 @@
 #define VC_EXPR_H_INCLUDE
 
 #include <vc/ast/stmt.h>
+#include <vc/ast/type.h>
+
 #include <vc/basic/token.h>
 
 namespace vc {
@@ -181,33 +183,86 @@ struct BooleanLiteralExpr : Expr {
     { }
 };
 
+// either a r'' for rune
+// or standard ascii char 'a'
 struct CharLiteralExpr : Expr { 
+    
+    union {
+        char char_value;
+        rune rune_value;
+    };
 
+    BuiltinKind builtinKind;
+
+    CharLiteralExpr(Stmt* stmtParent, SourceLocation sourceLocation, char char_value) :
+        Expr(ExprKind::CharLiteralExpr, stmtParent, sourceLocation),
+        builtinKind(BuiltinKind::Char),
+        char_value(char_value)
+    { }
+
+    CharLiteralExpr(Stmt* stmtParent, SourceLocation sourceLocation, rune rune_value) :
+        Expr(ExprKind::CharLiteralExpr, stmtParent, sourceLocation),
+        builtinKind(BuiltinKind::Rune),
+        rune_value(rune_value)
+    { }
 };
 
-// u8
-// u16
-// u32
-//....
-//
-// i8
-// i16
-// i32
-// i64
-// .....
 struct IntegerLiteralExpr : Expr { 
+    union {
+        u8 u8_value;
+        u16 u16_value;
+        u32 u32_value;
+        u64 u64_value;
+        u64 u128_value[2];
+        u64 u256_value[4];
+        u64 u512_value[8];
+        u64 u1024_value[16];
 
+        i8 i8_value;
+        i16 i16_value;
+        i32 i32_value;
+        i64 i64_value;
+        i64 i128_value[2];
+        i64 i256_value[4];
+        i64 i512_value[8];
+        i64 i1024_value[16];
+    };
+
+    BuiltinKind builtinKind;
+
+    IntegerLiteralExpr(Stmt* stmtParent, SourceLocation sourceLocation, BuiltinKind builtinKind) :
+        Expr(ExprKind::IntegerLiteralExpr, stmtParent, sourceLocation),
+        builtinKind(builtinKind)
+    { }
 };
+
+/*
+    R8,
+    R16,
+    R32,
+    R64,
+    R128,
+    R256,
+    R512,
+    R1024,
+    Decimal
+*/
 
 // real32, 
 // real64
 struct RealLiteralExpr : Expr { 
-
+    BuiltinKind builtinKind;
 };
 
-// how to handle ascii/utf8, utf16 and utf32 strings?
+// how to handle ascii/utf8, utf16 and utf32 strings? utf32("test")
+/*
+    CStr,
+    Utf8,
+    Utf16,
+    Utf32,
+*/
 struct StringLiteralExpr : Expr { 
-
+    BuiltinKind builtinKind;
 };
 
 } // namespace vc

@@ -21,6 +21,8 @@ struct Name {
     { }
 };
 
+void namePrint(Name* name);
+
 }
 
 #endif // VC_NAME_H_INCLUDE
