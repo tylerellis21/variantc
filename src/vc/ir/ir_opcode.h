@@ -153,9 +153,12 @@ struct ir_store {
 
 // xchg - exchange register/memory with register
 
-// math
-
 // lea - load effective address
+struct ir_lea {
+    u64 size;
+    u64 index;
+    u64 offset;
+};
 
 // cmp - compare two operands
 
@@ -188,9 +191,10 @@ struct ir_store {
 // neg - two's complement negation
 
 // rol - rotate left
+// <<<
 
 // ror - rotate right
-// <<<
+// >>>
 
 // rcl - rotate carry left
 // @<<
@@ -216,13 +220,7 @@ struct ir_store {
 // pop - pop values from the stack
 
 // how do we want to use mmx instructions?
-// should we leave that to the optimizer? or allow their use in the IR?
-
-struct ir_lea {
-    u64 src;
-    u64 dest;
-    u64 scalar;
-};
+// should we leave that to the optimizer? or allow their use in the IR
 
 struct ir_opcode {
     ir_opcode_id opcodeId;

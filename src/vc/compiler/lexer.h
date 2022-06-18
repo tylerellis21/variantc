@@ -2,25 +2,40 @@
 #define VC_LEXER_H_INCLUDE
 
 #include <vc/basic/token.h>
+#include <vc/basic/sourcelocation.h>
+#include <vc/basic/filebuffer.h>
+#include <sstream>
+#include <map>
 
 namespace vc {
+
+typedef std::map<std::string, vc::TokenKind> TokenMap;
 
 struct FileBuffer;
 
 struct Lexer {
     int offset;
     char prev, current, next;
+    SourceLocation sourceLocation;
 
-    FileBuffer* fb;
+    FileBuffer fileBuffer;
 
-    bool open(FileBuffer* fileBuffer);
+    // used to build token strings.
+    std::stringstream sstream;
+
+    TokenMap tokenMap;
+
+    Lexer(TokenMap tokenMap) :
+        tokenMap(tokenMap)
+    { }
+
+    bool open(std::string filePath);
 
     bool isMoreChars();
 
-    char readChar();
-    char peekChar();
+    void nextChar();
 
-    Token nextToken();
+    Token lexToken();
 };
 
 } // namespace vc

@@ -20,29 +20,33 @@
 
 using namespace vc;
 
+#include <string>
 #include <iostream>
+#include <map>
+
+static TokenMap tokenMap = {
+    { "test", TokenKind::Null }
+};
 
 int main(int argc, char** args) {
 
-    char* input = args[1];
-
-    FileBuffer fb;
-    if (fb.load(input) == false) {
+    if (argc <= 1) {
+        printf("not enough arguments specified");
         return -1;
     }
 
-    SourceLocation none {u64(-1), u64(-1)};
-    DeclGroup* moduleGroup = new DeclGroup(0);
+    char* input = args[1];
 
-    ModuleDecl* decl = new ModuleDecl {
-        0,
-        none,
-        moduleGroup
-    };
+    Lexer lexer(tokenMap);
+    if (!lexer.open(input)) {
+        return -1;
+    }
 
-    Name* name = new Name();
-    name->identifiers.push_back(vc::Token{TokenKind::Null, none, "test world"});
+    while (lexer.isMoreChars()) {
+        char c = lexer.current;
+        printf("%c", c);
+        lexer.nextChar();
+    }
 
-    std::cout << (name->identifiers.front().string) << std::endl;
     return 0;
 }
