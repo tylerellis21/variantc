@@ -8,7 +8,13 @@
 namespace vc {
 
 enum TokenKind {
-    Null = 0
+    Null = 0,
+
+    BooleanLiteral,
+    CharacterLiteral,
+    IntegerLiteral,
+    RealLiteral,
+    StringLiteral
 };
 
 struct Token {

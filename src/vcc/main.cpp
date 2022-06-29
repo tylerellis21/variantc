@@ -22,11 +22,6 @@ using namespace vc;
 
 #include <string>
 #include <iostream>
-#include <map>
-
-static TokenMap tokenMap = {
-    { "test", TokenKind::Null }
-};
 
 int main(int argc, char** args) {
 
@@ -37,16 +32,20 @@ int main(int argc, char** args) {
 
     char* input = args[1];
 
-    Lexer lexer(tokenMap);
+    Lexer lexer;
     if (!lexer.open(input)) {
         return -1;
     }
 
     while (lexer.isMoreChars()) {
         char c = lexer.current;
-        printf("%c", c);
-        lexer.nextChar();
+
+        Token token;
+        lexer.nextToken(&token);
+
+        printf("%s\n", token.string.c_str());
     }
+    printf("\n");
 
     return 0;
 }
