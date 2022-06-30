@@ -38,9 +38,6 @@ null
 operator
 package
 params
-private
-protected
-public
 readonly
 return
 sizeof
@@ -55,10 +52,8 @@ try
 typeof
 union
 use
-use
 using
 var
-virtual
 void
 volatile
 while

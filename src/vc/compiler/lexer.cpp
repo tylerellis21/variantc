@@ -156,7 +156,31 @@ void Lexer::lexNumeric(Token* token) {
 }
 
 void Lexer::lexWord(Token* token) {
+    TokenKind tokenKind = TokenKind::Identifier;
+    bool canHaveNumber = false;
 
+    while (isMoreChars()) {
+        if (std::isalnum(current) || current == '_') {
+            canHaveNumber =  true;
+            appendConsume();
+        }
+        else if (std::isdigit(current) && canHaveNumber) {
+            appendConsume();
+        }
+        else {
+            break;
+        }
+    }
+
+    std::string str = sstream.str();
+    
+    vc::TokenMap::iterator iterator = tokenMap.find(str);
+
+    if (iterator != tokenMap.end()) {
+        tokenKind = iterator->second;
+    }
+
+    constructToken(token, tokenKind);
 }
 
 void Lexer::lexOperator(Token* token) {

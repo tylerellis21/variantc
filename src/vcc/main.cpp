@@ -43,7 +43,8 @@ int main(int argc, char** args) {
         Token token;
         lexer.nextToken(&token);
 
-        printf("%s\n", token.string.c_str());
+
+        printf("%s {line: %i, col: %i} tokenKind: %i\n", token.string.c_str(), token.loc.line, token.loc.column, token.kind);
     }
     printf("\n");
 
