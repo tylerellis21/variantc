@@ -2,6 +2,9 @@
 
 namespace vc {
 
+// TOKEN_KIND()
+// { "string", TokenKind::Kind },
+
 const TokenMap tokenMap = {
     { "null", TokenKind::Null },
     { "align", TokenKind::Align },
@@ -12,7 +15,6 @@ const TokenMap tokenMap = {
     { "attribute", TokenKind::Attribute },
     { "await", TokenKind::Await },
     { "base", TokenKind::Base },
-    { "catch", TokenKind::Catch },
     { "class", TokenKind::Class },
     { "const", TokenKind::Const },
     { "continue", TokenKind::Continue },
@@ -47,14 +49,11 @@ const TokenMap tokenMap = {
     { "struct", TokenKind::Struct },
     { "switch", TokenKind::Switch },
     { "this", TokenKind::This },
-    { "throw", TokenKind::Throw },
     { "true", TokenKind::True },
-    { "try", TokenKind::Try },
     { "typeof", TokenKind::Typeof },
     { "union", TokenKind::Union },
     { "use", TokenKind::Use },
     { "using", TokenKind::Using },
-    { "var", TokenKind::Var },
     { "void", TokenKind::Void },
     { "volatile", TokenKind::Volatile },
     { "while", TokenKind::While },

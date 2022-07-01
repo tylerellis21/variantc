@@ -172,19 +172,24 @@ void Lexer::lexWord(Token* token) {
         }
     }
 
-    std::string str = sstream.str();
-    
-    vc::TokenMap::iterator iterator = tokenMap.find(str);
+    // Lookup the token string using the token map
+    // If we have an entry, use the found token kind.
+    {
+        std::string str = sstream.str();
+        
+        vc::TokenMap::iterator iterator = tokenMap.find(str);
 
-    if (iterator != tokenMap.end()) {
-        tokenKind = iterator->second;
+        if (iterator != tokenMap.end()) {
+            tokenKind = iterator->second;
+        }
     }
 
     constructToken(token, tokenKind);
 }
 
 void Lexer::lexOperator(Token* token) {
-
+    TokenKind operatorKind = TokenKind::Null;
+    
 }
 
 void Lexer::lexEscapeSequence(Token* token) {

@@ -23,6 +23,9 @@ set (SRC
     ${SRC_DIR}/basic/sourcelocation.h
     ${SRC_DIR}/basic/sourcelocation.cpp
     ${SRC_DIR}/basic/token.h
+    ${SRC_DIR}/basic/token.cpp
+    ${SRC_DIR}/basic/tokenkind.h
+    ${SRC_DIR}/basic/tokenkind.cpp
     ${SRC_DIR}/basic/tokenmap.h
     ${SRC_DIR}/basic/tokenmap.cpp
 
@@ -30,6 +33,8 @@ set (SRC
     ${SRC_DIR}/compiler/lexer.cpp
     ${SRC_DIR}/compiler/parser.h
     ${SRC_DIR}/compiler/parser.cpp
+
+    ${SRC_DIR}/defs/tokenkinds.inl
 
     ${SRC_DIR}/ir/ir_gen.h
     ${SRC_DIR}/ir/ir_gen.cpp
