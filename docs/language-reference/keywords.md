@@ -8,7 +8,6 @@ atomic
 attribute
 await
 base
-catch
 class
 const
 continue
@@ -46,14 +45,11 @@ struct
 switch
 then
 this
-throw
 true
-try
 typeof
 union
 use
 using
-var
 void
 volatile
 while
