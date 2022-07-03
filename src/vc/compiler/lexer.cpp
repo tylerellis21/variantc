@@ -189,11 +189,198 @@ void Lexer::lexWord(Token* token) {
 
 void Lexer::lexOperator(Token* token) {
     TokenKind operatorKind = TokenKind::Null;
-    
+
+    #define SET_BREAK(tokenKind) { operatorKind = tokenKind; break; }
+    #define SET_APP_BREAK(tokenKind) { operatorKind = tokenKind; appendConsume(); break; }
+
+    switch (current) {
+
+    case '[': SET_APP_BREAK(TokenKind::LSquare);
+    case ']': SET_APP_BREAK(TokenKind::RSquare);
+    case '(': SET_APP_BREAK(TokenKind::LParen);
+    case ')': SET_APP_BREAK(TokenKind::RParen);
+    case '{': SET_APP_BREAK(TokenKind::LBrace);
+    case '}': SET_APP_BREAK(TokenKind::RBrace);
+    case '?': SET_APP_BREAK(TokenKind::Question);
+    case ';': SET_APP_BREAK(TokenKind::Semi);
+    case ',': SET_APP_BREAK(TokenKind::Comma);
+    case '@': SET_APP_BREAK(TokenKind::At);
+
+    case '&':
+        appendConsume();
+        switch (current) {
+        case '&': SET_APP_BREAK(TokenKind::AmpAmp);
+        case '=': SET_APP_BREAK(TokenKind::AmpEqual);
+        default: SET_BREAK(TokenKind::Amp);
+        }
+        break;
+
+    case '~':
+        appendConsume();
+        switch (current) {
+        case '=': SET_APP_BREAK(TokenKind::TildeEqual);
+        default: SET_BREAK(TokenKind::Tilde);
+        }
+        break;
+
+    case '*':
+        appendConsume();
+        switch (current) {
+        case '=': SET_APP_BREAK(TokenKind::StarEqual);
+        default: SET_BREAK(TokenKind::Star);
+        }
+        break;
+
+    case '+':
+        appendConsume();
+        switch (current) {
+        case '+': SET_APP_BREAK(TokenKind::PlusPlus);
+        case '=': SET_APP_BREAK(TokenKind::PlusEqual);
+        default: SET_BREAK(TokenKind::Plus);
+        }
+        break;
+
+    case '-':
+        appendConsume();
+        switch (current) {
+        case '-': SET_APP_BREAK(TokenKind::MinusMinus);
+        case '=': SET_APP_BREAK(TokenKind::MinusEqual);
+        case '>': {
+            appendConsume();
+            if (current == '*') {
+                SET_APP_BREAK(TokenKind::ArrowStar);
+            }
+            else
+                SET_BREAK(TokenKind::Arrow);
+        }
+        default: SET_BREAK(TokenKind::Minus);
+        }
+        break;
+
+    case '!':
+        appendConsume();
+        switch (current) {
+        case '=': SET_APP_BREAK(TokenKind::ExclaimEqual);
+        default: SET_BREAK(TokenKind::Exclaim);
+        }
+        break;
+
+    case '/':
+        appendConsume();
+        switch (current) {
+        case '=': SET_APP_BREAK(TokenKind::SlashEqual);
+        default: SET_BREAK(TokenKind::Slash);
+        }
+        break;
+
+    case '%':
+        appendConsume();
+        switch (current) {
+        case '=': SET_APP_BREAK(TokenKind::PercentEqual);
+        default: SET_BREAK(TokenKind::Percent);
+        }
+        break;
+
+    case '^':
+        appendConsume();
+        switch (current) {
+        case '=': SET_APP_BREAK(TokenKind::CaretEqual);
+        default: SET_BREAK(TokenKind::Caret);
+        }
+        break;
+
+    case '=':
+        appendConsume();
+        switch (current) {
+        case '=': SET_APP_BREAK(TokenKind::EqualEqual);
+        default: SET_BREAK(TokenKind::Equal);
+        }
+        break;
+
+    case '|':
+        appendConsume();
+        switch (current) {
+        case '|': SET_APP_BREAK(TokenKind::PipePipe);
+        case '=': SET_APP_BREAK(TokenKind::PipeEqual);
+        default: SET_BREAK(TokenKind::Pipe);
+        }
+        break;
+
+    case '#':
+        appendConsume();
+        switch (current) {
+        case '#': SET_APP_BREAK(TokenKind::HashHash);
+        case '@': SET_APP_BREAK(TokenKind::HashAt);
+        default: SET_BREAK(TokenKind::Hash);
+        }
+        break;
+
+    case ':':
+        appendConsume();
+        switch (current) {
+        case ':': SET_APP_BREAK(TokenKind::ColonColon);
+        default: SET_BREAK(TokenKind::Colon);
+        }
+        break;
+
+    case '<':
+        appendConsume();
+        switch (current) {
+        case '<': {
+            appendConsume();
+            if (current == '=') {
+                SET_APP_BREAK(TokenKind::LessLessEqual);
+            }
+            else
+                SET_BREAK(TokenKind::LessLess);
+        }
+        case '=': SET_APP_BREAK(TokenKind::LessEqual);
+        default: SET_BREAK(TokenKind::Less);
+        }
+
+    break;
+
+    case '>':
+        appendConsume();
+        switch (current) {
+        case '>': {
+            appendConsume();
+            if (current == '=') {
+                SET_APP_BREAK(TokenKind::GreaterGreaterEqual);
+            }
+            else
+                SET_BREAK(TokenKind::GreaterGreater);
+        }
+        case '=': SET_APP_BREAK(TokenKind::GreaterEqual);
+        default: SET_BREAK(TokenKind::Greater);
+        }
+
+    break;
+
+    case '.':
+        appendConsume();
+        switch (current) {
+        case '*': SET_APP_BREAK(TokenKind::PeriodStar);
+        case '.':
+            appendConsume();
+            if (current == '.') { SET_APP_BREAK(TokenKind::Ellipsis); }
+            else {
+                break;
+            }
+        default: SET_BREAK(TokenKind::Period);
+        }
+
+        break;
+
+    default:
+        break;
+    }
+
+    return constructToken(token, operatorKind);
 }
 
 void Lexer::lexEscapeSequence(Token* token) {
-
+sstream.put('a');
 }
 
 void Lexer::lexString(Token* token) {

@@ -1,9 +1,17 @@
 hello
 hello123
 _123a
-_a123
+//_a123
+/*
+def foo(i32 a, i32 b) i32 {
+    return a + b;
+}*/
 
-align
+
+align+(++)+=
+-=
+/=
+?:!=
 allocator
 as
 async

@@ -2,14 +2,17 @@
 
 using namespace vc;
 
-int main(int argc, char** args) {
-    Lexer lexer;
-    if (!lexer.open("src/tests/basic.vc")) {
-        return -1;
-    }
+#include "lexer/lexer_tests.cpp"
 
-    Token token;
-    lexer.nextToken(&token);
+/*
+TODO:
+    Add tests for all basic lexer functions
+*/
+
+int main(int argc, char** args) {
+    
+    
+    test1();
 
 
     //TODO: Run all tests.
