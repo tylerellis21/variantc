@@ -399,7 +399,7 @@ void Lexer::lexEscapeSequence(Token* token) {
         case 'v': sstream.putback('\v'); break;
         // Is this correct?
         case '"': sstream.putback('\"'); break;
-        case '\\': sstream.putback('\\"'); break;
+        case '\\': sstream.putback('\\'); break;
         case '\'': sstream.putback('\''); break;
         case '\?': sstream.putback('\?'); break;
     }
