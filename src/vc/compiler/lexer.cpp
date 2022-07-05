@@ -409,7 +409,7 @@ void Lexer::lexEscapeSequence(Token* token) {
 }
 
 void Lexer::lexString(Token* token) {
-    // consume the starting quote
+    // consume the starting double quote
     nextChar();
 
     while (isMoreChars()) {
@@ -424,14 +424,29 @@ void Lexer::lexString(Token* token) {
         }
     }
 
-    // consume the closing quote
+    // consume the closing double quote
     nextChar();
 
     constructToken(token, TokenKind::StringLiteral);
 }
 
 void Lexer::lexCharacter(Token* token) {
+    // consume the opening single quote
+    nextChar();
 
+    switch (current) {
+    case '\\':
+        lexEscapeSequence(token);
+        break;
+    default:
+        appendConsume();
+        break;
+    }
+
+    // consume the closing single quote
+    nextChar();
+
+    constructToken(token, TokenKind::CharacterLiteral);
 }
 
 void Lexer::lexSingleLineComment() {
@@ -440,11 +455,36 @@ void Lexer::lexSingleLineComment() {
     nextChar();
 
     while (isMoreChars()) {
+        if (current == '\n' || current == 0) {
+            nextChar();
+            break;
+        }
+        else {
+            nextChar();
+        }
     }
 }
 
 void Lexer::lexMultiLineComment() {
+    // consume the opening /*
+    nextChar();
+    nextChar();
 
+    while (isMoreChars()) {
+        if (current == '*' && next == '/') {
+            break;
+        }
+        else if (current == '/' && next == '*') {
+            lexMultiLineComment();
+        }
+        else {
+            nextChar();
+        }
+    }
+
+    // consume the closing */
+    nextChar();
+    nextChar();
 }
 
 } // namespace vc
