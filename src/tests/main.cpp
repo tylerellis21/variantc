@@ -9,6 +9,12 @@ TODO:
     Add tests for all basic lexer functions
 */
 
+class TestClassUnit {
+    bool testA();
+};
+
+bool testB();
+
 int main(int argc, char** args) {
     
     

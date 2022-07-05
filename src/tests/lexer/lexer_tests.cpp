@@ -1,11 +1,14 @@
 #include <vc/compiler/lexer.h>
 
+#define LEXER_OPEN(filePath) \
+    Lexer lexer; \
+    if (!lexer.open(filePath)) { \
+        return false; \
+    } \
+
 bool test1() {
 
-    Lexer lexer;
-    if (!lexer.open("src/tests/lexer/basic.vc")) {
-        return -1;
-    }
+    LEXER_OPEN("src/tests/lexer/basic.vc");
 
     Token token;
     lexer.nextToken(&token);

@@ -380,11 +380,54 @@ void Lexer::lexOperator(Token* token) {
 }
 
 void Lexer::lexEscapeSequence(Token* token) {
-sstream.put('a');
+    // consume the escaping slash '/'
+    nextChar();
+
+    switch (current) {
+        // alert (beep, bell)
+        case 'a': sstream.putback('\a'); break; 
+        // backspace
+        case 'b': sstream.putback('\b'); break;
+        // feedform
+        case 'f': sstream.putback('\f'); break;
+        // new line
+        case 'n': sstream.putback('\n'); break;
+        // carriage return
+        case 'r': sstream.putback('\r'); break;
+        // tab
+        case 't': sstream.putback('\t'); break;
+        case 'v': sstream.putback('\v'); break;
+        // Is this correct?
+        case '"': sstream.putback('\"'); break;
+        case '\\': sstream.putback('\\"'); break;
+        case '\'': sstream.putback('\''); break;
+        case '\?': sstream.putback('\?'); break;
+    }
+    
+    // consume the escaped character.
+    nextChar();
 }
 
 void Lexer::lexString(Token* token) {
+    // consume the starting quote
+    nextChar();
 
+    while (isMoreChars()) {
+        if (current == '"') {
+            break;
+        }
+        else if (current == '\\') {
+            lexEscapeSequence(token);
+        }
+        else {
+            appendConsume();
+        }
+    }
+
+    // consume the closing quote
+    nextChar();
+
+    constructToken(token, TokenKind::StringLiteral);
 }
 
 void Lexer::lexCharacter(Token* token) {
@@ -392,7 +435,12 @@ void Lexer::lexCharacter(Token* token) {
 }
 
 void Lexer::lexSingleLineComment() {
+    // consume the leading forward slashes '//'
+    nextChar();
+    nextChar();
 
+    while (isMoreChars()) {
+    }
 }
 
 void Lexer::lexMultiLineComment() {
