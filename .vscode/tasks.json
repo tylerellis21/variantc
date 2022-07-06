@@ -33,7 +33,11 @@
             "command": "cd ${workspaceFolder}/build/debug && make",
             "problemMatcher": [
                 "$gcc"
-            ]
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
