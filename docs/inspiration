@@ -1,0 +1,17 @@
+Everything is not an object!
+
+At the lowest level what do we have? Memory, Bits, Bytes, Etc...
+
+We are manipulating memory, preforming operations on that memory.
+Moving and manipulating memory is the core task we face.
+
+How we interpret that memory is up to the program.
+
+That's why everything can't be an object.
+Because at the lowest level we have bits and bytes... which are not objects...
+
+A type is nothing more than an interpretation of said bytes.
+
+We write instructions to operate on said types.
+    Preform math operations
+    load/store into said memory (array of bytes)
