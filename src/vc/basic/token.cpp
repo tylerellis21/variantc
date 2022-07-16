@@ -2,15 +2,11 @@
 
 namespace vc {
 
-std::string toString(TokenKind tokenKind) {
-    switch (tokenKind) {
-        case TokenKind::Null: return "Null";
-
-        case TokenKind::BooleanLiteral: return "BooleanLiteral";
-    
-        default: 
-            return "";
-    }
+std::ostream& operator <<(std::ostream& out, const Token& token) {
+    out << token.kind
+        << " " 
+        << token.loc;
+    return out;
 }
 
 }

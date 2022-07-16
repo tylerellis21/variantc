@@ -2,6 +2,7 @@
 #define VC_TOKEN_H_INCLUDE
 
 #include <string>
+#include <iostream>
 
 #include <vc/basic/sourcelocation.h>
 #include <vc/basic/tokenkind.h>
@@ -13,6 +14,8 @@ struct Token {
     SourceLocation loc;
     std::string string;
 };
+
+std::ostream& operator <<(std::ostream& out, const Token& token);
 
 }
 
