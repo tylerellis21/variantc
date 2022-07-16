@@ -17,6 +17,7 @@ TEST(Lexer, BasicTokens) {
 
     Token token;
     lexer.nextToken(&token);
+       
     lexer.nextToken(&token);
 
     return true;
@@ -25,3 +26,21 @@ TEST(Lexer, BasicTokens) {
 TEST(hello_world, testB) {
     return false;
 }
+
+/*
+
+Lexer Tests Needed:
+    Numerics
+        Binary - base 1
+        Octal - base 8
+        Decimal - base10
+        Hex - base16
+    Words
+    Operators & Symbols
+    Escape Sequences
+    Strings
+    Chars
+    Single Line Comments
+    Multi Line Comments
+
+*/

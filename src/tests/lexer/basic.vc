@@ -3,7 +3,10 @@ hello123
 _123a
 
 0b11111111
-0xFF
+0xFFFFFFFF
+0xffffffff
+0b11111111
+0o76543210
 
 //_a123
 /*

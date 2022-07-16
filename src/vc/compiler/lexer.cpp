@@ -133,7 +133,7 @@ void Lexer::constructToken(Token* token, TokenKind kind) {
     token->loc = tokenLocation;
     token->string = sstream.str();
 
-    sstream.str( std::string() );
+    sstream.str(std::string());
     // who the fuck thought clear would only clear the error state....
     sstream.clear();
 }
@@ -158,7 +158,7 @@ void Lexer::lexNumeric(Token* token) {
 void Lexer::lexWord(Token* token) {
     TokenKind tokenKind = TokenKind::Identifier;
     bool canHaveNumber = false;
-
+    
     while (isMoreChars()) {
         if (std::isalnum(current) || current == '_') {
             canHaveNumber =  true;

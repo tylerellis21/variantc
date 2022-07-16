@@ -45,19 +45,19 @@ struct UnitTestResult {
     UnitTest* unitTest;
 };
 
-typedef std::map<std::string, UnitTest*> UnitTestMap;
-
-extern UnitTestMap unitTests;
-
 void registerTest(std::string unitName, std::string testName, TestCaseFunction function);
-
-void runAllTests();
 
 struct TestAutoRegister {
     TestAutoRegister(std::string unitName, std::string testName, TestCaseFunction function) {
         registerTest(unitName, testName, function);
     }
 };
+
+typedef std::map<std::string, UnitTest*> UnitTestMap;
+
+extern UnitTestMap unitTests;
+
+void runAllTests();
 
 #define TEST(unitName, testName) \
     bool unitName##testName(); \
