@@ -1,4 +1,5 @@
 #include <chrono>
+#include <iostream>
 
 #include <vc/compiler/lexer.h>
 
@@ -17,8 +18,16 @@ TEST(Lexer, BasicTokens) {
 
     Token token;
     lexer.nextToken(&token);
+
+    std::cout << "Token: " << token << std::endl;
+
+    TEST_ASSERT(token.kind == TokenKind::Identifier);
        
     lexer.nextToken(&token);
+
+    TEST_ASSERT(token.kind == TokenKind::Identifier);
+
+    std::cout << "Token: " << token << std::endl;
 
     return true;
 }

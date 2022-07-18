@@ -12,7 +12,14 @@
 
 namespace vc {
 
-typedef std::function<bool()> TestCaseFunction;
+struct TestCase;
+struct UnitTest;
+
+typedef bool (*TestCaseFunction)();
+typedef std::vector<TestCase> TestCaseVector;
+typedef std::map<std::string, UnitTest*> UnitTestMap;
+
+void registerTest(const std::string&, const std::string&, TestCaseFunction);
 
 struct TestCase {
     std::string name;
@@ -23,8 +30,6 @@ struct TestCase {
         function(function)
     { }
 };
-
-typedef std::vector<TestCase> TestCaseVector;
 
 struct UnitTest {
     std::string name;
@@ -45,24 +50,27 @@ struct UnitTestResult {
     UnitTest* unitTest;
 };
 
-void registerTest(std::string unitName, std::string testName, TestCaseFunction function);
-
 struct TestAutoRegister {
     TestAutoRegister(std::string unitName, std::string testName, TestCaseFunction function) {
         registerTest(unitName, testName, function);
     }
 };
 
-typedef std::map<std::string, UnitTest*> UnitTestMap;
-
 extern UnitTestMap unitTests;
 
+void registerTest(const std::string& unitName, const std::string& testName, TestCaseFunction function);
+
 void runAllTests();
+
+void _testAssert(const std::string& expression, const std::string& file, int line);
 
 #define TEST(unitName, testName) \
     bool unitName##testName(); \
     TestAutoRegister _register_##unitName##testName(#unitName, #testName, unitName##testName); \
     bool unitName##testName()
+
+#define TEST_ASSERT(expression) if (!(expression)) _testAssert(#expression, __FILE__, __LINE__);
+
 
 } // namespace vc
 

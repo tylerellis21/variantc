@@ -10,7 +10,7 @@ using namespace vc;
 #include "unit_test.h"
 
 int main(int argc, char** args) {
-    
+
     runAllTests();
 
     return 0;
