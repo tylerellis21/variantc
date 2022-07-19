@@ -32,10 +32,41 @@ TEST(Lexer, BasicTokens) {
     return true;
 }
 
-TEST(hello_world, testB) {
-    return false;
+TEST(Lexer, Numerics) {
+    return true;
 }
 
+TEST(Lexer, Words) {
+    return true;
+}
+
+TEST(Lexer, Operators) {
+    return true;
+}
+
+TEST(Lexer, Symbols) {
+    return true;
+}
+
+TEST(Lexer, EscapeSequences) {
+    return true;
+}
+
+TEST(Lexer, Strings) {
+    return true;
+}
+
+TEST(Lexer, Characters) {
+    return true;
+}
+
+TEST(Lexer, SingleLineComments) {
+    return true;
+}
+
+TEST(Lexer, MultiLineComments) {
+    return true;
+}
 /*
 
 Lexer Tests Needed:

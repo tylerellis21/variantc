@@ -9,6 +9,19 @@ using namespace vc;
 
 #include "unit_test.h"
 
+/*
+Tests needed:
+    Numerics
+    Word
+    Operators & Symbols
+    Escape Sequences
+    Strings
+    Chars
+    Single line comments
+    Multi line comments
+*/
+
+
 int main(int argc, char** args) {
 
     runAllTests();
