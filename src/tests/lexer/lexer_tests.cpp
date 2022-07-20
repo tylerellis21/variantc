@@ -13,26 +13,19 @@ using namespace vc;
         return false; \
     }
 
-TEST(Lexer, BasicTokens) {
-    LEXER_OPEN("src/tests/lexer/basic.vc");
-
-    Token token;
-    lexer.nextToken(&token);
-
-    std::cout << "Token: " << token << std::endl;
-
-    TEST_ASSERT(token.kind == TokenKind::Identifier);
-       
-    lexer.nextToken(&token);
-
-    TEST_ASSERT(token.kind == TokenKind::Identifier);
-
-    std::cout << "Token: " << token << std::endl;
-
-    return true;
-}
-
 TEST(Lexer, Numerics) {
+    LEXER_OPEN("src/tests/lexer/numerics.vc");
+
+    while (lexer.isMoreChars()) {
+        Token token;
+        lexer.nextToken(&token);
+        std::cout << "Token: " << token << std::endl;
+    }
+
+    //TEST_ASSERT(token.kind == TokenKind::Identifier);
+    //lexer.nextToken(&token);
+    //TEST_ASSERT(token.kind == TokenKind::Identifier);
+    //std::cout << "Token: " << token << std::endl;
     return true;
 }
 

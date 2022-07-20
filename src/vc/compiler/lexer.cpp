@@ -95,6 +95,9 @@ void Lexer::nextToken(Token* token) {
         // parse a numeric digit
         // eg: 12345
         // eg: -1234
+        // eg: 0b1010
+        // eg: 0xFFFF
+        // eg: 0777
         else if (std::isdigit(current) || (current == '-' && std::isdigit(next))) {
             return lexNumeric(token);
         }
@@ -136,6 +139,18 @@ void Lexer::constructToken(Token* token, TokenKind kind) {
     sstream.str(std::string());
     // who the fuck thought clear would only clear the error state....
     sstream.clear();
+}
+
+void lexBinaryNumber(Token* token) {
+}
+
+void lexOctalNumber(Token* token) {
+}
+
+void lexHexNumber(Token* token) {
+}
+
+void lexDecNumber(Token* token) {
 }
 
 void Lexer::lexNumeric(Token* token) {
