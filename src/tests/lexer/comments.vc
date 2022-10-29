@@ -1,0 +1,15 @@
+// Single line comment
+
+/*
+A multi line comment.
+*/
+
+/* /* Nested multi line comments */ */
+
+// /* /* Nested multi line comments */ */
+
+/*
+/*
+//
+
+*/

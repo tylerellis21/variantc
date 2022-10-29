@@ -6,12 +6,25 @@
 #include "../unit_test.h"
 
 using namespace vc;
+using namespace cpptest;
 
 #define LEXER_OPEN(filePath) \
     Lexer lexer; \
     if (!lexer.open(filePath)) { \
         return false; \
     }
+
+TEST(Lexer, Comments) {
+    LEXER_OPEN("src/tests/lexer/comments.vc");
+
+    Token token;
+    lexer.nextToken(&token);
+
+    TEST_ASSERT(token.kind == TokenKind::Null);
+    TEST_ASSERT(lexer.isMoreChars() == false);
+
+    return true;
+}
 
 TEST(Lexer, Numerics) {
     LEXER_OPEN("src/tests/lexer/numerics.vc");

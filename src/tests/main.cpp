@@ -9,6 +9,8 @@ using namespace vc;
 
 #include "unit_test.h"
 
+#include <windows.h>
+
 /*
 Tests needed:
     Numerics
@@ -24,7 +26,12 @@ Tests needed:
 
 int main(int argc, char** args) {
 
-    runAllTests();
+    char buffer[256];
+    GetCurrentDirectoryA(256, buffer);
+
+    printf("cwd: %s", buffer);
+
+    cpptest::runAllTests();
 
     return 0;
 }

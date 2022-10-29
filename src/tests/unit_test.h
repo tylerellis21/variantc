@@ -1,5 +1,5 @@
-#ifndef VC_UNIT_TEST_H_INCLUDE
-#define VC_UNIT_TEST_H_INCLUDE
+#ifndef CPPTEST_UNIT_TEST_H_INCLUDE
+#define CPPTEST_UNIT_TEST_H_INCLUDE
 
 #include <map>
 #include <vector>
@@ -10,7 +10,9 @@
 #define TOSTRING(x) STRINGIFY(x)
 #define AT __FILE__ ":" TOSTRING(__LINE__)
 
-namespace vc {
+namespace cpptest {
+
+using namespace std;
 
 struct TestCase;
 struct UnitTest;
@@ -18,6 +20,7 @@ struct UnitTest;
 typedef bool (*TestCaseFunction)();
 typedef std::vector<TestCase> TestCaseVector;
 typedef std::map<std::string, UnitTest*> UnitTestMap;
+typedef UnitTestMap* UnitTestMapPtr;
 
 void registerTest(const std::string&, const std::string&, TestCaseFunction);
 
@@ -56,7 +59,7 @@ struct TestAutoRegister {
     }
 };
 
-extern UnitTestMap unitTests;
+extern UnitTestMap* unitTests;
 
 void registerTest(const std::string& unitName, const std::string& testName, TestCaseFunction function);
 
@@ -72,6 +75,6 @@ void _testAssert(const std::string& expression, const std::string& file, int lin
 #define TEST_ASSERT(expression) if (!(expression)) _testAssert(#expression, __FILE__, __LINE__);
 
 
-} // namespace vc
+} // namespace cpptest
 
-#endif // VC_UNIT_TEST_H_INCLUDE
+#endif // CPPTEST_UNIT_TEST_H_INCLUDE

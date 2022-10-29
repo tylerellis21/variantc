@@ -4,7 +4,7 @@
 #include <vc/compiler/lexer.h>
 #include <vc/basic/filebuffer.h>
 
-// Let's work backwards. Let's build the ast structure then attempt to build the ir code generation before we 
+// Let's work backwards. Let's build the ast structure then attempt to build the ir code generation before we
 // build out the entire lexer/parser/compiler
 
 #include <vc/ast/decl.h>
@@ -44,7 +44,7 @@ int main(int argc, char** args) {
         lexer.nextToken(&token);
 
 
-        printf("%s {line: %i, col: %i} tokenKind: %i\n", token.string.c_str(), token.loc.line, token.loc.column, token.kind);
+        printf("%s {line: %ull, col: %ull} tokenKind: %i\n", token.string.c_str(), token.loc.line, token.loc.column, token.kind);
     }
     printf("\n");
 

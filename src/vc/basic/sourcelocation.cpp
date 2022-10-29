@@ -11,6 +11,7 @@ std::ostream& operator <<(std::ostream& out, const SourceLocation& sourceLocatio
         << ", Col " 
         << sourceLocation.column 
         << ")";
+    return out;
 }
 
 std::ostream& operator <<(std::ostream& out, const SourceRange& sourceRange) {
@@ -19,6 +20,7 @@ std::ostream& operator <<(std::ostream& out, const SourceRange& sourceRange) {
         << ", "
         << sourceRange.end
         << "}";
+    return out;
 }
 
 } // namespace vc
