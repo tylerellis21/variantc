@@ -5,7 +5,7 @@ set (SRC
     main.cpp
     unit_test.h
     unit_test.cpp
-    lexer/lexer_tests.cpp
+    lexer_tests.cpp
 )
 
 add_executable (${EXE_NAME} ${SRC})

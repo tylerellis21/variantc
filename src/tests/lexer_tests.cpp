@@ -3,7 +3,7 @@
 
 #include <vc/compiler/lexer.h>
 
-#include "../unit_test.h"
+#include "unit_test.h"
 
 using namespace vc;
 using namespace cpptest;
@@ -14,8 +14,10 @@ using namespace cpptest;
         return false; \
     }
 
+//TODO(@Tyler): Once we have string.join working replace theses full paths with a constant string base path of sorts.
+
 TEST(Lexer, Comments) {
-    LEXER_OPEN("src/tests/lexer/comments.vc");
+    LEXER_OPEN("src/tests/test-src/lexer/comments.vc");
 
     Token token;
     lexer.nextToken(&token);
@@ -27,7 +29,7 @@ TEST(Lexer, Comments) {
 }
 
 TEST(Lexer, Numerics) {
-    LEXER_OPEN("src/tests/lexer/numerics.vc");
+    LEXER_OPEN("src/tests/test-src/lexer/numerics.vc");
 
     while (lexer.isMoreChars()) {
         Token token;
@@ -42,7 +44,7 @@ TEST(Lexer, Numerics) {
     return true;
 }
 
-TEST(Lexer, Words) {
+TEST(Lexer, Keywords) {
     return true;
 }
 

@@ -15,7 +15,7 @@
   - u256
   - u512
   - u1024
-  
+
 ---
 
 - Signed Types
@@ -41,6 +41,9 @@
   - r1024
 
 ---
+
+- Platform Types
+-- TODO
 
 - Fixed Point Types
   - decimal
