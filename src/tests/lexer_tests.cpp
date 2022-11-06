@@ -28,14 +28,31 @@ TEST(Lexer, Comments) {
     return true;
 }
 
-TEST(Lexer, Numerics) {
-    LEXER_OPEN("src/tests/test-src/lexer/numerics.vc");
+TEST(Lexer, Literals) {
+    LEXER_OPEN("src/tests/test-src/lexer/literals.vc");
 
-    while (lexer.isMoreChars()) {
-        Token token;
-        lexer.nextToken(&token);
-        std::cout << "Token: " << token << std::endl;
-    }
+    Token booleanLiterals[2];
+
+    lexer.nextToken(&booleanLiterals[0]);
+    lexer.nextToken(&booleanLiterals[1]);
+
+    TEST_ASSERT(booleanLiterals[0].kind == TokenKind::BooleanLiteral);
+    TEST_ASSERT(booleanLiterals[1].kind == TokenKind::BooleanLiteral);
+
+/*
+(BooleanLiteral)
+
+(CharacterLiteral)
+
+(StringLiteral)
+
+(IntegerLiteral)
+(HexIntegerLiteral)
+(BinaryIntegerLiteral)
+(OctalIntegerLiteral)
+
+(RealLiteral)
+*/
 
     //TEST_ASSERT(token.kind == TokenKind::Identifier);
     //lexer.nextToken(&token);

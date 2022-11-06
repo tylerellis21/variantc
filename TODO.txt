@@ -1,72 +1,7 @@
-Get the basic language up and running
+Add lexer tests for all literals:
 
-Finish the lexer
-hex
-dec
-bin
-number support
+    integer literals
 
-Finish the parser
-
-Finish the AST basics
-	Basic Declarations
-	Basic Statements
-	Basic Expressions
-
-* Modules
-* Packages
-* Imports
-
-* Variables
-* Functions
-* Records
-
-* Most Statements
-* Most Expressions
-
-* Constructors
-* Destructors
-* Deconstruction
-* Reflection
-
-Declarations
-	* Initalizers
-	* Struct
-	* Union
-	* Constructors
-	* Destructors
-	* Functions
-		* Multiple Return Values
-		* Named Return
-		* Extention Methods
-	* Interfaces
-	* Enums
-	* Anonymous Methods
-	* Namespaces
-	* Packages
-	* Import
-	* Templates
-	* Attributes
-	* Alignment
-	* Packing and Padding
-	* Preprocesser
-		* Compile Time Execution
-
-Statements
-	* Flow Control
-		* If
-		* For
-		* For Each
-		* While
-		* Do While
-		* Defer
-	* Use
-	* Threading
-		* Async
-		* Await
-
-
-Expressions
-	* Lambda Expressions
-
-
+    octal integer literal
+    hexadecimal integer literal
+    binary integer literal
