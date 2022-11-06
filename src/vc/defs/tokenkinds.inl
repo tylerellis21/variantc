@@ -2,7 +2,12 @@ TOKEN_KIND(Null)
 
 TOKEN_KIND(BooleanLiteral)
 TOKEN_KIND(CharacterLiteral)
+
 TOKEN_KIND(IntegerLiteral)
+TOKEN_KIND(HexIntegerLiteral)
+TOKEN_KIND(BinaryIntegerLiteral)
+TOKEN_KIND(OctalIntegerLiteral)
+
 TOKEN_KIND(RealLiteral)
 TOKEN_KIND(StringLiteral)
 

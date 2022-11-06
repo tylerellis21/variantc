@@ -2,7 +2,7 @@
 0b11110000
 
 // Octal number with prefix '0'
-0117;
+0777;
 
 // Hexadecimal number with prefix '0x'
 0x13ac;

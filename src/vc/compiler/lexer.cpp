@@ -61,7 +61,7 @@ void Lexer::nextToken(Token* token) {
     token->kind = TokenKind::Null;
 
     while (isMoreChars()) {
-        
+
         // Save the starting point for the next token.
         tokenLocation = sourceLocation;
 
@@ -141,19 +141,64 @@ void Lexer::constructToken(Token* token, TokenKind kind) {
     sstream.clear();
 }
 
-void lexBinaryNumber(Token* token) {
+void Lexer::lexBinaryNumber(Token* token) {
+    // binary numbers are prefixed with 0b or 0B
+
+    // skip the prefix
+    nextChar();
+    nextChar();
+
+    while (isMoreChars() && (current == '1' || current == '0')) {
+        appendConsume();
+    }
+
+    constructToken(token, TokenKind::BinaryIntegerLiteral);
 }
 
-void lexOctalNumber(Token* token) {
+void Lexer::lexOctalNumber(Token* token) {
+    // octal numbers are prefixed with 0
+    // skip the prefix
+    nextChar();
+
+    while (isMoreChars() && current >= '0' && current <= '7') {
+        appendConsume();
+    }
+
+    constructToken(token, TokenKind::OctalIntegerLiteral);
 }
 
-void lexHexNumber(Token* token) {
-}
+void Lexer::lexHexNumber(Token* token) {
+    // hex numbers are prefixed with 0x or 0X
 
-void lexDecNumber(Token* token) {
+    // skip the prefix
+    nextChar();
+    nextChar();
+
+    while (isMoreChars() && isxdigit(current)) {
+        appendConsume();
+    }
+
+    constructToken(token, TokenKind::HexIntegerLiteral);
 }
 
 void Lexer::lexNumeric(Token* token) {
+    // Hex numbers are prefixed with 0x
+    if (current == '0' && next == 'x' ||
+        current == '0' && next == 'X') {
+        return lexHexNumber(token);
+    }
+
+    // Binary numbers are prefixed with 0b
+    if (current == '0' && next == 'b' ||
+        current == '0' && next == 'B') {
+        return lexBinaryNumber(token);
+    }
+
+    // octal numbers are prefixed with 0777
+    if (current == 0 && std::isdigit(next)) {
+        return lexOctalNumber(token);
+    }
+
     TokenKind numericType = TokenKind::IntegerLiteral;
 
     while (isMoreChars()) {
@@ -173,7 +218,7 @@ void Lexer::lexNumeric(Token* token) {
 void Lexer::lexWord(Token* token) {
     TokenKind tokenKind = TokenKind::Identifier;
     bool canHaveNumber = false;
-    
+
     while (isMoreChars()) {
         if (std::isalnum(current) || current == '_') {
             canHaveNumber =  true;
@@ -191,7 +236,7 @@ void Lexer::lexWord(Token* token) {
     // If we have an entry, use the found token kind.
     {
         std::string str = sstream.str();
-        
+
         vc::TokenMap::iterator iterator = tokenMap.find(str);
 
         if (iterator != tokenMap.end()) {
@@ -400,7 +445,7 @@ void Lexer::lexEscapeSequence(Token* token) {
 
     switch (current) {
         // alert (beep, bell)
-        case 'a': sstream.putback('\a'); break; 
+        case 'a': sstream.putback('\a'); break;
         // backspace
         case 'b': sstream.putback('\b'); break;
         // feedform
@@ -418,7 +463,7 @@ void Lexer::lexEscapeSequence(Token* token) {
         case '\'': sstream.putback('\''); break;
         case '\?': sstream.putback('\?'); break;
     }
-    
+
     // consume the escaped character.
     nextChar();
 }

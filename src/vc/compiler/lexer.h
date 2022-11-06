@@ -38,7 +38,7 @@ struct Lexer {
     bool isMoreChars();
 
     void nextChar();
-    
+
     void nextToken(Token* token);
 
     // Append the current char to the string stream
@@ -53,6 +53,9 @@ struct Lexer {
     void constructToken(Token* token, TokenKind kind);
 
     void lexNumeric(Token* token);
+    void lexHexNumber(Token* token);
+    void lexOctalNumber(Token* token);
+    void lexBinaryNumber(Token* token);
     void lexWord(Token* token);
     void lexOperator(Token* token);
     void lexEscapeSequence(Token* token);
