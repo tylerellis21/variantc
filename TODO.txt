@@ -1,5 +1,13 @@
 Get the basic language up and running
 
+Finish the lexer
+hex
+dec
+bin
+number support
+
+Finish the parser
+
 Finish the AST basics
 	Basic Declarations
 	Basic Statements
