@@ -39,14 +39,48 @@ TEST(Lexer, Literals) {
     TEST_ASSERT(booleanLiterals[0].kind == TokenKind::BooleanLiteral);
     TEST_ASSERT(booleanLiterals[1].kind == TokenKind::BooleanLiteral);
 
+    Token characterLiterals[2];
+    lexer.nextToken(&characterLiterals[0]);
+    lexer.nextToken(&characterLiterals[1]);
+
+    TEST_ASSERT(characterLiterals[0].kind == TokenKind::CharacterLiteral);
+    TEST_ASSERT(characterLiterals[1].kind == TokenKind::UnicodeLiteral);
+
+    Token stringLiterals[4];
+    lexer.nextToken(&stringLiterals[0]);
+    lexer.nextToken(&stringLiterals[1]);
+    lexer.nextToken(&stringLiterals[2]);
+    lexer.nextToken(&stringLiterals[3]);
+
+    TEST_ASSERT(stringLiterals[0].kind == TokenKind::StringLiteral);
+    TEST_ASSERT(stringLiterals[0].string == "hello");
+
+    TEST_ASSERT(stringLiterals[1].kind == TokenKind::StringLiteral);
+    TEST_ASSERT(stringLiterals[1].string == "hello world");
+
+    TEST_ASSERT(stringLiterals[2].kind == TokenKind::StringLiteral);
+    TEST_ASSERT(stringLiterals[2].string == "\nhello world\nhello world\n");
+
+    TEST_ASSERT(stringLiterals[3].kind == TokenKind::StringLiteral);
+    TEST_ASSERT(stringLiterals[3].string == "hello\nmulti\nline\nstring");
+
+    // TODO(@Tyler): Make some helper functions to clean this up
+    // eg: TEST_TOKEN_KIND(TOKEN, EXPECTED_KIND)
+    // eg: TEST_TOKEN_VALUE(TOKEN, EXPECTED_VALUE)
+
+    // eg: TEST_TOKEN_KIND_ARRAY(TOKEN, EXPECTED_KIND)
+    // eg: TEST_TOKEN_VALUE_ARRAY(TOKEN, EXPECTED_KIND)
+    Token integerLiterals[2];
+    lexer.nextToken(&integerLiterals[0]);
+    lexer.nextToken(&integerLiterals[1]);
+
+    TEST_ASSERT(integerLiterals[0].kind == TokenKind::IntegerLiteral);
+    TEST_ASSERT(integerLiterals[0].string == "12345");
+
+    TEST_ASSERT(integerLiterals[1].kind == TokenKind::IntegerLiteral);
+    TEST_ASSERT(integerLiterals[1].string == "-12345");
+
 /*
-(BooleanLiteral)
-
-(CharacterLiteral)
-
-(StringLiteral)
-
-(IntegerLiteral)
 (HexIntegerLiteral)
 (BinaryIntegerLiteral)
 (OctalIntegerLiteral)

@@ -4,3 +4,43 @@ false
 'a'
 
 '\u2200'
+
+"hello"
+
+"hello world"
+
+"
+hello world
+hello world
+"
+
+"hello
+multi
+line
+string"
+
+12345
+-12345
+
+0xffff
+0xFFFF
+0x0
+
+0b11111111
+
+0777
+
+-123.123
+123.123
+
+0.0f
+123.123f
+123.f
+.0f
+-123.f
+
+0.0
+123.0d
+-123.0d
+.0d
+-123.d

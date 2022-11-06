@@ -462,6 +462,20 @@ void Lexer::lexEscapeSequence(Token* token) {
         case '\\': sstream.putback('\\'); break;
         case '\'': sstream.putback('\''); break;
         case '\?': sstream.putback('\?'); break;
+
+        // unicode escape sequence
+        case '\u': {
+            // consume the u
+            nextChar();
+
+            // loop until the end of the character def.
+            while (isMoreChars() && current != '\'') {
+                appendConsume();
+            }
+
+            constructToken(token, TokenKind::UnicodeLiteral);
+        }
+        break;
     }
 
     // consume the escaped character.
@@ -478,6 +492,9 @@ void Lexer::lexString(Token* token) {
         }
         else if (current == '\\') {
             lexEscapeSequence(token);
+        }
+        else if (current == '\r') {
+            nextChar();
         }
         else {
             appendConsume();
@@ -506,7 +523,10 @@ void Lexer::lexCharacter(Token* token) {
     // consume the closing single quote
     nextChar();
 
-    constructToken(token, TokenKind::CharacterLiteral);
+    // temp fix for unicode escape sequences.
+    if (token->kind == TokenKind::Null) {
+        constructToken(token, TokenKind::CharacterLiteral);
+    }
 }
 
 void Lexer::lexSingleLineComment() {

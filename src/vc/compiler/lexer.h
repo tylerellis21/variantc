@@ -56,11 +56,16 @@ struct Lexer {
     void lexHexNumber(Token* token);
     void lexOctalNumber(Token* token);
     void lexBinaryNumber(Token* token);
+
     void lexWord(Token* token);
     void lexOperator(Token* token);
+
     void lexEscapeSequence(Token* token);
-    void lexString(Token* token);
+
     void lexCharacter(Token* token);
+    void lexString(Token* token);
+    void lexMultiLineString(Token* token);
+
     void lexSingleLineComment();
     void lexMultiLineComment();
 };
