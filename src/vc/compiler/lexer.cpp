@@ -98,7 +98,11 @@ void Lexer::nextToken(Token* token) {
         // eg: 0b1010
         // eg: 0xFFFF
         // eg: 0777
-        else if (std::isdigit(current) || (current == '-' && std::isdigit(next))) {
+        else if (
+            std::isdigit(current)
+            || (current == '-' && std::isdigit(next))
+            || (current == '.' && std::isdigit(next))
+        ) {
             return lexNumeric(token);
         }
         // parse a word
@@ -195,7 +199,7 @@ void Lexer::lexNumeric(Token* token) {
     }
 
     // octal numbers are prefixed with 0777
-    if (current == 0 && std::isdigit(next)) {
+    if (current == '0' && std::isdigit(next)) {
         return lexOctalNumber(token);
     }
 
