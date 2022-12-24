@@ -1,0 +1,35 @@
+# Notes
+
+"Inside C++, there is a MUCH SMALLER AND CLEANER LANGUAGE struggling to get out"
+    - B. Stroustrup.
+
+One syntax for everything!
+    Compile time settings.
+    preprocessing/compile time execution.
+
+Do we have to use stack unwinding for try/catch?
+
+What if we had "catch trees"?
+
+move vs copy vs initalize
+
+"constructor" functions?
+
+Bounds Checking
+
+Type Safe
+
+Initalization
+
+Interop support for C and C++ will be very important.
+A lot of libraries are built with C, so we will NEED to interface with them at some point.
+
+What is the quickest way to get the language up and working.
+
+So we can start building the standard library and game engine libraries.
+
+Well we need the lexer, parser, IR and C/C++ generators working and or ASM generator.
+
+It would be very nice to have some basic semantic validation.
+
+If all we achive is c++ without having to write headers, I would be fine with that.

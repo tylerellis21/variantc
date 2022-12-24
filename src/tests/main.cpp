@@ -28,8 +28,7 @@ int main(int argc, char** args) {
 
     char buffer[256];
     GetCurrentDirectoryA(256, buffer);
-
-    printf("cwd: %s", buffer);
+    printf("\ncurrent working directory: %s\n", buffer);
 
     cpptest::runAllTests();
 

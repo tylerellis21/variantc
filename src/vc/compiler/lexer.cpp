@@ -193,13 +193,13 @@ void Lexer::lexNumeric(Token* token) {
     }
 
     // Binary numbers are prefixed with 0b
-    if (current == '0' && next == 'b' ||
+    else if (current == '0' && next == 'b' ||
         current == '0' && next == 'B') {
         return lexBinaryNumber(token);
     }
 
     // octal numbers are prefixed with 0777
-    if (current == '0' && std::isdigit(next)) {
+    else if (current == '0' && std::isdigit(next)) {
         return lexOctalNumber(token);
     }
 

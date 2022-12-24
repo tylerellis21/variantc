@@ -1,7 +1,0 @@
-Add lexer tests for all literals:
-
-    integer literals
-
-    octal integer literal
-    hexadecimal integer literal
-    binary integer literal
