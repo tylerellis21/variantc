@@ -72,7 +72,7 @@ void _testAssert(const std::string& expression, const std::string& file, int lin
     TestAutoRegister _register_##unitName##testName(#unitName, #testName, unitName##testName); \
     bool unitName##testName()
 
-#define TEST_ASSERT(expression) if (!(expression)) _testAssert(#expression, __FILE__, __LINE__);
+#define TEST_ASSERT(expression) if (!(expression)) { _testAssert(#expression, __FILE__, __LINE__); return false; }
 
 
 } // namespace cpptest

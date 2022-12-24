@@ -60,7 +60,7 @@ void runAllTests() {
         std::string name = i->first;
         UnitTest* unit = i->second;
 
-        std::cout << "running unit: " << name << std::endl;
+        std::cout << std::endl << "[running unit: " << name << "]" << std::endl;
 
         // Gross, fix this by returning a test result structure of some sorts?
         currentUnit = unit;
@@ -71,15 +71,15 @@ void runAllTests() {
             // Gross, fix this by returning a test result structure of some sorts?
             currentCase = &testCase;
 
-            std::cout << "[running test case] " << testCase.name  << " @" << &testCase.function << " + " << std::endl;
+            std::cout << "    [running test case] " << testCase.name  << " @" << &testCase.function << " + " << std::endl;
 
             bool results = testCase.function();
 
             if (results) {
-                std::cout << "passed" << std::endl;
+                std::cout << "        passed" << std::endl;
             }
             else {
-                std::cout << "failed" << std::endl;
+                std::cout << "        failed" << std::endl;
             }
 
             std::cout << std::endl;

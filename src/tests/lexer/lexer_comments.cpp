@@ -1,7 +1,7 @@
 #include "../lexer_shared.h"
 
 TEST(Lexer, Comments) {
-    LEXER_OPEN("src/tests/test-src/lexer/comments.vc");
+    LEXER_OPEN("src/tests/test_src/lexer/comments.vc");
 
     Token token;
     lexer.nextToken(&token);
