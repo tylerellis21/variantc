@@ -12,8 +12,6 @@
 // eg: TEST_TOKEN_KIND_ARRAY(TOKEN, EXPECTED_KIND_ARRAY, EXPECTED_KIND_ARRAY_LENGTH)
 // eg: TEST_TOKEN_VALUE_ARRAY(TOKEN, EXPECTED_KIND)
 
-
-
 TEST(Lexer, Keywords) {
     return true;
 }
@@ -29,36 +27,3 @@ TEST(Lexer, Symbols) {
 TEST(Lexer, EscapeSequences) {
     return true;
 }
-
-TEST(Lexer, Strings) {
-    return true;
-}
-
-TEST(Lexer, Characters) {
-    return true;
-}
-
-TEST(Lexer, SingleLineComments) {
-    return true;
-}
-
-TEST(Lexer, MultiLineComments) {
-    return true;
-}
-/*
-
-Lexer Tests Needed:
-    Numeric Literals
-        Binary - base 1
-        Octal - base 8
-        Decimal - base10
-        Hex - base16
-    Words
-    Operators & Symbols
-    Escape Sequences
-    Strings
-    Chars
-    Single Line Comments
-    Multi Line Comments
-
-*/
