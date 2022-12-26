@@ -1,7 +1,17 @@
 {
     "files.associations": {
         "locale": "cpp",
-        "istream": "cpp"
+        "istream": "cpp",
+        "algorithm": "cpp",
+        "charconv": "cpp",
+        "xlocale": "cpp",
+        "xlocnum": "cpp",
+        "fstream": "cpp",
+        "sstream": "cpp",
+        "xiosbase": "cpp",
+        "xlocmes": "cpp",
+        "atomic": "cpp",
+        "iomanip": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

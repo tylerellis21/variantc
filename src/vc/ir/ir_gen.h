@@ -13,6 +13,7 @@ struct IRGen {
     void generate(Decl* decl);
     void generate(Stmt* stmt);
     void generate(Expr* expr);
+    void generate(Type* type);
 };
 
 

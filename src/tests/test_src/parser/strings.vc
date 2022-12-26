@@ -1,0 +1,8 @@
+struct String<T> {
+    T buffer;
+    u64 length;
+}
+
+typedef String<u8> utf8;
+typedef String<u16> utf16;
+typedef String<u32> utf32;

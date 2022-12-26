@@ -1,0 +1,1 @@
+BUILTIN_KIND(void, 0)

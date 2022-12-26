@@ -2,10 +2,7 @@
 #include <vector>
 
 #include <vc/compiler/lexer.h>
-#include <vc/basic/filebuffer.h>
-
-// Let's work backwards. Let's build the ast structure then attempt to build the ir code generation before we
-// build out the entire lexer/parser/compiler
+#include <vc/compiler/parser.h>
 
 #include <vc/ast/decl.h>
 #include <vc/ast/declgroup.h>
@@ -43,10 +40,20 @@ int main(int argc, char** args) {
         Token token;
         lexer.nextToken(&token);
 
-
-        printf("%s {line: %ull, col: %ull} tokenKind: %i\n", token.string.c_str(), token.loc.line, token.loc.column, token.kind);
+        std::cout << token << std::endl;
     }
-    printf("\n");
+
+    // Reset the lexer for parsing,
+    //remove if we aren't printing out the tokens.
+    if (!lexer.open(input)) {
+        return -1;
+    }
+
+    Parser parser(&lexer);
+    if (!parser.open()) {
+        return -1;
+    }
+
 
     return 0;
 }
