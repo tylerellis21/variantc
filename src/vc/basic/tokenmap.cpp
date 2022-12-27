@@ -1,9 +1,20 @@
 #include <vc/basic/tokenmap.h>
 
+#define xstr(s) str(s)
+#define str(s) #s
+
+#define BUILTIN_KIND(x, y, z)
+
 namespace vc {
 
 // TOKEN_KIND()
 // { "string", TokenKind::Kind },
+
+/*
+#define TYPE_TOKEN(TOKEN) { xstr(TOKEN), TokenKind::##TOKEN },
+TYPE_TOKENS
+#undef TYPE_TOKEN
+*/
 
 const TokenMap tokenMap = {
     { "null", TokenKind::Null },
