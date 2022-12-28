@@ -1,0 +1,10 @@
+# TODO
+
+When we define the lexer tokens should we seperate operators and keywords? why am i calling them symbols?
+
+I think it might be better to seperate them into the following:
+    Keywords
+    Operators
+    Types
+
+Well Types contain keywords, should we just remove types and have them in the keywords?

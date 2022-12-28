@@ -14,9 +14,17 @@ namespace vc {
 #define TYPE_TOKEN(TOKEN) { xstr(TOKEN), TokenKind::##TOKEN },
 TYPE_TOKENS
 #undef TYPE_TOKEN
+
+// Generate an entry for each of the builtin types.
+{ "i32", TokenKind::Int32 },
+
 */
 
 const TokenMap tokenMap = {
+
+    // Generate an entry for each of the builtin types.
+    { "i32", TokenKind::Int32 },
+
     { "null", TokenKind::Null },
     { "align", TokenKind::Align },
     { "allocator", TokenKind::Allocator },

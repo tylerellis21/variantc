@@ -8,16 +8,13 @@
 
 namespace vc {
 
-enum TokenKind {
-    #define TOKEN_KIND(tokenKind) tokenKind,
+enum class TokenKind {
 
-    #include <vc/defs/tokenkinds.inl>
-
-    #define BUILTIN_KIND(x, y, z)
-    #include <vc/defs/builtin_kinds.inl>
-
+    #define TOKEN_KIND(TOKEN_NAME, TOKEN_SYMBOL) TOKEN_NAME,
     #undef TOKEN_KIND
 
+    #define BUILTIN_KIND(TOKEN_NAME, TOKEN_SYMBOL, SIZE_IN_BYTES) TOKEN_NAME,
+    #undef BUILTIN_KIND
 };
 
 std::string toString(TokenKind tokenKind);

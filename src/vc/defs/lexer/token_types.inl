@@ -7,6 +7,8 @@ BUILTIN_KIND(Int, int, 0)
 BUILTIN_KIND(UInt, uint, 0)
 BUILTIN_KIND(Pointer, ptr, 0)
 
+// EnumDefinition, TokenDefinition, ByteCount
+
 // Base type sizes
 BUILTIN_KIND(Int8, i8, 1)
 BUILTIN_KIND(Int16, i16, 2)
@@ -47,7 +49,7 @@ BUILTIN_KIND(Real1024, r1024, 128)
 BUILTIN_KIND(Fixed8, f8, 1)
 BUILTIN_KIND(Fixed16, f16, 2)
 BUILTIN_KIND(Fixed32, f32, 4)
-BUILTIN_KIND(Fixed64, f32, 8)
+BUILTIN_KIND(Fixed64, f64, 8)
 
 // Extended type sizes
 BUILTIN_KIND(Fixed128, f128, 16)

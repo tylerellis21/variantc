@@ -1,7 +1,23 @@
 
-// i32 testVar = 0;
-// struct testStruct { i32 x; i32 y; }
+struct testStruct {
+    i32 x;
+    i32 y;
+}
 
-def main() i32 {
+testStruct* structVar = 0;
+i32 testVar = 0;
+
+def main(i32 argc, u8** args) i32 {
     return 0;
 }
+
+/*
+
+// IR
+
+struct testStruct {
+    i32 x;
+    i32 y;
+}
+
+*/

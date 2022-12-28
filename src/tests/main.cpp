@@ -19,12 +19,11 @@ Tests needed:
     Escape Sequences
     Strings
     Chars
-    Single line comments
-    Multi line comments
 */
 
 
 int main(int argc, char** args) {
+    TokenKind test = TokenKind::Int32;
 
     char buffer[256];
     GetCurrentDirectoryA(256, buffer);
