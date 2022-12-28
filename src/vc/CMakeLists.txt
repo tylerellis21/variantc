@@ -15,6 +15,8 @@ set (SRC
     ${SRC_DIR}/ast/decl.h
     ${SRC_DIR}/ast/declgroup.h
     ${SRC_DIR}/ast/expr.h
+    ${SRC_DIR}/ast/name.h
+    ${SRC_DIR}/ast/name.cpp
     ${SRC_DIR}/ast/stmt.h
     ${SRC_DIR}/ast/type.h
 
@@ -34,8 +36,8 @@ set (SRC
     ${SRC_DIR}/compiler/parser.h
     ${SRC_DIR}/compiler/parser.cpp
 
-    ${SRC_DIR}/defs/tokenkinds.inl
-    ${SRC_DIR}/defs/builtinkinds.inl
+    #${SRC_DIR}/defs/tokenkinds.inl
+    #${SRC_DIR}/defs/builtinkinds.inl
 
     ${SRC_DIR}/ir/ir_gen.h
     ${SRC_DIR}/ir/ir_gen.cpp

@@ -73,7 +73,7 @@ struct EnumDecl : Decl {
         Name* name,
         DeclGroup* declGroup,
         Type* type
-    ) : 
+    ) :
     Decl(DeclKind::EnumDecl, parent, sourceRange.begin),
     sourceRange(sourceRange),
     name(name),
@@ -99,9 +99,9 @@ struct FunctionDecl : Decl {
     Stmt* body;
 
     FunctionDecl(
-        Decl* parent, 
-        SourceLocation sourceLocation, 
-        Name* name, 
+        Decl* parent,
+        SourceLocation sourceLocation,
+        Name* name,
         std::vector<FunctionArgDecl*> args,
         Type* returnType,
         Stmt* body
@@ -129,7 +129,7 @@ struct InterfaceDecl : Decl {
     DeclGroup* declGroup;
 
     InterfaceDecl(
-        Decl* parent, 
+        Decl* parent,
         SourceRange sourceRange,
         Name* name,
         DeclGroup* declGroup
@@ -146,7 +146,7 @@ struct ModuleDecl : Decl {
 
     ModuleDecl(Decl* parent, SourceLocation sourceLocation, DeclGroup* declGroup) :
         Decl(DeclKind::ModuleDecl, parent, sourceLocation),
-        declGroup(declGroup) 
+        declGroup(declGroup)
     { }
 };
 
@@ -156,9 +156,9 @@ struct NamespaceDecl : Decl {
     DeclGroup* declGroup;
 
     NamespaceDecl(
-        Decl* parent, 
+        Decl* parent,
         SourceRange sourceRange,
-        Name* name, 
+        Name* name,
         DeclGroup* declGroup
     ) :
         Decl(DeclKind::NamespaceDecl, parent, sourceRange.begin),
@@ -191,13 +191,13 @@ struct RecordDecl : Decl {
     DeclGroup* declGroup;
 
     RecordDecl(
-        Decl* parent, 
-        SourceRange 
-        sourceRange, 
-        RecordKind recordKind, 
-        Name* name, 
+        Decl* parent,
+        SourceRange
+        sourceRange,
+        RecordKind recordKind,
+        Name* name,
         DeclGroup* declGroup
-    ) : 
+    ) :
         Decl(DeclKind::RecordDecl, parent, sourceRange.begin),
         recordKind(recordKind),
         name(name),

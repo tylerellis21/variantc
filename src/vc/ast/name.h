@@ -11,7 +11,7 @@ namespace vc {
 
 struct Name {
     std::vector<Token> identifiers;
-    
+
     Name(std::vector<Token> identifiers) :
         identifiers(identifiers)
     { }
@@ -21,7 +21,8 @@ struct Name {
     { }
 };
 
-void namePrint(Name* name);
+
+std::ostream& operator <<(std::ostream& out, const Name& name);
 
 }
 
