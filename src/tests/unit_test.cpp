@@ -54,6 +54,9 @@ void runAllTests() {
     std::cout << std::endl;
     std::cout << "[running " << unitTests->size() << " tests]" << std::endl;
 
+    int total  = 0;
+    int passed = 0;
+    int failed = 0;
 
     // TODO(@Tyler): Clean this up, perhaps break up into two functions?
     for (UnitTestMap::iterator i = unitTests->begin(); i != unitTests->end(); i++) {
@@ -75,17 +78,22 @@ void runAllTests() {
 
             bool results = testCase.function();
 
+            total++;
             if (results) {
                 std::cout << "        passed" << std::endl;
+                passed++;
             }
             else {
                 std::cout << "        failed" << std::endl;
+                failed++;
             }
 
             std::cout << std::endl;
         }
 
-        std::cout << "[finished running all tests]" << std::endl << std::endl;
+        std::cout << "[finished running all tests]" << std::endl;
+        std::cout << "\tpassed " << passed << " out of " << total << std::endl;
+        std::cout << "\tfailed " << failed << " out of " << total << std::endl << std::endl;
     }
 }
 
