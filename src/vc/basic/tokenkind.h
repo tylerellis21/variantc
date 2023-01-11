@@ -26,7 +26,9 @@ enum class TokenKind {
     #undef TOKEN_KIND
 };
 
-std::string toString(TokenKind tokenKind);
+std::string toName(TokenKind tokenKind);
+std::string toSymbol(TokenKind tokenKind);
+
 std::ostream& operator <<(std::ostream& out, const TokenKind& tokenKind);
 
 }

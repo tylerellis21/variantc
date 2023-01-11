@@ -9,17 +9,19 @@ const TokenMap tokenMap = {
     #include <vc/defs/builtin_kinds.inl>
     #undef BUILTIN_KIND
 
-    #define TOKEN_KIND(NAME, SYMBOL) { TOSTRING(SYMBOL), TokenKind::##NAME },
+    #define TOKEN_KIND(NAME, SYMBOL) { SYMBOL, TokenKind::##NAME },
     #include <vc/defs/lexer/token_keywords.inl>
     #undef TOKEN_KIND
 
     #define TOKEN_KIND(NAME, SYMBOL) { TOSTRING(SYMBOL), TokenKind::##NAME },
     #include <vc/defs/lexer/token_literals.inl>
     #undef TOKEN_KIND
-
-    #define TOKEN_KIND(NAME, SYMBOL) { TOSTRING(SYMBOL), TokenKind::##NAME },
+    /*
+    Don't include the token_operators.inl since they are lexed on a different branch than identifiers.
+    #define TOKEN_KIND(NAME, SYMBOL) { SYMBOL, TokenKind::##NAME },
     #include <vc/defs/lexer/token_operators.inl>
     #undef TOKEN_KIND
+    */
 
     { "false", TokenKind::BooleanLiteral },
     { "true", TokenKind::BooleanLiteral }
