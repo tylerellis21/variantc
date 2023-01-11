@@ -47,7 +47,7 @@ struct ArraySubscriptExpr : Expr {
     { }
 };
 
-struct BinaryOpExpr : Expr { 
+struct BinaryOpExpr : Expr {
     SourceRange sourceRange;
     Expr* lhs;
     Expr* rhs;
@@ -62,7 +62,7 @@ struct BinaryOpExpr : Expr {
     { }
 };
 
-struct CallExpr : Expr { 
+struct CallExpr : Expr {
     SourceRange sourceRange;
     Name* name;
     std::vector<Expr*> args;
@@ -75,7 +75,7 @@ struct CallExpr : Expr {
     { }
 };
 
-struct CastExpr : Expr { 
+struct CastExpr : Expr {
     SourceRange sourceRange;
     Expr* expr;
     Type* type;
@@ -88,7 +88,7 @@ struct CastExpr : Expr {
     { }
 };
 
-struct DeclRefExpr : Expr { 
+struct DeclRefExpr : Expr {
     Name* name;
 
     DeclRefExpr(Stmt* stmtParent, SourceLocation sourceLocation, Name* name) :
@@ -97,7 +97,7 @@ struct DeclRefExpr : Expr {
     { }
 };
 
-struct InitalizerExpr : Expr { 
+struct InitalizerExpr : Expr {
     SourceRange sourceRange;
     std::vector<Expr*> values;
 
@@ -108,7 +108,7 @@ struct InitalizerExpr : Expr {
     { }
 };
 
-struct MemberExpr : Expr { 
+struct MemberExpr : Expr {
     SourceRange sourceRange;
     Name* name;
     Expr* expr;
@@ -132,14 +132,14 @@ struct ParenExpr : Expr {
     { }
 };
 
-struct TernaryExpr : Expr { 
+struct TernaryExpr : Expr {
     SourceRange sourceRange;
     Expr* condition;
     Expr* lhs;
     Expr* rhs;
 
     TernaryExpr(
-        Stmt* stmtParent, 
+        Stmt* stmtParent,
         SourceRange sourceRange,
         Expr* condition,
         Expr* lhs,
@@ -153,7 +153,7 @@ struct TernaryExpr : Expr {
     { }
 };
 
-struct UnaryOpExpr : Expr { 
+struct UnaryOpExpr : Expr {
     SourceRange sourceRange;
     bool isPostfix;
     Expr* expr;
@@ -174,7 +174,7 @@ struct UnaryOpExpr : Expr {
     { }
 };
 
-struct BooleanLiteralExpr : Expr { 
+struct BooleanLiteralExpr : Expr {
     bool value;
 
     BooleanLiteralExpr(Stmt* stmtParent, SourceLocation sourceLocation, bool value) :
@@ -185,8 +185,8 @@ struct BooleanLiteralExpr : Expr {
 
 // either a r'' for rune
 // or standard ascii char 'a'
-struct CharLiteralExpr : Expr { 
-    
+struct CharLiteralExpr : Expr {
+
     union {
         char char_value;
         rune rune_value;
@@ -196,7 +196,7 @@ struct CharLiteralExpr : Expr {
 
     CharLiteralExpr(Stmt* stmtParent, SourceLocation sourceLocation, char char_value) :
         Expr(ExprKind::CharLiteralExpr, stmtParent, sourceLocation),
-        builtinKind(BuiltinKind::Char),
+        builtinKind(BuiltinKind::Int8),
         char_value(char_value)
     { }
 
@@ -207,7 +207,7 @@ struct CharLiteralExpr : Expr {
     { }
 };
 
-struct IntegerLiteralExpr : Expr { 
+struct IntegerLiteralExpr : Expr {
     union {
         u8 u8_value;
         u16 u16_value;
@@ -248,9 +248,9 @@ struct IntegerLiteralExpr : Expr {
     Decimal
 */
 
-// real32, 
+// real32,
 // real64
-struct RealLiteralExpr : Expr { 
+struct RealLiteralExpr : Expr {
     BuiltinKind builtinKind;
 };
 
@@ -261,7 +261,7 @@ struct RealLiteralExpr : Expr {
     Utf16,
     Utf32,
 */
-struct StringLiteralExpr : Expr { 
+struct StringLiteralExpr : Expr {
     BuiltinKind builtinKind;
 };
 

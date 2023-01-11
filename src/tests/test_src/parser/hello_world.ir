@@ -1,4 +1,0 @@
-struct testStruct {
-    i32 x;
-    i32 y;
-}

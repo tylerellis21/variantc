@@ -1,6 +1,7 @@
 #ifndef VC_TYPE_H_INCLUDE
 #define VC_TYPE_H_INCLUDE
 
+#include <vc/basic/builtinkind.h>
 #include <vc/basic/sourcelocation.h>
 
 namespace vc {
@@ -26,49 +27,6 @@ struct Type {
     { }
 };
 
-enum class BuiltinKind {
-    Null = 0,
-
-    Void,
-    Bool,
-
-    Char,
-    Rune,
-    CStr,
-    Utf8,
-    Utf16,
-    Utf32,
-
-    U8,
-    U16,
-    U32,
-    U64,
-    U128,
-    U245,
-    U512,
-    U1024,
-
-    I8,
-    I16,
-    I32,
-    I64,
-    I128,
-    I256,
-    I512,
-    I1024, 
-
-    R8,
-    R16,
-    R32,
-    R64,
-    R128,
-    R256,
-    R512,
-    R1024,
-
-    Decimal
-};
-
 struct ArrayType : Type {
     Type* type;
     u64 length;
@@ -80,11 +38,10 @@ struct ArrayType : Type {
     { }
 };
 
-
 struct BuiltinType : Type {
     BuiltinKind builtinKind;
-    
-    BuiltinType(SourceLocation sourceLocation, BuiltinKind builtinKind) : 
+
+    BuiltinType(SourceLocation sourceLocation, BuiltinKind builtinKind) :
         Type(TypeKind::BuiltinType, sourceLocation),
         builtinKind(builtinKind)
     { }

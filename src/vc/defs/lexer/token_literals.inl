@@ -1,4 +1,3 @@
-TOKEN_KIND(Null, 0)
 TOKEN_KIND(BooleanLiteral, 0)
 TOKEN_KIND(CharacterLiteral, 0)
 TOKEN_KIND(UnicodeLiteral, 0)

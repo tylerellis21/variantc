@@ -9,12 +9,21 @@
 namespace vc {
 
 enum class TokenKind {
+    #define BUILTIN_KIND(NAME, SYMBOL, SIZE) NAME,
+    #include <vc/defs/builtin_kinds.inl>
+    #undef BUILTIN_KIND
 
-    #define TOKEN_KIND(TOKEN_NAME, TOKEN_SYMBOL) TOKEN_NAME,
+    #define TOKEN_KIND(NAME, SYMBOL) NAME,
+    #include <vc/defs/lexer/token_keywords.inl>
     #undef TOKEN_KIND
 
-    #define BUILTIN_KIND(TOKEN_NAME, TOKEN_SYMBOL, SIZE_IN_BYTES) TOKEN_NAME,
-    #undef BUILTIN_KIND
+    #define TOKEN_KIND(NAME, SYMBOL) NAME,
+    #include <vc/defs/lexer/token_literals.inl>
+    #undef TOKEN_KIND
+
+    #define TOKEN_KIND(NAME, SYMBOL) NAME,
+    #include <vc/defs/lexer/token_operators.inl>
+    #undef TOKEN_KIND
 };
 
 std::string toString(TokenKind tokenKind);

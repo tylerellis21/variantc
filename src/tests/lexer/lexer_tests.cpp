@@ -1,7 +1,7 @@
 #include <chrono>
 #include <iostream>
 
-#include "lexer_shared.h"
+#include "../lexer_shared.h"
 
 
 //TODO(@Tyler): Once we have string.join working replace theses full paths with a constant string base path of sorts.

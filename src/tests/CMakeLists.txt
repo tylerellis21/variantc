@@ -5,7 +5,7 @@ set (SRC
     main.cpp
     unit_test.h
     unit_test.cpp
-    lexer_tests.cpp
+    lexer/lexer_tests.cpp
     lexer/lexer_comments.cpp
     lexer/lexer_literals.cpp
 )
