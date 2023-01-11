@@ -6,36 +6,6 @@
 
 namespace vc {
 
-// should we replace this with BuiltinKind?
-enum class ir_opcode_type {
-    Null = 0,
-
-    U8,
-    U16,
-    U32,
-    U64,
-    U128,
-    U256,
-    U512,
-    U1024,
-
-    I8,
-    I16,
-    I32,
-    I64,
-    I128,
-    I256,
-    I512,
-    I1024,
-
-    R32,
-    R64,
-    R128,
-    R256,
-    R512,
-    R1024,
-};
-
 enum class ir_opcode_id {
     NOP = 0,
     JO,
@@ -137,7 +107,7 @@ struct ir_call {
 };
 
 // ret
-struct ir_ret { 
+struct ir_ret {
 
 };
 
@@ -224,11 +194,11 @@ struct ir_lea {
 
 struct ir_opcode {
     ir_opcode_id opcodeId;
-    ir_opcode_type opcodeType;
-    
+    BuiltinKind opcodeType;
+
     union {
         ir_nop nop;
-        
+
         ir_jo jo;
         ir_jno jno;
 
@@ -236,13 +206,13 @@ struct ir_opcode {
         ir_jnb jnb;
     };
 
-    ir_opcode(ir_opcode_type opcodeType) :
+    ir_opcode(BuiltinKind opcodeType) :
         opcodeType(opcodeType)
     { }
 
     ir_opcode(ir_nop nop) :
         opcodeId(ir_opcode_id::NOP),
-        opcodeType(ir_opcode_type::Null),
+        opcodeType(BuiltinKind::Null),
         nop(nop)
     { }
 };

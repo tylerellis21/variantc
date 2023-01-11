@@ -20,6 +20,8 @@ set (SRC
     ${SRC_DIR}/ast/stmt.h
     ${SRC_DIR}/ast/type.h
 
+    ${SRC_DIR}/basic/builtinkind.h
+    ${SRC_DIR}/basic/builtinkind.cpp
     ${SRC_DIR}/basic/filebuffer.h
     ${SRC_DIR}/basic/filebuffer.cpp
     ${SRC_DIR}/basic/sourcelocation.h
