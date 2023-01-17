@@ -217,6 +217,8 @@ struct ir_opcode {
     { }
 };
 
+constexpr int OPCODE_SIZE = sizeof(ir_opcode);
+
 } // namespace vc
 
 #endif // IR_OPCODE_H_INCLUDE

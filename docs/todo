@@ -7,4 +7,12 @@ I think it might be better to seperate them into the following:
     Operators
     Types
 
+    internal
+    in
+    out
+    lock
+    unlock
+    yield
+    goto
+
 Well Types contain keywords, should we just remove types and have them in the keywords?

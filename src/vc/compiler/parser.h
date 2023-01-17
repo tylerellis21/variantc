@@ -2,6 +2,7 @@
 #define VC_PARSER_H_INCLUDE
 
 #include <vc/basic/token.h>
+#include <vc/ast/name.h>
 
 namespace vc {
 
@@ -25,11 +26,14 @@ struct Parser {
     bool valid();
     bool open();
 
+    SourceLocation loc();
     SourceLocation consume();
 
     bool expect(TokenKind tokenKind);
     bool expectConsume(TokenKind tokenKind);
     bool expectSemi();
+
+    bool parseName(Name* name, bool fullyQualifiedName);
 
     Decl* parseDeclaration(Decl* parentDecl, DeclGroup* declGroup);
 

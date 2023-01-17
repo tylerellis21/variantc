@@ -8,6 +8,8 @@ set (SRC
     lexer/lexer_tests.cpp
     lexer/lexer_comments.cpp
     lexer/lexer_literals.cpp
+    parser/parser_tests.cpp
+    ir/ir_tests.cpp
 )
 
 add_executable (${EXE_NAME} ${SRC})

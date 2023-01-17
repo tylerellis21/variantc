@@ -8,12 +8,80 @@ Parser::Parser(Lexer* lexer) {
 }
 
 bool Parser::valid() {
-    return lexer->isMoreChars();
+    return lexer->isMoreChars() || current.kind != TokenKind::Null;
 }
 
 
 bool Parser::open() {
+    lexer->nextToken(&current);
+    lexer->nextToken(&next);
     return true;
 }
 
+SourceLocation Parser::loc() {
+    if (current.kind == TokenKind::Null) {
+        return SourceLocation::None;
+    }
+    return current.loc;
 }
+
+SourceLocation Parser::consume() {
+    SourceLocation l = loc();
+
+    prev = current;
+    current = next;
+
+    lexer->nextToken(&next);
+
+    return l;
+}
+
+bool Parser::expect(TokenKind tokenKind) {
+    if (current.kind != tokenKind) {
+        std::cout << "expected token kind: " << tokenKind << " at: " << current << std::endl;
+        return false;
+    }
+    return true;
+}
+
+bool Parser::expectConsume(TokenKind tokenKind) {
+    if (expect(tokenKind)) {
+        consume();
+        return true;
+    }
+    return false;
+}
+
+bool Parser::expectSemi() {
+    if (current.kind != TokenKind::Semi) {
+        std::cout << "expected semicolon at: " << current << std::endl;
+    }
+    consume();
+    return true;
+}
+
+bool Parser::parseName(Name* name, bool fullyQualifiedName) {
+    if (expect(TokenKind::Identifier) == false) return false;
+
+    while (valid()) {
+        if (current.kind != TokenKind::Identifier) {
+            break;
+        }
+
+        name->identifiers.push_back(current);
+        consume();
+
+        if (current.kind == TokenKind::ColonColon && fullyQualifiedName) {
+            consume();
+        }
+    }
+
+    return true;
+}
+
+// Decl* parseDeclaration(Decl* parentDecl, DeclGroup* declGroup);
+// Stmt* parseStatement(Stmt* parentStmt, DeclGroup* declGroup);
+// Expr* parseExpression(Expr* parentExpr, DeclGroup* declGroup);
+// Type* parseType(Type* parentType, DeclGroup* declGroup);
+
+} // namespace vc

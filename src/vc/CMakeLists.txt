@@ -37,6 +37,10 @@ set (SRC
     ${SRC_DIR}/compiler/lexer.cpp
     ${SRC_DIR}/compiler/parser.h
     ${SRC_DIR}/compiler/parser.cpp
+    ${SRC_DIR}/compiler/parser_decl.cpp
+    ${SRC_DIR}/compiler/parser_expr.cpp
+    ${SRC_DIR}/compiler/parser_stmt.cpp
+    ${SRC_DIR}/compiler/parser_type.cpp
 
     #${SRC_DIR}/defs/tokenkinds.inl
     #${SRC_DIR}/defs/builtinkinds.inl

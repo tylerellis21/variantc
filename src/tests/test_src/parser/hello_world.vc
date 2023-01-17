@@ -1,9 +1,0 @@
-
-struct v2i {
-    i32 x;
-    i32 y;
-}
-
-def main(i32 argc, u8** args) i32 {
-    return 0;
-}
