@@ -6,7 +6,7 @@ TEST(Lexer, Comments) {
     Token token;
     lexer.nextToken(&token);
 
-    TEST_ASSERT(token.kind == TokenKind::Null);
+    TEST_ASSERT(token.kind == TokenKind::None);
     TEST_ASSERT(lexer.isMoreChars() == false);
 
     return true;

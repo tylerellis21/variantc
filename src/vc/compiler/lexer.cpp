@@ -58,7 +58,7 @@ bool Lexer::open(std::string filePath) {
 }
 
 void Lexer::nextToken(Token* token) {
-    token->kind = TokenKind::Null;
+    token->kind = TokenKind::None;
 
     while (isMoreChars()) {
 
@@ -122,7 +122,6 @@ void Lexer::nextToken(Token* token) {
             std::cout << "failed to lex character: " << current << std::endl;
             break;
         }
-
     }
 }
 
@@ -252,7 +251,7 @@ void Lexer::lexWord(Token* token) {
 }
 
 void Lexer::lexOperator(Token* token) {
-    TokenKind operatorKind = TokenKind::Null;
+    TokenKind operatorKind = TokenKind::None;
 
     #define SET_BREAK(tokenKind) { operatorKind = tokenKind; break; }
     #define SET_APP_BREAK(tokenKind) { operatorKind = tokenKind; appendConsume(); break; }
@@ -528,7 +527,7 @@ void Lexer::lexCharacter(Token* token) {
     nextChar();
 
     // temp fix for unicode escape sequences.
-    if (token->kind == TokenKind::Null) {
+    if (token->kind == TokenKind::None) {
         constructToken(token, TokenKind::CharacterLiteral);
     }
 }

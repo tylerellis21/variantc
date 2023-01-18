@@ -3,11 +3,11 @@
 
 #include <vc/basic/token.h>
 #include <vc/ast/name.h>
+#include <vc/ast/decl.h>
+#include <vc/ast/declgroup.h>
 
 namespace vc {
 
-struct Decl;
-struct DeclGroup;
 struct Stmt;
 struct Expr;
 struct Type;
@@ -35,7 +35,20 @@ struct Parser {
 
     bool parseName(Name* name, bool fullyQualifiedName);
 
-    Decl* parseDeclaration(Decl* parentDecl, DeclGroup* declGroup);
+    bool parseDeclaration(Decl* parentDecl, DeclGroup* declGroup);
+
+    bool parsePackageDecl(Decl* parent, DeclGroup* dg);
+    bool parseUsingDecl(Decl* parent, DeclGroup* dg);
+    bool parseTypedefDecl(Decl* parent, DeclGroup* dg);
+    bool parseTemplateDecl(Decl* parent, Decl** out);
+    bool parseImportDecl(Decl* parent, DeclGroup* dg);
+    bool parseEnumDecl(Decl* parent, DeclGroup* dg);
+    bool parseNamespaceDecl(Decl* parent, DeclGroup* dg);
+    bool parseRecordDecl(Decl* parent, DeclGroup* dg);
+    bool parseFunctionDecl(Decl* parent, DeclGroup* dg);
+    bool parseFunctionArgDecl(Decl* parent, FunctionArgDecl** out);
+    bool parseSingleVarDecl(Decl* parent, VarDecl** out, Type* type = 0);
+    bool parseCompoundVarDecl(Decl* parent, DeclGroup* dg, Type* type = 0);
 
     Stmt* parseStatement(Stmt* parentStmt, DeclGroup* declGroup);
 

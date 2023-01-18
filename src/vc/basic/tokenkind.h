@@ -9,6 +9,8 @@
 namespace vc {
 
 enum class TokenKind {
+    None = 0,
+
     #define BUILTIN_KIND(NAME, SYMBOL, SIZE) NAME,
     #include <vc/defs/builtin_kinds.inl>
     #undef BUILTIN_KIND

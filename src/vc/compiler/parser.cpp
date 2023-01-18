@@ -8,7 +8,7 @@ Parser::Parser(Lexer* lexer) {
 }
 
 bool Parser::valid() {
-    return lexer->isMoreChars() || current.kind != TokenKind::Null;
+    return lexer->isMoreChars() || current.kind != TokenKind::None;
 }
 
 
@@ -19,7 +19,7 @@ bool Parser::open() {
 }
 
 SourceLocation Parser::loc() {
-    if (current.kind == TokenKind::Null) {
+    if (current.kind == TokenKind::None) {
         return SourceLocation::None;
     }
     return current.loc;
