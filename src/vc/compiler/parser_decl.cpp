@@ -8,7 +8,6 @@ bool Parser::parseDeclaration(Decl* parentDecl, DeclGroup* declGroup) {
     case TokenKind::None: return true;
 
     case TokenKind::Enum: return parseEnumDecl(parentDecl, declGroup);
-    case TokenKind::Package: return parsePackageDecl(parentDecl, declGroup);
     case TokenKind::Namespace: return parseNamespaceDecl(parentDecl, declGroup);
     case TokenKind::Using: return parseUsingDecl(parentDecl, declGroup);
     case TokenKind::Typedef: return parseTypedefDecl(parentDecl, declGroup);
@@ -18,8 +17,7 @@ bool Parser::parseDeclaration(Decl* parentDecl, DeclGroup* declGroup) {
     case TokenKind::Union: return parseRecordDecl(parentDecl, declGroup);
 
     // Currently extern is only used to mark functions and variables from c
-    case TokenKind::Extern:
-        return parseFunctionDecl(parentDecl, declGroup);
+    case TokenKind::Extern: return parseFunctionDecl(parentDecl, declGroup);
 
     // case TokenKind::At: return parse_pp_decl(parentDecl, declGroup);
 
@@ -42,24 +40,44 @@ bool Parser::parseDeclaration(Decl* parentDecl, DeclGroup* declGroup) {
     case TokenKind::Def: return parseFunctionDecl(parentDecl, declGroup);
 
     default:
-        //utf8 str = token_symbol_or_string(current.kind);
-        //report_error(lexer->fb, loc(), "unexpected token '%s' in top level declaration\n", str.buffer);
+        std::cout << "unexpected token in declaration: " << current << std::endl;
         return false;
     }
     return true;
 }
 
-bool parseUsing_decl(Decl* parentDecl, DeclGroup* declGroup);
-bool parseTypedefDecl(Decl* parentDecl, DeclGroup* declGroup);
-bool parseTemplateDecl(Decl* parentDecl, Decl** out);
-bool parseImportDecl(Decl* parentDecl, DeclGroup* declGroup);
-bool parseEnumDecl(Decl* parentDecl, DeclGroup* declGroup);
-bool parseNamespaceDecl(Decl* parentDecl, DeclGroup* declGroup);
-bool parseRecordDecl(Decl* parentDecl, DeclGroup* declGroup);
-bool parseFunctionDecl(Decl* parentDecl, DeclGroup* declGroup);
-bool parseFunctionArgDecl(Decl* parentDecl, FunctionArgDecl** out);
-bool parseSingleVarDecl(Decl* parentDecl, VarDecl** out, Type* type = 0);
-bool parseCompoundVarDecl(Decl* parentDecl, DeclGroup* declGroup, Type* type = 0);
+bool Parser::parseUsingDecl(Decl* parentDecl, DeclGroup* declGroup) {
+}
+
+bool Parser::parseTypedefDecl(Decl* parentDecl, DeclGroup* declGroup) {
+}
+
+bool Parser::parseTemplateDecl(Decl* parentDecl, Decl** out) {
+}
+
+bool Parser::parseImportDecl(Decl* parentDecl, DeclGroup* declGroup) {
+}
+
+bool Parser::parseEnumDecl(Decl* parentDecl, DeclGroup* declGroup) {
+}
+
+bool Parser::parseNamespaceDecl(Decl* parentDecl, DeclGroup* declGroup) {
+}
+
+bool Parser::parseRecordDecl(Decl* parentDecl, DeclGroup* declGroup) {
+}
+
+bool Parser::parseFunctionDecl(Decl* parentDecl, DeclGroup* declGroup) {
+}
+
+bool Parser::parseFunctionArgDecl(Decl* parentDecl, FunctionArgDecl** out) {
+}
+
+bool Parser::parseSingleVarDecl(Decl* parentDecl, VarDecl** out, Type* type) {
+}
+
+bool Parser::parseCompoundVarDecl(Decl* parentDecl, DeclGroup* declGroup, Type* type) {
+}
 
 } // namespace vc
 

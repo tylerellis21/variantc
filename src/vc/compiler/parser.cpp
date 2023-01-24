@@ -11,7 +11,6 @@ bool Parser::valid() {
     return lexer->isMoreChars() || current.kind != TokenKind::None;
 }
 
-
 bool Parser::open() {
     lexer->nextToken(&current);
     lexer->nextToken(&next);

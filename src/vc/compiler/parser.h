@@ -36,8 +36,6 @@ struct Parser {
     bool parseName(Name* name, bool fullyQualifiedName);
 
     bool parseDeclaration(Decl* parentDecl, DeclGroup* declGroup);
-
-    bool parsePackageDecl(Decl* parent, DeclGroup* dg);
     bool parseUsingDecl(Decl* parent, DeclGroup* dg);
     bool parseTypedefDecl(Decl* parent, DeclGroup* dg);
     bool parseTemplateDecl(Decl* parent, Decl** out);
@@ -50,11 +48,60 @@ struct Parser {
     bool parseSingleVarDecl(Decl* parent, VarDecl** out, Type* type = 0);
     bool parseCompoundVarDecl(Decl* parent, DeclGroup* dg, Type* type = 0);
 
-    Stmt* parseStatement(Stmt* parentStmt, DeclGroup* declGroup);
+    bool parseStmt(Stmt* stmtParent, Stmt** out);
 
-    Expr* parseExpression(Expr* parentExpr, DeclGroup* declGroup);
+    bool parseCompoundStmt(Stmt* stmtParent, Stmt** out);
+    bool parseOptionalCompoundStmt(Stmt* stmtParent, Stmt** out);
+    bool parseBreakStmt(Stmt* stmtParent, Stmt** out);
+    bool parseContinueStmt(Stmt* stmtParent, Stmt** out);
+    bool parseTemplateStmt(Stmt* stmtParent, Stmt** out);
+    bool parseDeclStmt(Stmt* stmtParent, Stmt** out);
+    bool parseDoStmt(Stmt* stmtParent, Stmt** out);
+    bool parseForStmt(Stmt* stmtParent, Stmt** out);
+    bool parseIfStmt(Stmt* stmtParent, Stmt** out);
+    bool parseLabelStmt(Stmt* stmtParent, Stmt** out);
+    bool parseGotoStmt(Stmt* stmtParent, Stmt** out);
+    bool parseSwitchStmt(Stmt* stmtParent, Stmt** out);
+    bool parseWhileStmt(Stmt* stmtParent, Stmt** out);
+    bool parseDefaultStmt(Stmt* stmtParent, Stmt** out);
+    bool parseCaseStmt(Stmt* stmtParent, Stmt** out);
+    bool parseReturnStmt(Stmt* stmtParent, Stmt** out);
 
-    Type* parseType(Type* parentType, DeclGroup* declGroup);
+    ///
+    /// Expression parsing methods
+    ///
+
+    Expr* exprError();
+
+    Expr* parseExpr(Stmt* stmtParent);
+
+    Expr* parseAssignmentExpr(Stmt* stmtParent);
+    Expr* parseArraySubscriptExpr(Stmt* stmtParent, Expr* lhs);
+    Expr* parseUnaryExpr(Stmt* stmtParent, Expr* lhs, bool postfix);
+    Expr* parseRhsBinaryOp(Stmt* stmtParent, Expr* lhs, i32 minPrecedence);
+    Expr* parseCallExpr(Stmt* stmtParent, bool expectSemi, Name* name = 0, Type* templateType = 0);
+    Expr* parseCastExpr(Stmt* stmtParent);
+    Expr* parseTernaryExpr(Stmt* stmtParent, Expr* condition);
+    Expr* parsePostfixExpr(Stmt* stmtParent, Expr* lhs, bool postfix);
+    Expr* parseDeclRefExpr(Stmt* stmtParent);
+    Expr* parseInitalizerExpr(Stmt* stmtParent);
+    Expr* parseLiteralExpr(Stmt* stmtParent);
+    Expr* parseParenExpr(Stmt* stmtParent);
+    Expr* parseMemberExpr(Stmt* stmtParent);
+
+    ///
+    /// Type parsing methods
+    ///
+
+    bool parseType(Type** type, bool firstCall = true);
+
+    bool parseBasicType(Type** type);
+    bool parsePointerType(Type** type);
+    bool parseDeclRefType(Type** type, Name* name = 0);
+    bool parseArrayType(Type** type);
+    bool parseVarargType(Type** type);
+
+    bool parseTemplateType(Type** type, Name* name = 0);
 };
 
 } // namespace vc
