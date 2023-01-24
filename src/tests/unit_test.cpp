@@ -27,7 +27,7 @@ void registerTest(const std::string& unitName, const std::string& testName, Test
 
     unit->tests.push_back(TestCase(testName, function));
 
-    std::cout << "registered: " << unitName << " - " << testName << " @ " << (void*)function << std::endl;
+    std::cout << "registered: " << unitName << " - " << testName << std::endl;
 }
 
 void runUnitTest(UnitTest* unitTest) {
@@ -74,7 +74,7 @@ void runAllTests() {
             // Gross, fix this by returning a test result structure of some sorts?
             currentCase = &testCase;
 
-            std::cout << "    [running test case] " << testCase.name  << " @" << &testCase.function << " + " << std::endl;
+            std::cout << "    [running test case] " << testCase.name << std::endl;
 
             bool results = testCase.function();
 

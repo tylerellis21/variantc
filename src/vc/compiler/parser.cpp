@@ -54,6 +54,7 @@ bool Parser::expectConsume(TokenKind tokenKind) {
 bool Parser::expectSemi() {
     if (current.kind != TokenKind::Semi) {
         std::cout << "expected semicolon at: " << current << std::endl;
+        return false;
     }
     consume();
     return true;
@@ -77,10 +78,5 @@ bool Parser::parseName(Name* name, bool fullyQualifiedName) {
 
     return true;
 }
-
-// Decl* parseDeclaration(Decl* parentDecl, DeclGroup* declGroup);
-// Stmt* parseStatement(Stmt* parentStmt, DeclGroup* declGroup);
-// Expr* parseExpression(Expr* parentExpr, DeclGroup* declGroup);
-// Type* parseType(Type* parentType, DeclGroup* declGroup);
 
 } // namespace vc

@@ -47,36 +47,72 @@ bool Parser::parseDeclaration(Decl* parentDecl, DeclGroup* declGroup) {
 }
 
 bool Parser::parseUsingDecl(Decl* parentDecl, DeclGroup* declGroup) {
+    SourceLocation startLoc = loc();
+
+    if (!expectConsume(TokenKind::Using)) return false;
+
+    Name name;
+    if (!parseName(&name, true)) return false;
+
+    if (!expectSemi()) return false;
+
+    UsingDecl* decl = new UsingDecl(parentDecl, startLoc, name);
+    declGroup->entries.push_back(decl);
+    return true;
 }
 
 bool Parser::parseTypedefDecl(Decl* parentDecl, DeclGroup* declGroup) {
+    SourceLocation loc = consume();
+
+    Type* type = 0;
+    if (!parseType(&type)) return false;
+
+    Name name;
+    if (!parseName(&name, false)) return false;
+
+    if (!expectSemi()) return false;
+
+    TypedefDecl* typedefDecl = new TypedefDecl(loc, parent, name, type);
+
+    dg->add(typedefDecl);
+
+    return true;
 }
 
 bool Parser::parseTemplateDecl(Decl* parentDecl, Decl** out) {
+    return true;
 }
 
 bool Parser::parseImportDecl(Decl* parentDecl, DeclGroup* declGroup) {
+    return true;
 }
 
 bool Parser::parseEnumDecl(Decl* parentDecl, DeclGroup* declGroup) {
+    return true;
 }
 
 bool Parser::parseNamespaceDecl(Decl* parentDecl, DeclGroup* declGroup) {
+    return true;
 }
 
 bool Parser::parseRecordDecl(Decl* parentDecl, DeclGroup* declGroup) {
+    return true;
 }
 
 bool Parser::parseFunctionDecl(Decl* parentDecl, DeclGroup* declGroup) {
+    return true;
 }
 
 bool Parser::parseFunctionArgDecl(Decl* parentDecl, FunctionArgDecl** out) {
+    return true;
 }
 
 bool Parser::parseSingleVarDecl(Decl* parentDecl, VarDecl** out, Type* type) {
+    return true;
 }
 
 bool Parser::parseCompoundVarDecl(Decl* parentDecl, DeclGroup* declGroup, Type* type) {
+    return true;
 }
 
 } // namespace vc

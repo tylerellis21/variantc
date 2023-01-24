@@ -3,7 +3,7 @@
 
 #include <vc/types.h>
 #include <vc/basic/sourcelocation.h>
-
+#include <vc/ast/name.h>
 #include <vector>
 
 namespace vc {
@@ -12,7 +12,6 @@ struct DeclGroup;
 struct Expr;
 struct Stmt;
 struct Type;
-struct Name;
 
 enum class DeclKind {
     Null = 0,
@@ -51,10 +50,10 @@ struct Decl {
 };
 
 struct EnumConstDecl : Decl {
-    Name* name;
+    Name name;
     Expr* value;
 
-    EnumConstDecl(Decl* parent, SourceLocation sourceLocation, Name* name, Expr* value) :
+    EnumConstDecl(Decl* parent, SourceLocation sourceLocation, Name name, Expr* value) :
         Decl(DeclKind::EnumConstDecl, parent, sourceLocation),
         name(name),
         value(value)
@@ -63,14 +62,14 @@ struct EnumConstDecl : Decl {
 
 struct EnumDecl : Decl {
     SourceRange sourceRange;
-    Name* name;
+    Name name;
     DeclGroup* declGroup;
     Type* type;
 
     EnumDecl(
         Decl* parent,
         SourceRange sourceRange,
-        Name* name,
+        Name name,
         DeclGroup* declGroup,
         Type* type
     ) :
@@ -93,7 +92,7 @@ struct FunctionArgDecl : Decl {
 };
 
 struct FunctionDecl : Decl {
-    Name* name;
+    Name name;
     std::vector<FunctionArgDecl*> args;
     Type* returnType;
     Stmt* body;
@@ -101,7 +100,7 @@ struct FunctionDecl : Decl {
     FunctionDecl(
         Decl* parent,
         SourceLocation sourceLocation,
-        Name* name,
+        Name name,
         std::vector<FunctionArgDecl*> args,
         Type* returnType,
         Stmt* body
@@ -115,9 +114,9 @@ struct FunctionDecl : Decl {
 };
 
 struct ImportDecl : Decl {
-    Name* name;
+    Name name;
 
-    ImportDecl(Decl* parent, SourceLocation sourceLocation, Name* name) :
+    ImportDecl(Decl* parent, SourceLocation sourceLocation, Name name) :
         Decl(DeclKind::ImportDecl, parent, sourceLocation),
         name(name)
     { }
@@ -125,13 +124,13 @@ struct ImportDecl : Decl {
 
 struct InterfaceDecl : Decl {
     SourceRange sourceRange;
-    Name* name;
+    Name name;
     DeclGroup* declGroup;
 
     InterfaceDecl(
         Decl* parent,
         SourceRange sourceRange,
-        Name* name,
+        Name name,
         DeclGroup* declGroup
     ) :
         Decl(DeclKind::InterfaceDecl, parent, sourceRange.begin),
@@ -151,14 +150,14 @@ struct ModuleDecl : Decl {
 };
 
 struct NamespaceDecl : Decl {
-    Name* name;
+    Name name;
     SourceRange sourceRange;
     DeclGroup* declGroup;
 
     NamespaceDecl(
         Decl* parent,
         SourceRange sourceRange,
-        Name* name,
+        Name name,
         DeclGroup* declGroup
     ) :
         Decl(DeclKind::NamespaceDecl, parent, sourceRange.begin),
@@ -169,9 +168,9 @@ struct NamespaceDecl : Decl {
 };
 
 struct PackageDecl : Decl {
-    Name* name;
+    Name name;
 
-    PackageDecl(Decl* parent, SourceLocation sourceLocation, Name* name) :
+    PackageDecl(Decl* parent, SourceLocation sourceLocation, Name name) :
         Decl(DeclKind::PackageDecl, parent, sourceLocation)
     { }
 };
@@ -187,7 +186,7 @@ enum class RecordKind {
 
 struct RecordDecl : Decl {
     RecordKind recordKind;
-    Name* name;
+    Name name;
     DeclGroup* declGroup;
 
     RecordDecl(
@@ -195,7 +194,7 @@ struct RecordDecl : Decl {
         SourceRange
         sourceRange,
         RecordKind recordKind,
-        Name* name,
+        Name name,
         DeclGroup* declGroup
     ) :
         Decl(DeclKind::RecordDecl, parent, sourceRange.begin),
@@ -206,10 +205,10 @@ struct RecordDecl : Decl {
 };
 
 struct TypedefDecl : Decl {
-    Name* name;
+    Name name;
     Type* type;
 
-    TypedefDecl(Decl* parent, SourceLocation sourceLocation, Name* name, Type* type) :
+    TypedefDecl(Decl* parent, SourceLocation sourceLocation, Name name, Type* type) :
         Decl(DeclKind::TypedefDecl, parent, sourceLocation),
         name(name),
         type(type)
@@ -217,9 +216,9 @@ struct TypedefDecl : Decl {
 };
 
 struct UsingDecl : Decl {
-    Name* name;
+    Name name;
 
-    UsingDecl(Decl* parent, SourceLocation sourceLocation, Name* name) :
+    UsingDecl(Decl* parent, SourceLocation sourceLocation, Name name) :
         Decl(DeclKind::UsingDecl, parent, sourceLocation),
         name(name)
     { }
@@ -227,14 +226,14 @@ struct UsingDecl : Decl {
 
 struct VarDecl : Decl {
     Type* type;
-    Name* name;
+    Name name;
     Expr* assignment;
 
     VarDecl(
         Decl* parent,
         SourceLocation sourceLocation,
         Type* type,
-        Name* name,
+        Name name,
         Expr* assignment
     ) :
         Decl(DeclKind::VarDecl, parent, sourceLocation),
