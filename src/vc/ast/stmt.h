@@ -36,84 +36,84 @@ struct Expr;
 
 struct Stmt {
     StmtKind stmtKind;
-    Stmt* stmtParent;
+    Stmt* parentStmt;
     SourceLocation sourceLocation;
 
-    Stmt(StmtKind stmtKind, Stmt* stmtParent, SourceLocation sourceLocation) :
+    Stmt(StmtKind stmtKind, Stmt* parentStmt, SourceLocation sourceLocation) :
         stmtKind(stmtKind),
-        stmtParent(stmtParent),
+        parentStmt(parentStmt),
         sourceLocation(sourceLocation)
     { }
 };
 
 struct BreakStmt : Stmt {
-    BreakStmt(Stmt* stmtParent, SourceLocation sourceLocation) :
-        Stmt(StmtKind::BreakStmt, stmtParent, sourceLocation)
+    BreakStmt(Stmt* parentStmt, SourceLocation sourceLocation) :
+        Stmt(StmtKind::BreakStmt, parentStmt, sourceLocation)
     { }
 };
 
-struct CaseStmt : Stmt { 
+struct CaseStmt : Stmt {
     Expr* value;
     Stmt* stmt;
 
-    CaseStmt(Stmt* stmtParent, SourceLocation sourceLocation, Expr* value, Stmt* stmt) :
-        Stmt(StmtKind::CaseStmt, stmtParent, sourceLocation),
+    CaseStmt(Stmt* parentStmt, SourceLocation sourceLocation, Expr* value, Stmt* stmt) :
+        Stmt(StmtKind::CaseStmt, parentStmt, sourceLocation),
         value(value),
         stmt(stmt)
     { }
 };
 
-struct CompoundStmt : Stmt { 
+struct CompoundStmt : Stmt {
     SourceRange sourceRange;
     std::vector<Stmt*> statements;
 
-    CompoundStmt(Stmt* stmtParent, SourceRange sourceRange, std::vector<Stmt*> statements) :
-        Stmt(StmtKind::CompoundStmt, stmtParent, sourceRange.begin),
+    CompoundStmt(Stmt* parentStmt, SourceRange sourceRange, std::vector<Stmt*> statements) :
+        Stmt(StmtKind::CompoundStmt, parentStmt, sourceRange.begin),
         sourceRange(sourceRange),
         statements(statements)
     { }
 };
 
-struct ContinueStmt : Stmt { 
-    ContinueStmt(Stmt* stmtParent, SourceLocation sourceLocation) :
-        Stmt(StmtKind::ContinueStmt, stmtParent, sourceLocation)
+struct ContinueStmt : Stmt {
+    ContinueStmt(Stmt* parentStmt, SourceLocation sourceLocation) :
+        Stmt(StmtKind::ContinueStmt, parentStmt, sourceLocation)
     { }
 };
 
-struct DeclStmt : Stmt { 
+struct DeclStmt : Stmt {
     DeclGroup* declGroup;
 
-    DeclStmt(Stmt* stmtParent, SourceLocation sourceLocation, DeclGroup* declGroup) :
-        Stmt(StmtKind::DeclStmt, stmtParent, sourceLocation),
+    DeclStmt(Stmt* parentStmt, SourceLocation sourceLocation, DeclGroup* declGroup) :
+        Stmt(StmtKind::DeclStmt, parentStmt, sourceLocation),
         declGroup(declGroup)
     { }
 };
 
-struct DefaultStmt : Stmt { 
+struct DefaultStmt : Stmt {
     Stmt* stmt;
 
-    DefaultStmt(Stmt* stmtParent, SourceLocation sourceLocation, Stmt* stmt) :
-        Stmt(StmtKind::DefaultStmt, stmtParent, sourceLocation)
+    DefaultStmt(Stmt* parentStmt, SourceLocation sourceLocation, Stmt* stmt) :
+        Stmt(StmtKind::DefaultStmt, parentStmt, sourceLocation)
     { }
 };
 
-struct DeferStmt : Stmt { 
+struct DeferStmt : Stmt {
     Stmt* stmt;
-    
-    DeferStmt(Stmt* stmtParent, SourceLocation sourceLocation, Stmt* stmt) :
-        Stmt(StmtKind::DeferStmt, stmtParent, sourceLocation),
+
+    DeferStmt(Stmt* parentStmt, SourceLocation sourceLocation, Stmt* stmt) :
+        Stmt(StmtKind::DeferStmt, parentStmt, sourceLocation),
         stmt(stmt)
     { }
 };
 
 struct WhileStmt;
 
-struct DoStmt : Stmt { 
+struct DoStmt : Stmt {
     Stmt* body;
     WhileStmt* whileStmt;
 
-    DoStmt(Stmt* stmtParent, SourceLocation sourceLocation, Stmt* body, WhileStmt* whileStmt) :
-        Stmt(StmtKind::WhileStmt, stmtParent, sourceLocation),
+    DoStmt(Stmt* parentStmt, SourceLocation sourceLocation, Stmt* body, WhileStmt* whileStmt) :
+        Stmt(StmtKind::WhileStmt, parentStmt, sourceLocation),
         body(body),
         whileStmt(whileStmt)
     { }
@@ -121,104 +121,106 @@ struct DoStmt : Stmt {
 
 struct ForStmt : Stmt {
     SourceRange sourceRange;
-    Stmt* init;
-    Expr* condition;
-    Expr* increment;
-    Stmt* body;
+    Stmt* initStmt;
+    Expr* conditionStmt;
+    Expr* incrementStmt;
+    Stmt* bodyStmt;
 
     ForStmt(
-        Stmt* stmtParent, 
-        SourceRange sourceRange, 
-        Stmt* init, 
-        Expr* condition,
-        Expr* increment,
-        Stmt* body
+        Stmt* parentStmt,
+        SourceLocation sourceLocation,
+        SourceRange sourceRange,
+        Stmt* initStmt,
+        Expr* conditionStmt,
+        Expr* incrementStmt,
+        Stmt* bodyStmt
     ) :
-        Stmt(StmtKind::ForStmt, stmtParent, sourceRange.begin),
+        Stmt(StmtKind::ForStmt, parentStmt, sourceLocation),
         sourceRange(sourceRange),
-        init(init),
-        condition(condition),
-        increment(increment),
-        body(body)
+        initStmt(initStmt),
+        conditionStmt(conditionStmt),
+        incrementStmt(incrementStmt),
+        bodyStmt(bodyStmt)
     { }
 };
 
-struct GotoStmt : Stmt { 
-    Name* name;
+struct GotoStmt : Stmt {
+    Name name;
 
-    GotoStmt(Stmt* stmtParent, SourceLocation sourceLocation, Name* name) :
-        Stmt(StmtKind::GotoStmt, stmtParent, sourceLocation),
+    GotoStmt(Stmt* parentStmt, SourceLocation sourceLocation, Name name) :
+        Stmt(StmtKind::GotoStmt, parentStmt, sourceLocation),
         name(name)
     { }
 };
 
-struct IfStmt : Stmt { 
+struct IfStmt : Stmt {
     SourceRange sourceRange;
-    Expr* condition;
-    Stmt* body;
+    Expr* conditionStmt;
+    Stmt* bodyStmt;
     Stmt* elseStmt;
-    
+
     IfStmt(
-        Stmt* stmtParent, 
+        Stmt* parentStmt,
+        SourceLocation sourceLocation,
         SourceRange sourceRange,
-        Expr* condition,
-        Stmt* body,
+        Expr* conditionStmt,
+        Stmt* bodyStmt,
         Stmt* elseStmt
     ) :
-        Stmt(StmtKind::IfStmt, stmtParent, sourceRange.begin),
+        Stmt(StmtKind::IfStmt, parentStmt, sourceLocation),
         sourceRange(sourceRange),
-        condition(condition),
-        body(body),
+        conditionStmt(conditionStmt),
+        bodyStmt(bodyStmt),
         elseStmt(elseStmt)
     { }
 };
 
-struct LabelStmt : Stmt { 
-    Name* name;
+struct LabelStmt : Stmt {
+    Name name;
 
-    LabelStmt(Stmt* stmtParent, SourceLocation sourceLocation, Name* name) :
-        Stmt(StmtKind::LabelStmt, stmtParent, sourceLocation),
+    LabelStmt(Stmt* parentStmt, SourceLocation sourceLocation, Name name) :
+        Stmt(StmtKind::LabelStmt, parentStmt, sourceLocation),
         name(name)
     { }
 };
 
-struct ReturnStmt : Stmt { 
+struct ReturnStmt : Stmt {
     Expr* expr;
 
-    ReturnStmt(Stmt* stmtParent, SourceLocation sourceLocation, Expr* expr) :
-        Stmt(StmtKind::ReturnStmt, stmtParent, sourceLocation),
+    ReturnStmt(Stmt* parentStmt, SourceLocation sourceLocation, Expr* expr) :
+        Stmt(StmtKind::ReturnStmt, parentStmt, sourceLocation),
         expr(expr)
     { }
 };
 
-struct SwitchStmt : Stmt { 
+struct SwitchStmt : Stmt {
     SourceRange sourceRange;
     Expr* expr;
     Stmt* stmt;
 
-    SwitchStmt(Stmt* stmtParent, SourceRange sourceRange, Expr* expr, Stmt* stmt) :
-        Stmt(StmtKind::SwitchStmt, stmtParent, sourceRange.begin),
+    SwitchStmt(Stmt* parentStmt, SourceRange sourceRange, Expr* expr, Stmt* stmt) :
+        Stmt(StmtKind::SwitchStmt, parentStmt, sourceRange.begin),
         expr(expr),
         stmt(stmt)
     { }
 };
 
-struct UseStmt : Stmt { 
+struct UseStmt : Stmt {
     Expr* expr;
 
-    UseStmt(Stmt* stmtParent, SourceLocation sourceLocation, Expr* expr) :
-        Stmt(StmtKind::UseStmt, stmtParent, sourceLocation),
+    UseStmt(Stmt* parentStmt, SourceLocation sourceLocation, Expr* expr) :
+        Stmt(StmtKind::UseStmt, parentStmt, sourceLocation),
         expr(expr)
     { }
 };
 
-struct WhileStmt : Stmt { 
+struct WhileStmt : Stmt {
     SourceRange sourceRange;
     Expr* condition;
     Stmt* body;
 
-    WhileStmt(Stmt* stmtParent, SourceRange sourceRange, Expr* condition, Stmt* body) :
-        Stmt(StmtKind::WhileStmt, stmtParent, sourceLocation),
+    WhileStmt(Stmt* parentStmt, SourceRange sourceRange, Expr* condition, Stmt* body) :
+        Stmt(StmtKind::WhileStmt, parentStmt, sourceLocation),
         condition(condition),
         body(body)
     { }

@@ -16,7 +16,6 @@ struct Type;
 enum class DeclKind {
     Null = 0,
 
-    // AST Declarations
     EnumConstDecl,
     EnumDecl,
     FunctionArgDecl,
@@ -27,6 +26,8 @@ enum class DeclKind {
     NamespaceDecl,
     PackageDecl,
     RecordDecl,
+    TemplateDecl,
+    TemplateNameDecl,
     TypedefDecl,
     UsingDecl,
     VarDecl,
@@ -49,6 +50,9 @@ struct Decl {
     { }
 };
 
+struct TemplateDecl;
+struct VarDecl;
+
 struct EnumConstDecl : Decl {
     Name name;
     Expr* value;
@@ -68,12 +72,13 @@ struct EnumDecl : Decl {
 
     EnumDecl(
         Decl* parent,
+        SourceLocation sourceLocation,
         SourceRange sourceRange,
         Name name,
         DeclGroup* declGroup,
         Type* type
     ) :
-    Decl(DeclKind::EnumDecl, parent, sourceRange.begin),
+    Decl(DeclKind::EnumDecl, parent, sourceLocation),
     sourceRange(sourceRange),
     name(name),
     declGroup(declGroup),
@@ -81,21 +86,26 @@ struct EnumDecl : Decl {
     { }
 };
 
-struct VarDecl;
 struct FunctionArgDecl : Decl {
+    bool isVarArg = false;
     VarDecl* varDecl;
 
-    FunctionArgDecl(Decl* parent, SourceLocation sourceLocation, VarDecl* varDecl) :
+    FunctionArgDecl(Decl* parent, SourceLocation sourceLocation, VarDecl* varDecl, bool isVarArg) :
         Decl(DeclKind::FunctionArgDecl, parent, sourceLocation),
         varDecl(varDecl)
     { }
 };
 
 struct FunctionDecl : Decl {
+    bool isPrototype = false;
+    bool isInline = false;
+    bool isExtern = false;
+
     Name name;
     std::vector<FunctionArgDecl*> args;
     Type* returnType;
     Stmt* body;
+    TemplateDecl* templateDecl;
 
     FunctionDecl(
         Decl* parent,
@@ -119,24 +129,6 @@ struct ImportDecl : Decl {
     ImportDecl(Decl* parent, SourceLocation sourceLocation, Name name) :
         Decl(DeclKind::ImportDecl, parent, sourceLocation),
         name(name)
-    { }
-};
-
-struct InterfaceDecl : Decl {
-    SourceRange sourceRange;
-    Name name;
-    DeclGroup* declGroup;
-
-    InterfaceDecl(
-        Decl* parent,
-        SourceRange sourceRange,
-        Name name,
-        DeclGroup* declGroup
-    ) :
-        Decl(DeclKind::InterfaceDecl, parent, sourceRange.begin),
-        sourceRange(sourceRange),
-        name(name),
-        declGroup(declGroup)
     { }
 };
 
@@ -182,25 +174,45 @@ enum class RecordKind {
     AttributeKind,
     StructKind,
     UnionKind,
+    InterfaceKind
 };
 
 struct RecordDecl : Decl {
     RecordKind recordKind;
     Name name;
     DeclGroup* declGroup;
+    SourceRange sourceRange;
+    TemplateDecl* templateDecl;
 
     RecordDecl(
         Decl* parent,
-        SourceRange
-        sourceRange,
+        SourceLocation sourceLocation,
         RecordKind recordKind,
         Name name,
         DeclGroup* declGroup
     ) :
-        Decl(DeclKind::RecordDecl, parent, sourceRange.begin),
+        Decl(DeclKind::RecordDecl, parent, sourceLocation),
         recordKind(recordKind),
         name(name),
         declGroup(declGroup)
+    { }
+};
+
+struct TemplateDecl : Decl {
+    DeclGroup* declGroup;
+
+    TemplateDecl(Decl* parent, SourceLocation sourceLocation, DeclGroup* declGroup) :
+        Decl(DeclKind::TypedefDecl, parent, sourceLocation),
+        declGroup(declGroup)
+    { }
+};
+
+struct TemplateNameDecl : Decl {
+    Name name;
+
+    TemplateNameDecl(Decl* parent, SourceLocation sourceLocation, Name name) :
+        Decl(DeclKind::TypedefDecl, parent, sourceLocation),
+        name(name)
     { }
 };
 
@@ -224,10 +236,13 @@ struct UsingDecl : Decl {
     { }
 };
 
+struct IntegerLiteralExpr;
+
 struct VarDecl : Decl {
     Type* type;
     Name name;
     Expr* assignment;
+    IntegerLiteralExpr* bitsize;
 
     VarDecl(
         Decl* parent,

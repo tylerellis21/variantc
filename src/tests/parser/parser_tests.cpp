@@ -30,7 +30,7 @@ TEST(Parser, UsingDecl) {
 
     DeclGroup* dg = new DeclGroup(0);
 
-    TEST_ASSERT(parser.parseDeclaration(0, dg) == true);
+    TEST_ASSERT(parser.parseDecl(0, dg) == true);
 
     Decl* decl = dg->entries.front();
 

@@ -14,7 +14,8 @@ enum class TypeKind {
     ArrayType,
     BuiltinType,
     DeclRefType,
-    PointerType
+    PointerType,
+    TemplateType
 };
 
 struct Type {
@@ -57,11 +58,22 @@ struct PointerType : Type {
 };
 
 struct DeclRefType : Type {
-    Name* name;
+    Name name;
 
-    DeclRefType(SourceLocation sourceLocation, Name* name) :
+    DeclRefType(SourceLocation sourceLocation, Name name) :
         Type(TypeKind::DeclRefType, sourceLocation),
         name(name)
+    { }
+};
+
+struct TemplateType : Type {
+    Name name;
+    std::vector<Type*> types;
+
+    TemplateType(SourceLocation sourceLocation, Name name, std::vector<Type*> types) :
+        Type(TypeKind::TemplateType, sourceLocation),
+        name(name),
+        types(types)
     { }
 };
 

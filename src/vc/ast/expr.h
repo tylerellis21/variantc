@@ -31,8 +31,8 @@ enum class ExprKind {
 struct Expr : Stmt {
     ExprKind exprKind;
 
-    Expr(ExprKind exprKind, Stmt* stmtParent, SourceLocation sourceLocation) :
-        Stmt(StmtKind::ExprStmt, stmtParent, sourceLocation),
+    Expr(ExprKind exprKind, Stmt* parentStmt, SourceLocation sourceLocation) :
+        Stmt(StmtKind::ExprStmt, parentStmt, sourceLocation),
         exprKind(exprKind)
     { }
 };
@@ -42,8 +42,8 @@ struct ArraySubscriptExpr : Expr {
     Expr* lhs;
     Expr* rhs;
 
-    ArraySubscriptExpr(Stmt* stmtParent, SourceLocation sourceLocation, Expr* lhs, Expr* rhs) :
-        Expr(ExprKind::ArraySubscriptExpr, stmtParent, sourceLocation)
+    ArraySubscriptExpr(Stmt* parentStmt, SourceLocation sourceLocation, Expr* lhs, Expr* rhs) :
+        Expr(ExprKind::ArraySubscriptExpr, parentStmt, sourceLocation)
     { }
 };
 
@@ -53,8 +53,8 @@ struct BinaryOpExpr : Expr {
     Expr* rhs;
     TokenKind op;
 
-    BinaryOpExpr(Stmt* stmtParent, SourceRange sourceRange, Expr* lhs, Expr* rhs, TokenKind op) :
-        Expr(ExprKind::BinaryOpExpr, stmtParent, sourceRange.begin),
+    BinaryOpExpr(Stmt* parentStmt, SourceRange sourceRange, Expr* lhs, Expr* rhs, TokenKind op) :
+        Expr(ExprKind::BinaryOpExpr, parentStmt, sourceRange.begin),
         sourceRange(sourceRange),
         lhs(lhs),
         rhs(rhs),
@@ -67,8 +67,8 @@ struct CallExpr : Expr {
     Name* name;
     std::vector<Expr*> args;
 
-    CallExpr(Stmt* stmtParent, SourceRange sourceRange, Name* name, std::vector<Expr*> args) :
-        Expr(ExprKind::CallExpr, stmtParent, sourceRange.begin),
+    CallExpr(Stmt* parentStmt, SourceRange sourceRange, Name* name, std::vector<Expr*> args) :
+        Expr(ExprKind::CallExpr, parentStmt, sourceRange.begin),
         sourceRange(sourceRange),
         name(name),
         args(args)
@@ -80,8 +80,8 @@ struct CastExpr : Expr {
     Expr* expr;
     Type* type;
 
-    CastExpr(Stmt* stmtParent, SourceRange sourceRange, Expr* expr, Type* type) :
-        Expr(ExprKind::CastExpr, stmtParent, sourceRange.begin),
+    CastExpr(Stmt* parentStmt, SourceRange sourceRange, Expr* expr, Type* type) :
+        Expr(ExprKind::CastExpr, parentStmt, sourceRange.begin),
         sourceRange(sourceRange),
         expr(expr),
         type(type)
@@ -91,8 +91,8 @@ struct CastExpr : Expr {
 struct DeclRefExpr : Expr {
     Name* name;
 
-    DeclRefExpr(Stmt* stmtParent, SourceLocation sourceLocation, Name* name) :
-        Expr(ExprKind::DeclRefExpr, stmtParent, sourceLocation),
+    DeclRefExpr(Stmt* parentStmt, SourceLocation sourceLocation, Name* name) :
+        Expr(ExprKind::DeclRefExpr, parentStmt, sourceLocation),
         name(name)
     { }
 };
@@ -101,8 +101,8 @@ struct InitalizerExpr : Expr {
     SourceRange sourceRange;
     std::vector<Expr*> values;
 
-    InitalizerExpr(Stmt* stmtParent, SourceRange sourceRange, std::vector<Expr*> values) :
-        Expr(ExprKind::InitalizerExpr, stmtParent, sourceRange.begin),
+    InitalizerExpr(Stmt* parentStmt, SourceRange sourceRange, std::vector<Expr*> values) :
+        Expr(ExprKind::InitalizerExpr, parentStmt, sourceRange.begin),
         sourceRange(sourceRange),
         values(values)
     { }
@@ -113,8 +113,8 @@ struct MemberExpr : Expr {
     Name* name;
     Expr* expr;
 
-    MemberExpr(Stmt* stmtParent, SourceRange sourceRange, Name* name, Expr* expr) :
-        Expr(ExprKind::MemberExpr, stmtParent, sourceRange.begin),
+    MemberExpr(Stmt* parentStmt, SourceRange sourceRange, Name* name, Expr* expr) :
+        Expr(ExprKind::MemberExpr, parentStmt, sourceRange.begin),
         sourceRange(sourceRange),
         name(name),
         expr(expr)
@@ -125,8 +125,8 @@ struct ParenExpr : Expr {
     SourceRange sourceRange;
     Expr* expr;
 
-    ParenExpr(Stmt* stmtParent, SourceRange sourceRange, Expr* expr) :
-        Expr(ExprKind::ParenExpr, stmtParent, sourceRange.begin),
+    ParenExpr(Stmt* parentStmt, SourceRange sourceRange, Expr* expr) :
+        Expr(ExprKind::ParenExpr, parentStmt, sourceRange.begin),
         sourceRange(sourceRange),
         expr(expr)
     { }
@@ -139,13 +139,13 @@ struct TernaryExpr : Expr {
     Expr* rhs;
 
     TernaryExpr(
-        Stmt* stmtParent,
+        Stmt* parentStmt,
         SourceRange sourceRange,
         Expr* condition,
         Expr* lhs,
         Expr* rhs
     ) :
-        Expr(ExprKind::TernaryExpr, stmtParent, sourceRange.begin),
+        Expr(ExprKind::TernaryExpr, parentStmt, sourceRange.begin),
         sourceRange(sourceRange),
         condition(condition),
         lhs(lhs),
@@ -160,13 +160,13 @@ struct UnaryOpExpr : Expr {
     TokenKind op;
 
     UnaryOpExpr(
-        Stmt* stmtParent,
+        Stmt* parentStmt,
         SourceRange sourceRange,
         bool isPostfix,
         Expr* expr,
         TokenKind op
     ) :
-        Expr(ExprKind::UnaryOpExpr, stmtParent, sourceRange.begin),
+        Expr(ExprKind::UnaryOpExpr, parentStmt, sourceRange.begin),
         sourceRange(sourceRange),
         isPostfix(isPostfix),
         expr(expr),
@@ -177,8 +177,8 @@ struct UnaryOpExpr : Expr {
 struct BooleanLiteralExpr : Expr {
     bool value;
 
-    BooleanLiteralExpr(Stmt* stmtParent, SourceLocation sourceLocation, bool value) :
-        Expr(ExprKind::BooleanLiteralExpr, stmtParent, sourceLocation),
+    BooleanLiteralExpr(Stmt* parentStmt, SourceLocation sourceLocation, bool value) :
+        Expr(ExprKind::BooleanLiteralExpr, parentStmt, sourceLocation),
         value(value)
     { }
 };
@@ -194,14 +194,14 @@ struct CharLiteralExpr : Expr {
 
     BuiltinKind builtinKind;
 
-    CharLiteralExpr(Stmt* stmtParent, SourceLocation sourceLocation, char char_value) :
-        Expr(ExprKind::CharLiteralExpr, stmtParent, sourceLocation),
+    CharLiteralExpr(Stmt* parentStmt, SourceLocation sourceLocation, char char_value) :
+        Expr(ExprKind::CharLiteralExpr, parentStmt, sourceLocation),
         builtinKind(BuiltinKind::Int8),
         char_value(char_value)
     { }
 
-    CharLiteralExpr(Stmt* stmtParent, SourceLocation sourceLocation, rune rune_value) :
-        Expr(ExprKind::CharLiteralExpr, stmtParent, sourceLocation),
+    CharLiteralExpr(Stmt* parentStmt, SourceLocation sourceLocation, rune rune_value) :
+        Expr(ExprKind::CharLiteralExpr, parentStmt, sourceLocation),
         builtinKind(BuiltinKind::Rune),
         rune_value(rune_value)
     { }
@@ -230,8 +230,8 @@ struct IntegerLiteralExpr : Expr {
 
     BuiltinKind builtinKind;
 
-    IntegerLiteralExpr(Stmt* stmtParent, SourceLocation sourceLocation, BuiltinKind builtinKind) :
-        Expr(ExprKind::IntegerLiteralExpr, stmtParent, sourceLocation),
+    IntegerLiteralExpr(Stmt* parentStmt, SourceLocation sourceLocation, BuiltinKind builtinKind) :
+        Expr(ExprKind::IntegerLiteralExpr, parentStmt, sourceLocation),
         builtinKind(builtinKind)
     { }
 };

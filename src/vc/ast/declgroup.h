@@ -8,13 +8,18 @@ namespace vc {
 struct Decl;
 
 struct DeclGroup {
-    Decl* parent;
+    DeclGroup* parent;
+
     std::vector<Decl*> entries;
 
-    DeclGroup(Decl* parent) :
+    DeclGroup(DeclGroup* parent) :
         parent(parent),
         entries(std::vector<Decl*>())
     { }
+
+    inline void add(Decl* decl) {
+        entries.push_back(decl);
+    }
 };
 
 } // namespace vc

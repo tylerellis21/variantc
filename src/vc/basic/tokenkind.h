@@ -28,6 +28,10 @@ enum class TokenKind {
     #undef TOKEN_KIND
 };
 
+bool isBuiltinKind(TokenKind tokenKind);
+bool isKeywordKind(TokenKind tokenKind);
+bool isOperatorKind(TokenKind tokenKind);
+
 std::string toName(TokenKind tokenKind);
 std::string toSymbol(TokenKind tokenKind);
 
