@@ -277,28 +277,12 @@ bool Parser::parseForStmt(Stmt* parentStmt, Stmt** out) {
     );
 
     // TODO(@Tyler): I don't think having to do this :(
-
-    // TODO(@Tyler): Perhaps we create
-    //  setDeclParent(Decl* decl, Decl* parent)
-    //  setStmtParent(Stmt* stmt, Stmt* parent)
-    //  setStmtParent(Expr* expr, Stmt* parent)
-
-    if (forStmt->initStmt) {
-        forStmt->initStmt->parentStmt = forStmt;
-    }
-    if (forStmt->conditionStmt) {
-        forStmt->conditionStmt->parentStmt = forStmt;
-    }
-    if (forStmt->incrementStmt) {
-        forStmt->incrementStmt->parentStmt = forStmt;
-    }
-    if (forStmt->bodyStmt) {
-        forStmt->bodyStmt->parentStmt = forStmt;
-    }
+    setStmtParent(forStmt->initStmt, forStmt);
+    setStmtParent(forStmt->conditionStmt, forStmt);
+    setStmtParent(forStmt->incrementStmt, forStmt);
+    setStmtParent(forStmt->bodyStmt, forStmt);
 
     *out = forStmt;
-
-
 
     return true;
 }
@@ -306,7 +290,7 @@ bool Parser::parseForStmt(Stmt* parentStmt, Stmt** out) {
 bool Parser::parseIfStmt(Stmt* parentStmt, Stmt** out) {
     SourceLocation keywordLoc = loc();
 
-    if (!expect_consume(TokenKind::If)) return false;
+    if (!expectConsume(TokenKind::If)) return false;
 
     SourceRange sourceRange;
     Expr* conditionStmt = 0;
@@ -316,18 +300,19 @@ bool Parser::parseIfStmt(Stmt* parentStmt, Stmt** out) {
     sourceRange.begin = loc();
     if (!expectConsume(TokenKind::LParen)) return false;
 
-    conditionStmt = parse_expr(parentStmt);
+    conditionStmt = parseExpr(0);
 
     sourceRange.end = loc();
     if (!expectConsume(TokenKind::RParen)) return false;
 
-    if (!parseOptionalCompoundStmt(parentStmt, &bodyStmt)) return false;
+    if (!parseOptionalCompoundStmt(0, &bodyStmt)) return false;
+
     if (current.kind == TokenKind::Else) {
         consume();
-        if (!parseOptionalCompoundStmt(parentStmt, &elseStmt)) return false;
+        if (!parseOptionalCompoundStmt(0, &elseStmt)) return false;
     }
 
-    *out = new IfStmt(
+    IfStmt* ifStmt = new IfStmt(
         parentStmt,
         keywordLoc,
         sourceRange,
@@ -335,6 +320,12 @@ bool Parser::parseIfStmt(Stmt* parentStmt, Stmt** out) {
         bodyStmt,
         elseStmt
     );
+
+    setStmtParent(ifStmt->conditionStmt, ifStmt);
+    setStmtParent(ifStmt->bodyStmt, ifStmt);
+    setStmtParent(ifStmt->elseStmt, ifStmt);
+
+    *out = ifStmt;
 
     return true;
 }
@@ -373,102 +364,137 @@ bool Parser::parseGotoStmt(Stmt* parentStmt, Stmt** out) {
 
 // switch(expr) { body; }
 bool Parser::parseSwitchStmt(Stmt* parentStmt, Stmt** out) {
-    SourceLocation sloc = consume();
-    SwitchStmt* stmt = new SwitchStmt(sloc, parentStmt, 0, 0);
-    SourceLocation lparen_loc = loc();
+    SourceLocation keywordLoc = consume();
 
-    if (!expect_consume(TokenKind::LParen)) return false;
+    Expr* conditionExpr = 0;
+    Stmt* bodyStmt = 0;
 
-    Expr* value = parse_assignment_expr(stmt);
-    SourceLocation rparen_loc = loc();
+    SourceRange sourceRange = SourceRange::None;
 
+    sourceRange.begin = loc();
+    if (!expectConsume(TokenKind::LParen)) return false;
+
+    conditionExpr = parseAssignmentExpr(0);
+
+    sourceRange.end = loc();
     if (!expectConsume(TokenKind::RParen)) return false;
-    if (!parseCompoundStmt(parentStmt, &stmt->body)) return false;
 
-    stmt->value = value;
-    stmt->lparen_loc = lparen_loc;
-    stmt->rparen_loc = rparen_loc;
+    if (!parseCompoundStmt(0, &bodyStmt)) return false;
 
-    *out = stmt;
+    SwitchStmt* switchStmt = new SwitchStmt(
+        parentStmt,
+        keywordLoc,
+        sourceRange,
+        conditionExpr,
+        bodyStmt
+    );
+
+    setStmtParent(switchStmt->conditionExpr, switchStmt);
+    setStmtParent(switchStmt->bodyStmt, switchStmt);
+
+    *out = switchStmt;
+
     return true;
 }
 
 bool Parser::parseCaseStmt(Stmt* parentStmt, Stmt** out) {
 
-    SourceLocation sloc = loc();
-    if (!expect_consume(TokenKind::Case)) return false;
+    SourceLocation keywordLoc = loc();
+    if (!expectConsume(TokenKind::Case)) return false;
 
-    CaseStmt* stmt = new CaseStmt(sloc, parentStmt, 0, 0);
+    Expr* valueExpr = parseExpr(0);
 
-    Expr* value = parse_expr(parentStmt);
+    if (!expectConsume(TokenKind::Colon)) return false;
 
-    if (!expect_consume(TokenKind::Colon)) return false;
+    Stmt* bodyStmt = 0;
+    if (!parseStmt(0, &bodyStmt)) return false;
 
-    Stmt* sub_stmt = 0;
-    if (!parse_stmt(stmt, &sub_stmt)) return false;
+    CaseStmt* caseStmt = new CaseStmt(
+        parentStmt,
+        keywordLoc,
+        valueExpr,
+        bodyStmt
+    );
 
-    stmt->value = value;
-    stmt->stmt = sub_stmt;
+    setStmtParent(caseStmt->valueExpr, caseStmt);
+    setStmtParent(caseStmt->bodyStmt, caseStmt);
 
-    *out = stmt;
+    *out = caseStmt;
 
     return true;
 }
 
-bool Parser::parse_default_stmt(Stmt* parentStmt, Stmt** out) {
-    SourceLocation sloc = loc();
-    if (!expect_consume(TokenKind::Default)) return false;
-    if (!expect_consume(TokenKind::Colon)) return false;
+bool Parser::parseDefaultStmt(Stmt* parentStmt, Stmt** out) {
+    SourceLocation keywordLoc = loc();
+    if (!expectConsume(TokenKind::Default)) return false;
+    if (!expectConsume(TokenKind::Colon)) return false;
 
-    DefaultStmt* stmt = new DefaultStmt(sloc, parentStmt, 0);
 
-    Stmt* sub_stmt = 0;
-    if (!parse_stmt(parentStmt, &sub_stmt)) return false;
+    Stmt* bodyStmt = 0;
+    if (!parseStmt(0, &bodyStmt)) return false;
 
-    stmt->stmt = sub_stmt;
+    DefaultStmt* defaultStmt = new DefaultStmt(
+        parentStmt,
+        keywordLoc,
+        bodyStmt
+    );
 
-    *out = stmt;
+    setStmtParent(defaultStmt->bodyStmt, defaultStmt);
+
+    *out = defaultStmt;
     return true;
 }
 
-bool Parser::parse_return_stmt(Stmt* parentStmt, Stmt** out) {
+bool Parser::parseReturnStmt(Stmt* parentStmt, Stmt** out) {
 
-    SourceLocation sloc = loc();
-    if (!expect_consume(TokenKind::Return)) return false;
+    SourceLocation keywordLoc = loc();
+    if (!expectConsume(TokenKind::Return)) return false;
 
-    ReturnStmt* stmt = new ReturnStmt(sloc, parentStmt, 0);
-
-    Expr* expr = parse_expr(parentStmt);
-
-    if (!expect_semi()) {
-        printf(" return statement\n");
+    Expr* expr = parseExpr(0);
+    if (!expectSemi()) {
+        printf("in return statement\n");
         return false;
     }
 
-    stmt->expr = expr;
-    *out = stmt;
+    ReturnStmt* returnStmt = new ReturnStmt(
+        parentStmt,
+        keywordLoc,
+        expr
+    );
+
+    returnStmt->expr = expr;
+    *out = returnStmt;
 
     return true;
 }
 
-bool Parser::parse_while_stmt(Stmt* parentStmt, Stmt** out) {
+bool Parser::parseWhileStmt(Stmt* parentStmt, Stmt** out) {
     SourceLocation loc = consume();
     Expr* condition = 0;
     Stmt* body = 0;
-    WhileStmt* stmt = new WhileStmt(loc, parentStmt, 0, 0);
+
+    SourceRange sourceRange = SourceRange::None;
 
     if (!expect_consume(TokenKind::LParen)) return false;
     condition = parse_expr(stmt);
+
     if (!expect_consume(TokenKind::RParen)) return false;
 
     if (current.kind == TokenKind::Semi) consume();
     else
         if (!parse_optional_compound_stmt(parentStmt, &body)) return false;
 
-    stmt->body = body;
-    stmt->condition = condition;
+    WhileStmt* whileStmt = new WhileStmt(
+        parentStmt,
+        loc,
+        condition,
+        body
+    );
 
-    *out = stmt;
+    setStmtParent(whileStmt->conditionExpr, whileStmt);
+    setStmtParent(whileStmt->bodyStmt, whileStmt);
+
+    *out = whileStmt;
 
     return true;
 }

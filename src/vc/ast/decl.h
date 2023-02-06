@@ -50,6 +50,12 @@ struct Decl {
     { }
 };
 
+inline void setDeclParent(Decl* decl, Decl* parent) {
+    if (decl) {
+        decl->parent = parent;
+    }
+}
+
 struct TemplateDecl;
 struct VarDecl;
 

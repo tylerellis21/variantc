@@ -46,6 +46,12 @@ struct Stmt {
     { }
 };
 
+inline void setStmtParent(Stmt* stmt, Stmt* parent) {
+    if (stmt) {
+        stmt->parentStmt = parent;
+    }
+}
+
 struct BreakStmt : Stmt {
     BreakStmt(Stmt* parentStmt, SourceLocation sourceLocation) :
         Stmt(StmtKind::BreakStmt, parentStmt, sourceLocation)
@@ -53,13 +59,13 @@ struct BreakStmt : Stmt {
 };
 
 struct CaseStmt : Stmt {
-    Expr* value;
-    Stmt* stmt;
+    Expr* valueExpr;
+    Stmt* bodyStmt;
 
-    CaseStmt(Stmt* parentStmt, SourceLocation sourceLocation, Expr* value, Stmt* stmt) :
+    CaseStmt(Stmt* parentStmt, SourceLocation sourceLocation, Expr* valueExpr, Stmt* bodyStmt) :
         Stmt(StmtKind::CaseStmt, parentStmt, sourceLocation),
-        value(value),
-        stmt(stmt)
+        valueExpr(valueExpr),
+        bodyStmt(bodyStmt)
     { }
 };
 
@@ -90,19 +96,19 @@ struct DeclStmt : Stmt {
 };
 
 struct DefaultStmt : Stmt {
-    Stmt* stmt;
+    Stmt* bodyStmt;
 
-    DefaultStmt(Stmt* parentStmt, SourceLocation sourceLocation, Stmt* stmt) :
+    DefaultStmt(Stmt* parentStmt, SourceLocation sourceLocation, Stmt* bodyStmt) :
         Stmt(StmtKind::DefaultStmt, parentStmt, sourceLocation)
     { }
 };
 
 struct DeferStmt : Stmt {
-    Stmt* stmt;
+    Stmt* bodyStmt;
 
-    DeferStmt(Stmt* parentStmt, SourceLocation sourceLocation, Stmt* stmt) :
+    DeferStmt(Stmt* parentStmt, SourceLocation sourceLocation, Stmt* bodyStmt) :
         Stmt(StmtKind::DeferStmt, parentStmt, sourceLocation),
-        stmt(stmt)
+        bodyStmt(bodyStmt)
     { }
 };
 
@@ -195,13 +201,19 @@ struct ReturnStmt : Stmt {
 
 struct SwitchStmt : Stmt {
     SourceRange sourceRange;
-    Expr* expr;
-    Stmt* stmt;
+    Expr* conditionExpr;
+    Stmt* bodyStmt;
 
-    SwitchStmt(Stmt* parentStmt, SourceRange sourceRange, Expr* expr, Stmt* stmt) :
+    SwitchStmt(
+        Stmt* parentStmt,
+        SourceLocation sourceLocation,
+        SourceRange sourceRange,
+        Expr* conditionExpr,
+        Stmt* bodyStmt
+    ) :
         Stmt(StmtKind::SwitchStmt, parentStmt, sourceRange.begin),
-        expr(expr),
-        stmt(stmt)
+        conditionExpr(conditionExpr),
+        bodyStmt(bodyStmt)
     { }
 };
 
@@ -216,13 +228,13 @@ struct UseStmt : Stmt {
 
 struct WhileStmt : Stmt {
     SourceRange sourceRange;
-    Expr* condition;
-    Stmt* body;
+    Expr* conditionExpr;
+    Stmt* bodyStmt;
 
     WhileStmt(Stmt* parentStmt, SourceRange sourceRange, Expr* condition, Stmt* body) :
         Stmt(StmtKind::WhileStmt, parentStmt, sourceLocation),
-        condition(condition),
-        body(body)
+        conditionExpr(condition),
+        bodyStmt(body)
     { }
 };
 
