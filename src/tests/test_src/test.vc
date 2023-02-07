@@ -1,0 +1,16 @@
+struct Vector<T> {
+}
+
+def test<T>(Vector<T> lhs, Vector<T> rhs) Vector<T> {
+    Vector<T> result;
+    result.x = lhs.x + rhs.x;
+    result.y = lhs.y + rhs.y;
+    return result;
+}
+
+def add<T>(Vector<T> lhs, Vector<T> rhs) Vector<T> {
+    Vector<T> result;
+    result.x = lhs.x + rhs.x;
+    result.y = lhs.y + rhs.y;
+    return result;
+}

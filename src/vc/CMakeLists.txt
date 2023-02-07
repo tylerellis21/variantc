@@ -32,6 +32,8 @@ set (SRC
     ${SRC_DIR}/basic/tokenkind.cpp
     ${SRC_DIR}/basic/tokenmap.h
     ${SRC_DIR}/basic/tokenmap.cpp
+    ${SRC_DIR}/basic/tokenprecedence.h
+    ${SRC_DIR}/basic/tokenprecedence.cpp
 
     ${SRC_DIR}/compiler/lexer.h
     ${SRC_DIR}/compiler/lexer.cpp

@@ -157,7 +157,7 @@ bool Parser::parseBreakStmt(Stmt* parentStmt, Stmt** out) {
     return true;
 }
 
-bool Parser::parseTemplateStmt(Stmt* parentStmt, Stmt** out) {
+bool Parser::parseTemplateStmt(Stmt* parentStmt, TemplateStmt** out) {
 /*
     WTF IS THIS DOING?!?
 
@@ -223,7 +223,7 @@ bool Parser::parseTemplateStmt(Stmt* parentStmt, Stmt** out) {
 bool Parser::parseDeclStmt(Stmt* parentStmt, Stmt** out) {
     SourceLocation sloc = loc();
     DeclGroup* declGroup = new DeclGroup(0);
-    if (!parseDecl(0, declGroup)) return false;
+    if (!parseDe  cl(0, declGroup)) return false;
     *out = new DeclStmt(parentStmt, sloc, declGroup);
     return true;
 }
@@ -302,11 +302,11 @@ bool Parser::parseIfStmt(Stmt* parentStmt, Stmt** out) {
 
     conditionStmt = parseExpr(0);
 
-    sourceRange.end = loc();
     if (!expectConsume(TokenKind::RParen)) return false;
 
     if (!parseOptionalCompoundStmt(0, &bodyStmt)) return false;
 
+    sourceRange.end = loc();
     if (current.kind == TokenKind::Else) {
         consume();
         if (!parseOptionalCompoundStmt(0, &elseStmt)) return false;
@@ -347,7 +347,7 @@ bool Parser::parseLabelStmt(Stmt* parentStmt, Stmt** out) {
 }
 
 bool Parser::parseGotoStmt(Stmt* parentStmt, Stmt** out) {
-    SourceLocation loc = consume();
+    SourceLocation keywordLoc = consume();
     Name name;
 
     if (!parseName(&name, false)) return false;
@@ -355,7 +355,7 @@ bool Parser::parseGotoStmt(Stmt* parentStmt, Stmt** out) {
 
     *out = new GotoStmt(
         parentStmt,
-        loc,
+        keywordLoc,
         name
     );
 
@@ -429,7 +429,6 @@ bool Parser::parseDefaultStmt(Stmt* parentStmt, Stmt** out) {
     if (!expectConsume(TokenKind::Default)) return false;
     if (!expectConsume(TokenKind::Colon)) return false;
 
-
     Stmt* bodyStmt = 0;
     if (!parseStmt(0, &bodyStmt)) return false;
 
@@ -469,26 +468,26 @@ bool Parser::parseReturnStmt(Stmt* parentStmt, Stmt** out) {
 }
 
 bool Parser::parseWhileStmt(Stmt* parentStmt, Stmt** out) {
-    SourceLocation loc = consume();
-    Expr* condition = 0;
-    Stmt* body = 0;
+    SourceLocation keywordLoc = consume();
+    Expr* conditionExpr = 0;
+    Stmt* bodyStmt = 0;
 
     SourceRange sourceRange = SourceRange::None;
 
     if (!expect_consume(TokenKind::LParen)) return false;
-    condition = parse_expr(stmt);
+    conditionExpr = parse_expr(stmt);
 
     if (!expect_consume(TokenKind::RParen)) return false;
 
     if (current.kind == TokenKind::Semi) consume();
     else
-        if (!parse_optional_compound_stmt(parentStmt, &body)) return false;
+        if (!parseOptionalCompoundStmt(0, &bodyStmt)) return false;
 
     WhileStmt* whileStmt = new WhileStmt(
         parentStmt,
-        loc,
-        condition,
-        body
+        keywordLoc,
+        conditionExpr,
+        bodyStmt
     );
 
     setStmtParent(whileStmt->conditionExpr, whileStmt);

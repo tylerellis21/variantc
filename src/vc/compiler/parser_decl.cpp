@@ -425,9 +425,9 @@ bool Parser::parseSingleVarDecl(Decl* parentDecl, VarDecl** out, Type* type) {
         assignment
     );
 
-    varDecl->bitsize = bitsize;
+    varDecl->bitsize = bitsizeExpr;
 
-    *out = var_decl;
+    *out = varDecl;
     return true;
 }
 
