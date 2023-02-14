@@ -1,61 +1,65 @@
 #include <vc/compiler/parser.h>
+#include <vc/basic/tokenprecedence.h>
 
 namespace vc {
 
-Expr* Parser::expr_error() {
+Expr* Parser::exprError() {
     consume();
-    failed = true;
     return 0;
 }
 
-Expr* Parser::parse_expr(Stmt* stmt_parent) {
-    Expr* lhs = parse_assignment_expr(stmt_parent);
-    return parse_rhs_binary_op(stmt_parent, lhs, prec::Comma);
+Expr* Parser::parseExpr(Stmt* parentStmt) {
+    Expr* lhs = parseAssignmentExpr(parentStmt);
+    return parseRhsBinaryOp(parentStmt, lhs, prec::Comma);
 }
 
-Expr* Parser::parse_assignment_expr(Stmt* stmt_parent) {
-    Expr* lhs = parse_cast_expr(stmt_parent);
-    return parse_rhs_binary_op(stmt_parent, lhs, prec::Assignment);
+Expr* Parser::parseAssignmentExpr(Stmt* parentStmt) {
+    Expr* lhs = parseCastExpr(parentStmt);
+    return parseRhsBinaryOp(parentStmt, lhs, TokenPrecedence::Assignment);
 }
 
-Expr* Parser::parse_rhs_binary_op(Stmt* stmt_parent, Expr* lhs, i32 min_precedence) {
-    prec::Level next_op_prec = token_precedence(current.kind);
+Expr* Parser::parseRhsBinaryOp(Stmt* parentStmt, Expr* lhs, i32 minPrecedence) {
+    TokenPrecedence nextOperatorPrec = getTokenPrecedence(current.kind);
 
     while (1) {
-        if (next_op_prec < min_precedence) break;
-        Token op_token = current;
+        if (nextOperatorPrec < minPrecedence) break;
+        Token opToken = current;
         consume();
 
-        if (next_op_prec == prec::Conditional) {
-            lhs = parse_ternary_expr(stmt_parent, lhs);
+        if (nextOperatorPrec == prec::Conditional) {
+            lhs = parseTernaryExpr(parentStmt, lhs);
             break;
         }
 
         Expr* rhs = 0;
-        if (next_op_prec <= prec::Conditional)
-            rhs = parse_assignment_expr(stmt_parent);
+        if (nextOperatorPrec <= prec::Conditional)
+            rhs = parseAssignmentExpr(parentStmt);
         else
-            rhs = parse_cast_expr(stmt_parent);
+            rhs = parseCastExpr(parentStmt);
 
-        prec::Level this_prec = next_op_prec;
-        next_op_prec = token_precedence(current.kind);
+        TokenPrecedence currentTokenPrec = nextOperatorPrec;
+        nextOperatorPrec = getTokenPrecedence(current.kind);
 
-        bool is_right_assoc = this_prec == prec::Conditional
-                || this_prec == prec::Assignment;
+        bool isRightAssoc = currentTokenPrec == prec::Conditional|| currentTokenPrec == prec::Assignment;
 
-        if (this_prec < next_op_prec
-                || ((this_prec == next_op_prec) && is_right_assoc)) {
-            rhs = parse_rhs_binary_op(stmt_parent, rhs, this_prec + !is_right_assoc);
-            next_op_prec = token_precedence(current.kind);
+        if (currentTokenPrec < nextOperatorPrec || ((currentTokenPrec == nextOperatorPrec) && isRightAssoc)) {
+            rhs = parseRhsBinaryOp(parentStmt, rhs, currentTokenPrec + !isRightAssoc);
+            nextOperatorPrec = getTokenPrecedence(current.kind);
         }
 
-        lhs = new BinaryOpExpr(op_token.loc, lhs, rhs, op_token.kind, stmt_parent);
+        lhs = new BinaryOpExpr(
+            parentStmt,
+            opToken.loc,
+            lhs,
+            rhs,
+            opToken.kind
+        );
     }
 
     return lhs;
 }
 
-Expr* Parser::parse_cast_expr(Stmt* stmt_parent) {
+Expr* Parser::parseCastExpr(Stmt* parentStmt) {
     Expr* result = 0;
 
     switch (current.kind) {
@@ -65,42 +69,41 @@ Expr* Parser::parse_cast_expr(Stmt* stmt_parent) {
     case TokenKind::IntegerLiteral:
     case TokenKind::RealLiteral:
     case TokenKind::StringLiteral:
-        result = parse_literal_expr(stmt_parent);
+        result = parseLiteralExpr(parentStmt);
         break;
 
     case TokenKind::Cast: {
         SourceLocation sloc = consume();
-        if (!expect_consume(TokenKind::Less)) return 0;
+        if (!expectConsume(TokenKind::Less)) return 0;
 
         Type* type = 0;
-        if (!parse_type(&type)) return 0;
+        if (!parseType(&type)) return 0;
 
-        if (!expect_consume(TokenKind::Greater)) return 0;
+        if (!expectConsume(TokenKind::Greater)) return 0;
 
-        Expr* expr = parse_cast_expr(stmt_parent);
-        result = new CastExpr(sloc, type, expr, stmt_parent);
-
+        Expr* expr = parseCastExpr(parentStmt);
+        result = new CastExpr(parentStmt, sloc, expr, type);
     } break;
 
     case TokenKind::Identifier: {
         if (ahead.kind == TokenKind::LParen ||
             ahead.kind == TokenKind::At) {
-            result = parse_call_expr(stmt_parent, false);
+            result = parse_call_expr(parentStmt, false);
         }
         else if (ahead.kind == TokenKind::Period) {
-            result = parse_member_expr(stmt_parent);
+            result = parse_member_expr(parentStmt);
         }
         else
-            result = parse_decl_ref_expr(stmt_parent);
+            result = parse_decl_ref_expr(parentStmt);
     } break;
 
     case TokenKind::Equal: {
         consume();
-        result = parse_assignment_expr(stmt_parent);
+        result = parse_assignment_expr(parentStmt);
     } break;
 
     case TokenKind::LParen: {
-        result = parse_paren_expr(stmt_parent);
+        result = parse_paren_expr(parentStmt);
     } break;
 
     case TokenKind::Amp:
@@ -111,11 +114,11 @@ Expr* Parser::parse_cast_expr(Stmt* stmt_parent) {
     case TokenKind::MinusMinus:
     case TokenKind::PlusPlus:
     case TokenKind::LSquare: {
-        result = parse_postfix_expr(stmt_parent, result, false);
+        result = parse_postfix_expr(parentStmt, result, false);
     } break;
 
     case TokenKind::LBrace: {
-        result = parse_initalizer_expr(stmt_parent);
+        result = parse_initalizer_expr(parentStmt);
     } break;
 
     } // switch (parser->current.kind)
@@ -125,29 +128,29 @@ Expr* Parser::parse_cast_expr(Stmt* stmt_parent) {
     case TokenKind::PlusPlus:
     case TokenKind::MinusMinus:
     case TokenKind::LSquare: {
-        result = parse_postfix_expr(stmt_parent, result, true);
+        result = parse_postfix_expr(parentStmt, result, true);
     } break;
     }
 
     return result;
 }
 
-Expr* Parser::parse_ternary_expr(Stmt* stmt_parent, Expr* condition) {
+Expr* Parser::parse_ternary_expr(Stmt* parentStmt, Expr* condition) {
     SourceLocation sloc = loc();
-    Expr* lhs = parse_cast_expr(stmt_parent);
+    Expr* lhs = parse_cast_expr(parentStmt);
     if (!expect_consume(TokenKind::Colon)) return 0;
-    Expr* rhs = parse_cast_expr(stmt_parent);
-    return new TernaryExpr(sloc, condition, lhs, rhs, stmt_parent);
+    Expr* rhs = parse_cast_expr(parentStmt);
+    return new TernaryExpr(sloc, condition, lhs, rhs, parentStmt);
 }
 
-Expr* Parser::parse_initalizer_expr(Stmt* stmt_parent) {
+Expr* Parser::parse_initalizer_expr(Stmt* parentStmt) {
     SourceLocation sloc = loc();
     List<Expr*> values(1);
 
     if (!expect_consume(TokenKind::LBrace)) return 0;
     while (valid()) {
         if (current.kind == TokenKind::RBrace) return 0;
-        Expr* value = parse_assignment_expr(stmt_parent);
+        Expr* value = parse_assignment_expr(parentStmt);
         values.push(value);
         if (current.kind == TokenKind::Comma) {
             consume();
@@ -155,25 +158,25 @@ Expr* Parser::parse_initalizer_expr(Stmt* stmt_parent) {
         } else break;
     }
     if (!expect_consume(TokenKind::RBrace)) return 0;
-    return new InitalizerExpr(sloc, values, stmt_parent);
+    return new InitalizerExpr(sloc, values, parentStmt);
 }
 
-Expr* Parser::parse_array_subscript_expr(Stmt* stmt_parent, Expr* lhs) {
+Expr* Parser::parse_array_subscript_expr(Stmt* parentStmt, Expr* lhs) {
     SourceLocation sloc = loc();
     if (!expect_consume(TokenKind::LSquare)) return 0;
-    Expr* rhs = parse_cast_expr(stmt_parent);
+    Expr* rhs = parse_cast_expr(parentStmt);
     if (!expect_consume(TokenKind::RSquare)) return 0;
-    return new ArraySubscriptExpr(sloc, lhs, rhs, stmt_parent);
+    return new ArraySubscriptExpr(sloc, lhs, rhs, parentStmt);
 }
 
-Expr* Parser::parse_unary_expr(Stmt* stmt_parent, Expr* lhs, bool postfix) {
+Expr* Parser::parse_unary_expr(Stmt* parentStmt, Expr* lhs, bool postfix) {
     Token op = current;
     consume();
-    Expr* expr = lhs ? lhs : parse_cast_expr(stmt_parent);
-    return new UnaryOpExpr(op.loc, expr, op.kind, postfix, stmt_parent);
+    Expr* expr = lhs ? lhs : parse_cast_expr(parentStmt);
+    return new UnaryOpExpr(op.loc, expr, op.kind, postfix, parentStmt);
 }
 
-Expr* Parser::parse_postfix_expr(Stmt* stmt_parent, Expr* lhs, bool postfix) {
+Expr* Parser::parse_postfix_expr(Stmt* parentStmt, Expr* lhs, bool postfix) {
     switch(current.kind) {
     default: return 0;
     case TokenKind::Amp:
@@ -182,22 +185,22 @@ Expr* Parser::parse_postfix_expr(Stmt* stmt_parent, Expr* lhs, bool postfix) {
     case TokenKind::Tilde:
     case TokenKind::Minus:
     case TokenKind::MinusMinus:
-    case TokenKind::PlusPlus: return parse_unary_expr(stmt_parent, lhs, postfix);
-    case TokenKind::LSquare: return parse_array_subscript_expr(stmt_parent, lhs);
+    case TokenKind::PlusPlus: return parse_unary_expr(parentStmt, lhs, postfix);
+    case TokenKind::LSquare: return parse_array_subscript_expr(parentStmt, lhs);
     }
 }
 
-Expr* Parser::parse_decl_ref_expr(Stmt* stmt_parent) {
+Expr* Parser::parse_decl_ref_expr(Stmt* parentStmt) {
     SourceLocation sloc = loc();
     if (!expect_kind(TokenKind::Identifier)) return expr_error();
 
     Name* name = 0;
     if (!parse_name(&name, true)) return expr_error();
 
-    return new DeclRefExpr(sloc, name, 0, 0, stmt_parent);
+    return new DeclRefExpr(sloc, name, 0, 0, parentStmt);
 }
 
-Expr* Parser::parse_literal_expr(Stmt* stmt_parent) {
+Expr* Parser::parse_literal_expr(Stmt* parentStmt) {
     SourceLocation sloc = loc();
     Token token = current;
     consume();
@@ -212,7 +215,7 @@ Expr* Parser::parse_literal_expr(Stmt* stmt_parent) {
             value = true;
         else
             value = false;
-        result = new BooleanLiteral(sloc, value, stmt_parent);
+        result = new BooleanLiteral(sloc, value, parentStmt);
     } break;
 
     case TokenKind::CharacterLiteral: {
@@ -220,23 +223,23 @@ Expr* Parser::parse_literal_expr(Stmt* stmt_parent) {
         u64 length = utf8_sequence_length(token.str.buffer[0]);
         rune value = utf8_decode_rune(token.str.buffer, length);
 
-        result = new CharLiteral(token.loc, value, stmt_parent);
+        result = new CharLiteral(token.loc, value, parentStmt);
     } break;
 
     case TokenKind::StringLiteral: {
-        result = new StringLiteral(token.loc, token.str, stmt_parent);
+        result = new StringLiteral(token.loc, token.str, parentStmt);
     } break;
 
     case TokenKind::IntegerLiteral: {
         // TODO: Figure out the proper integer type.
         //bool is_signed = token.str[0] == '-';
         i64 value = atoll((char*)token.str.buffer);
-        result = new IntegerLiteral(token.loc, value, stmt_parent);
+        result = new IntegerLiteral(token.loc, value, parentStmt);
     } break;
 
     case TokenKind::RealLiteral: {
         r64 value = atof((char*)token.str.buffer);
-        result = new RealLiteral(token.loc, value, stmt_parent);
+        result = new RealLiteral(token.loc, value, parentStmt);
     } break;
 
     default: {
@@ -248,19 +251,19 @@ Expr* Parser::parse_literal_expr(Stmt* stmt_parent) {
     return result;
 }
 
-Expr* Parser::parse_paren_expr(Stmt* stmt_parent) {
+Expr* Parser::parse_paren_expr(Stmt* parentStmt) {
     SourceLocation lparen_loc = loc();
     consume();
 
-    Expr* expr = parse_expr(stmt_parent);
+    Expr* expr = parse_expr(parentStmt);
 
     SourceLocation rparen_loc = loc();
     if (!expect_consume(TokenKind::RParen)) return expr_error();
 
-    return new ParenExpr(lparen_loc, lparen_loc, rparen_loc, expr, stmt_parent);
+    return new ParenExpr(lparen_loc, lparen_loc, rparen_loc, expr, parentStmt);
 }
 
-Expr* Parser::parse_member_expr(Stmt* stmt_parent) {
+Expr* Parser::parse_member_expr(Stmt* parentStmt) {
 
     SourceLocation sloc = loc();
 
@@ -269,13 +272,13 @@ Expr* Parser::parse_member_expr(Stmt* stmt_parent) {
 
     if (!expect_consume(TokenKind::Period)) return 0;
 
-    Expr* expr = parse_cast_expr(stmt_parent);
+    Expr* expr = parse_cast_expr(parentStmt);
 
-    return new MemberExpr(sloc, name, expr, 0, stmt_parent);
+    return new MemberExpr(sloc, name, expr, 0, parentStmt);
 }
 
 Expr* Parser::parse_call_expr(
-    Stmt* stmt_parent,
+    Stmt* parentStmt,
     bool expect_semi,
     Name* name,
     Type* template_type) {
@@ -293,7 +296,7 @@ Expr* Parser::parse_call_expr(
 
     while (valid()) {
         if (current.kind == TokenKind::RParen) break;
-        Expr* expr = parse_assignment_expr(stmt_parent);
+        Expr* expr = parse_assignment_expr(parentStmt);
         args.push(expr);
         if (current.kind == TokenKind::Comma) {
             consume();
@@ -305,7 +308,7 @@ Expr* Parser::parse_call_expr(
     if (expect_semi)
         if (!this->expect_semi()) return expr_error();
 
-    return new CallExpr(sloc, name, 0, template_type, args, stmt_parent);
+    return new CallExpr(sloc, name, 0, template_type, args, parentStmt);
 }
 
 } // namespace vc

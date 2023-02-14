@@ -48,14 +48,18 @@ struct ArraySubscriptExpr : Expr {
 };
 
 struct BinaryOpExpr : Expr {
-    SourceRange sourceRange;
     Expr* lhs;
     Expr* rhs;
     TokenKind op;
 
-    BinaryOpExpr(Stmt* parentStmt, SourceRange sourceRange, Expr* lhs, Expr* rhs, TokenKind op) :
-        Expr(ExprKind::BinaryOpExpr, parentStmt, sourceRange.begin),
-        sourceRange(sourceRange),
+    BinaryOpExpr(
+        Stmt* parentStmt,
+        SourceLocation sourceLocation,
+        Expr* lhs,
+        Expr* rhs,
+        TokenKind op
+    ) :
+        Expr(ExprKind::BinaryOpExpr, parentStmt, sourceLocation),
         lhs(lhs),
         rhs(rhs),
         op(op)
@@ -76,12 +80,11 @@ struct CallExpr : Expr {
 };
 
 struct CastExpr : Expr {
-    SourceRange sourceRange;
     Expr* expr;
     Type* type;
 
-    CastExpr(Stmt* parentStmt, SourceRange sourceRange, Expr* expr, Type* type) :
-        Expr(ExprKind::CastExpr, parentStmt, sourceRange.begin),
+    CastExpr(Stmt* parentStmt, SourceLocation sourceLocation, Expr* expr, Type* type) :
+        Expr(ExprKind::CastExpr, parentStmt, sourceLocation),
         sourceRange(sourceRange),
         expr(expr),
         type(type)

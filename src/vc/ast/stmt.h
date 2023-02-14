@@ -115,12 +115,17 @@ struct DeferStmt : Stmt {
 struct WhileStmt;
 
 struct DoStmt : Stmt {
-    Stmt* body;
-    WhileStmt* whileStmt;
+    Stmt* bodyStmt;
+    Stmt* whileStmt;
 
-    DoStmt(Stmt* parentStmt, SourceLocation sourceLocation, Stmt* body, WhileStmt* whileStmt) :
+    DoStmt(
+        Stmt* parentStmt,
+        SourceLocation sourceLocation,
+        Stmt* bodyStmt,
+        Stmt* whileStmt
+    ) :
         Stmt(StmtKind::WhileStmt, parentStmt, sourceLocation),
-        body(body),
+        bodyStmt(bodyStmt),
         whileStmt(whileStmt)
     { }
 };
@@ -231,10 +236,16 @@ struct WhileStmt : Stmt {
     Expr* conditionExpr;
     Stmt* bodyStmt;
 
-    WhileStmt(Stmt* parentStmt, SourceRange sourceRange, Expr* condition, Stmt* body) :
+    WhileStmt(
+        Stmt* parentStmt,
+        SourceLocation sourceLocation,
+        SourceRange sourceRange,
+        Expr* conditionExpr,
+        Stmt* bodyStmt
+    ) :
         Stmt(StmtKind::WhileStmt, parentStmt, sourceLocation),
-        conditionExpr(condition),
-        bodyStmt(body)
+        conditionExpr(conditionExpr),
+        bodyStmt(bodyStmt)
     { }
 };
 

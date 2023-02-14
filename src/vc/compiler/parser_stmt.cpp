@@ -157,7 +157,7 @@ bool Parser::parseBreakStmt(Stmt* parentStmt, Stmt** out) {
     return true;
 }
 
-bool Parser::parseTemplateStmt(Stmt* parentStmt, TemplateStmt** out) {
+bool Parser::parseTemplateStmt(Stmt* parentStmt, TemplateDecl** out) {
 /*
     WTF IS THIS DOING?!?
 
@@ -223,7 +223,7 @@ bool Parser::parseTemplateStmt(Stmt* parentStmt, TemplateStmt** out) {
 bool Parser::parseDeclStmt(Stmt* parentStmt, Stmt** out) {
     SourceLocation sloc = loc();
     DeclGroup* declGroup = new DeclGroup(0);
-    if (!parseDe  cl(0, declGroup)) return false;
+    if (!parseDecl(0, declGroup)) return false;
     *out = new DeclStmt(parentStmt, sloc, declGroup);
     return true;
 }
@@ -231,12 +231,12 @@ bool Parser::parseDeclStmt(Stmt* parentStmt, Stmt** out) {
 // do { block; } while(condition_expr) { block }
 // do stmt; while(condition_expr) stmt;
 bool Parser::parseDoStmt(Stmt* parentStmt, Stmt** out) {
-    SourceLocation sloc = consume();
+    SourceLocation keywordLoc = consume();
     Stmt* bodyStmt = 0;
     Stmt* whileStmt = 0;
     if (!parseOptionalCompoundStmt(parentStmt, &bodyStmt)) return false;
     if (!parseWhileStmt(parentStmt, &whileStmt)) return false;
-    *out = new DoStmt(parentStmt, sloc, bodyStmt, whileStmt);
+    *out = new DoStmt(parentStmt, keywordLoc, bodyStmt, whileStmt);
     return true;
 }
 
@@ -474,10 +474,10 @@ bool Parser::parseWhileStmt(Stmt* parentStmt, Stmt** out) {
 
     SourceRange sourceRange = SourceRange::None;
 
-    if (!expect_consume(TokenKind::LParen)) return false;
-    conditionExpr = parse_expr(stmt);
+    if (!expectConsume(TokenKind::LParen)) return false;
+    conditionExpr = parseExpr(0);
 
-    if (!expect_consume(TokenKind::RParen)) return false;
+    if (!expectConsume(TokenKind::RParen)) return false;
 
     if (current.kind == TokenKind::Semi) consume();
     else
@@ -486,6 +486,7 @@ bool Parser::parseWhileStmt(Stmt* parentStmt, Stmt** out) {
     WhileStmt* whileStmt = new WhileStmt(
         parentStmt,
         keywordLoc,
+        sourceRange,
         conditionExpr,
         bodyStmt
     );

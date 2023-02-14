@@ -3,26 +3,26 @@
 namespace vc {
 
 
-bool Parser::parse_basic_type(Type** type) {
-    *type = new BasicType(loc(), basic_from_token(current.kind));
+bool Parser::parseBuiltinType(Type** type) {
+    *type = new BuiltinType(loc(), basic_from_token(current.kind));
     consume();
     return true;
 }
 
-bool Parser::parse_pointer_type(Type** type) {
+bool Parser::parsePointerType(Type** type) {
     *type = new PointerType(loc(), *type);
     consume();
     return true;
 }
 
-bool Parser::parse_declref_type(Type** type, Name* name) {
+bool Parser::parseDeclRefType(Type** type, Name* name) {
     //if (!parse_name(&name, true)) return false;
     *type = new DeclRefType(name->loc, name, 0);
     // Don't consume since the parse_name did that for us
     return true;
 }
 
-bool Parser::parse_array_type(Type** type) {
+bool Parser::parseArrayType(Type** type) {
     consume();
     // NOTE(Tyler): Does this expression need a parent?
     // How does this effect validation?
@@ -36,13 +36,13 @@ bool Parser::parse_array_type(Type** type) {
     return true;
 }
 
-bool Parser::parse_vararg_type(Type** type) {
+bool Parser::parseVarargType(Type** type) {
     *type = new VarArgType(loc(), *type);
     consume();
     return true;
 }
 
-bool Parser::parse_template_type(Type** type, Name* name) {
+bool Parser::parseTemplateType(Type** type, Name* name) {
 
     // Perhaps remove this and require the caller pass in a pre parsed name?
     if (!name) if (!parse_name(&name, true)) return false;
@@ -86,7 +86,7 @@ bool Parser::parse_template_type(Type** type, Name* name) {
     return true;
 }
 
-bool Parser::parse_type(Type** type, bool first_call) {
+bool Parser::parseType(Type** type, bool first_call) {
 
     // We break out of the switch in the cases below
     // so that then end of the function can handle recursion if needed
