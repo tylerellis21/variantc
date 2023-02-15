@@ -76,23 +76,23 @@ struct Parser {
 
     Expr* parseExpr(Stmt* parentStmt);
 
-    BinaryOpExpr* parseAssignmentExpr(Stmt* parentStmt);
-    ArraySubscriptExpr* parseArraySubscriptExpr(Stmt* parentStmt, Expr* lhs);
-    UnaryOpExpr* parseUnaryExpr(Stmt* parentStmt, Expr* lhs, bool postfix);
-    BinaryOpExpr* parseRhsBinaryOp(Stmt* parentStmt, Expr* lhs, i32 minPrecedence);
-    CallExpr* parseCallExpr(Stmt* parentStmt, bool expectSemi, Name* name = 0, Type* templateType = 0);
-    CastExpr* parseCastExpr(Stmt* parentStmt);
-    TernaryExpr* parseTernaryExpr(Stmt* parentStmt, Expr* condition);
-    UnaryOpExpr* parsePostfixExpr(Stmt* parentStmt, Expr* lhs, bool postfix);
-    DeclRefExpr* parseDeclRefExpr(Stmt* parentStmt);
-    InitalizerExpr* parseInitalizerExpr(Stmt* parentStmt);
+    Expr* parseAssignmentExpr(Stmt* parentStmt);
+    Expr* parseArraySubscriptExpr(Stmt* parentStmt, Expr* lhs);
+    Expr* parseUnaryExpr(Stmt* parentStmt, Expr* lhs, bool postfix);
+    Expr* parseRhsBinaryOp(Stmt* parentStmt, Expr* lhs, i32 minPrecedence);
+    Expr* parseCallExpr(Stmt* parentStmt, bool expectSemi, Name* name = 0, Type* templateType = 0);
+    Expr* parseCastExpr(Stmt* parentStmt);
+    Expr* parseTernaryExpr(Stmt* parentStmt, Expr* condition);
+    Expr* parsePostfixExpr(Stmt* parentStmt, Expr* lhs, bool postfix);
+    Expr* parseDeclRefExpr(Stmt* parentStmt);
+    Expr* parseInitalizerExpr(Stmt* parentStmt);
     Expr* parseLiteralExpr(Stmt* parentStmt);
-    BooleanLiteralExpr* parseBooleanLiteralExpr(Stmt* parentStmt);
-    CharLiteralExpr parseCharacterLiteralExpr(Stmt* parentStmt);
-    IntegerLiteralExpr* parseIntegerLiteralExpr(Stmt* parentStmt);
-    RealLiteralExpr* parseRealLiteralExpr(Stmt* parentStmt);
-    ParenExpr* parseParenExpr(Stmt* parentStmt);
-    MemberExpr* parseMemberExpr(Stmt* parentStmt);
+    Expr* parseBooleanLiteralExpr(Stmt* parentStmt);
+    Expr* parseCharacterLiteralExpr(Stmt* parentStmt);
+    Expr* parseIntegerLiteralExpr(Stmt* parentStmt);
+    Expr* parseRealLiteralExpr(Stmt* parentStmt);
+    Expr* parseParenExpr(Stmt* parentStmt);
+    Expr* parseMemberExpr(Stmt* parentStmt);
 
     ///
     /// Type parsing methods

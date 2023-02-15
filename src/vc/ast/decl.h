@@ -248,7 +248,7 @@ struct VarDecl : Decl {
     Type* type;
     Name name;
     Expr* assignment;
-    IntegerLiteralExpr* bitsize;
+    Expr* bitsize;
 
     VarDecl(
         Decl* parent,

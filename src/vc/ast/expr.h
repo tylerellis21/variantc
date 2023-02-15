@@ -38,7 +38,6 @@ struct Expr : Stmt {
 };
 
 struct ArraySubscriptExpr : Expr {
-    SourceRange sourceRange;
     Expr* lhs;
     Expr* rhs;
 
@@ -85,7 +84,6 @@ struct CastExpr : Expr {
 
     CastExpr(Stmt* parentStmt, SourceLocation sourceLocation, Expr* expr, Type* type) :
         Expr(ExprKind::CastExpr, parentStmt, sourceLocation),
-        sourceRange(sourceRange),
         expr(expr),
         type(type)
     { }
@@ -136,20 +134,18 @@ struct ParenExpr : Expr {
 };
 
 struct TernaryExpr : Expr {
-    SourceRange sourceRange;
     Expr* condition;
     Expr* lhs;
     Expr* rhs;
 
     TernaryExpr(
         Stmt* parentStmt,
-        SourceRange sourceRange,
+        SourceLocation sourceLocation,
         Expr* condition,
         Expr* lhs,
         Expr* rhs
     ) :
-        Expr(ExprKind::TernaryExpr, parentStmt, sourceRange.begin),
-        sourceRange(sourceRange),
+        Expr(ExprKind::TernaryExpr, parentStmt, sourceLocation),
         condition(condition),
         lhs(lhs),
         rhs(rhs)

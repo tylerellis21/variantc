@@ -5,7 +5,7 @@
 
 namespace vc {
 
-enum class TokenPrecedence {
+enum class TokenPrecedence  : i32 {
     Unknown         = 0,
     Comma           = 1,    // ,
     Assignment      = 2,    // =, *=, /=, %=, +=, -=, <<=, >>=, &=, ^=, |=

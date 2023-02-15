@@ -403,7 +403,7 @@ bool Parser::parseSingleVarDecl(Decl* parentDecl, VarDecl** out, Type* type) {
 
     Name name;
     Expr* assignment = 0;
-    IntegerLiteralExpr* bitsizeExpr = 0;
+    Expr* bitsizeExpr = 0;
 
     if (!type) if (!parseType(&type)) return false;
 

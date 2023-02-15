@@ -10,29 +10,29 @@ Expr* Parser::exprError() {
 
 Expr* Parser::parseExpr(Stmt* parentStmt) {
     Expr* lhs = parseAssignmentExpr(parentStmt);
-    return parseRhsBinaryOp(parentStmt, lhs, prec::Comma);
+    return parseRhsBinaryOp(parentStmt, lhs, (i32)TokenPrecedence::Comma);
 }
 
 Expr* Parser::parseAssignmentExpr(Stmt* parentStmt) {
     Expr* lhs = parseCastExpr(parentStmt);
-    return parseRhsBinaryOp(parentStmt, lhs, TokenPrecedence::Assignment);
+    return parseRhsBinaryOp(parentStmt, lhs, (i32)TokenPrecedence::Assignment);
 }
 
 Expr* Parser::parseRhsBinaryOp(Stmt* parentStmt, Expr* lhs, i32 minPrecedence) {
     TokenPrecedence nextOperatorPrec = getTokenPrecedence(current.kind);
 
     while (1) {
-        if (nextOperatorPrec < minPrecedence) break;
+        if ((i32)nextOperatorPrec < minPrecedence) break;
         Token opToken = current;
         consume();
 
-        if (nextOperatorPrec == prec::Conditional) {
+        if (nextOperatorPrec == TokenPrecedence::Conditional) {
             lhs = parseTernaryExpr(parentStmt, lhs);
             break;
         }
 
         Expr* rhs = 0;
-        if (nextOperatorPrec <= prec::Conditional)
+        if ((i32)nextOperatorPrec <= (i32)TokenPrecedence::Conditional)
             rhs = parseAssignmentExpr(parentStmt);
         else
             rhs = parseCastExpr(parentStmt);
@@ -40,10 +40,10 @@ Expr* Parser::parseRhsBinaryOp(Stmt* parentStmt, Expr* lhs, i32 minPrecedence) {
         TokenPrecedence currentTokenPrec = nextOperatorPrec;
         nextOperatorPrec = getTokenPrecedence(current.kind);
 
-        bool isRightAssoc = currentTokenPrec == prec::Conditional|| currentTokenPrec == prec::Assignment;
+        bool isRightAssoc = currentTokenPrec == TokenPrecedence::Conditional|| currentTokenPrec == TokenPrecedence::Assignment;
 
         if (currentTokenPrec < nextOperatorPrec || ((currentTokenPrec == nextOperatorPrec) && isRightAssoc)) {
-            rhs = parseRhsBinaryOp(parentStmt, rhs, currentTokenPrec + !isRightAssoc);
+            rhs = parseRhsBinaryOp(parentStmt, rhs, (i32)currentTokenPrec + !isRightAssoc);
             nextOperatorPrec = getTokenPrecedence(current.kind);
         }
 
@@ -86,24 +86,24 @@ Expr* Parser::parseCastExpr(Stmt* parentStmt) {
     } break;
 
     case TokenKind::Identifier: {
-        if (ahead.kind == TokenKind::LParen ||
-            ahead.kind == TokenKind::At) {
-            result = parse_call_expr(parentStmt, false);
+        if (next.kind == TokenKind::LParen ||
+            next.kind == TokenKind::At) {
+            result = parseCallExpr(parentStmt, false);
         }
-        else if (ahead.kind == TokenKind::Period) {
-            result = parse_member_expr(parentStmt);
+        else if (next.kind == TokenKind::Period) {
+            result = parseMemberExpr(parentStmt);
         }
         else
-            result = parse_decl_ref_expr(parentStmt);
+            result = parseDeclRefExpr(parentStmt);
     } break;
 
     case TokenKind::Equal: {
         consume();
-        result = parse_assignment_expr(parentStmt);
+        result = parseAssignmentExpr(parentStmt);
     } break;
 
     case TokenKind::LParen: {
-        result = parse_paren_expr(parentStmt);
+        result = parseParenExpr(parentStmt);
     } break;
 
     case TokenKind::Amp:
@@ -114,11 +114,11 @@ Expr* Parser::parseCastExpr(Stmt* parentStmt) {
     case TokenKind::MinusMinus:
     case TokenKind::PlusPlus:
     case TokenKind::LSquare: {
-        result = parse_postfix_expr(parentStmt, result, false);
+        result = parsePostfixExpr(parentStmt, result, false);
     } break;
 
     case TokenKind::LBrace: {
-        result = parse_initalizer_expr(parentStmt);
+        result = parseInitalizerExpr(parentStmt);
     } break;
 
     } // switch (parser->current.kind)
@@ -128,45 +128,70 @@ Expr* Parser::parseCastExpr(Stmt* parentStmt) {
     case TokenKind::PlusPlus:
     case TokenKind::MinusMinus:
     case TokenKind::LSquare: {
-        result = parse_postfix_expr(parentStmt, result, true);
+        result = parsePostfixExpr(parentStmt, result, true);
     } break;
     }
 
     return result;
 }
 
-Expr* Parser::parse_ternary_expr(Stmt* parentStmt, Expr* condition) {
+Expr* Parser::parseTernaryExpr(Stmt* parentStmt, Expr* condition) {
     SourceLocation sloc = loc();
-    Expr* lhs = parse_cast_expr(parentStmt);
-    if (!expect_consume(TokenKind::Colon)) return 0;
-    Expr* rhs = parse_cast_expr(parentStmt);
-    return new TernaryExpr(sloc, condition, lhs, rhs, parentStmt);
+    Expr* lhs = parseCastExpr(parentStmt);
+    if (!expectConsume(TokenKind::Colon)) return 0;
+    Expr* rhs = parseCastExpr(parentStmt);
+    return new TernaryExpr(
+        parentStmt,
+        sloc,
+        condition,
+        lhs,
+        rhs
+    );
 }
 
-Expr* Parser::parse_initalizer_expr(Stmt* parentStmt) {
+Expr* Parser::parseInitalizerExpr(Stmt* parentStmt) {
     SourceLocation sloc = loc();
-    List<Expr*> values(1);
 
-    if (!expect_consume(TokenKind::LBrace)) return 0;
+    std::vector<Expr*> values;
+    SourceRange sourceRange;
+
+    sourceRange.begin = loc();
+    if (!expectConsume(TokenKind::LBrace)) return 0;
+
     while (valid()) {
         if (current.kind == TokenKind::RBrace) return 0;
-        Expr* value = parse_assignment_expr(parentStmt);
-        values.push(value);
+
+        Expr* value = parseAssignmentExpr(parentStmt);
+
+        values.push_back(value);
+
         if (current.kind == TokenKind::Comma) {
             consume();
             continue;
         } else break;
     }
-    if (!expect_consume(TokenKind::RBrace)) return 0;
-    return new InitalizerExpr(sloc, values, parentStmt);
+
+    sourceRange.end = loc();
+    if (!expectConsume(TokenKind::RBrace)) return 0;
+
+    return new InitalizerExpr(
+        parentStmt,
+        sourceRange,
+        values
+    );
 }
 
-Expr* Parser::parse_array_subscript_expr(Stmt* parentStmt, Expr* lhs) {
+Expr* Parser::parseArraySubscriptExpr(Stmt* parentStmt, Expr* lhs) {
     SourceLocation sloc = loc();
-    if (!expect_consume(TokenKind::LSquare)) return 0;
-    Expr* rhs = parse_cast_expr(parentStmt);
-    if (!expect_consume(TokenKind::RSquare)) return 0;
-    return new ArraySubscriptExpr(sloc, lhs, rhs, parentStmt);
+    if (!expectConsume(TokenKind::LSquare)) return 0;
+    Expr* rhs = parseCastExpr(parentStmt);
+    if (!expectConsume(TokenKind::RSquare)) return 0;
+    return new ArraySubscriptExpr(
+        parentStmt,
+        sloc,
+        lhs,
+        rhs
+    );
 }
 
 Expr* Parser::parse_unary_expr(Stmt* parentStmt, Expr* lhs, bool postfix) {
