@@ -67,10 +67,10 @@ struct BinaryOpExpr : Expr {
 
 struct CallExpr : Expr {
     SourceRange sourceRange;
-    Name* name;
+    Name name;
     std::vector<Expr*> args;
 
-    CallExpr(Stmt* parentStmt, SourceRange sourceRange, Name* name, std::vector<Expr*> args) :
+    CallExpr(Stmt* parentStmt, SourceRange sourceRange, Name name, std::vector<Expr*> args) :
         Expr(ExprKind::CallExpr, parentStmt, sourceRange.begin),
         sourceRange(sourceRange),
         name(name),
@@ -90,9 +90,9 @@ struct CastExpr : Expr {
 };
 
 struct DeclRefExpr : Expr {
-    Name* name;
+    Name name;
 
-    DeclRefExpr(Stmt* parentStmt, SourceLocation sourceLocation, Name* name) :
+    DeclRefExpr(Stmt* parentStmt, SourceLocation sourceLocation, Name name) :
         Expr(ExprKind::DeclRefExpr, parentStmt, sourceLocation),
         name(name)
     { }
@@ -111,10 +111,10 @@ struct InitalizerExpr : Expr {
 
 struct MemberExpr : Expr {
     SourceRange sourceRange;
-    Name* name;
+    Name name;
     Expr* expr;
 
-    MemberExpr(Stmt* parentStmt, SourceRange sourceRange, Name* name, Expr* expr) :
+    MemberExpr(Stmt* parentStmt, SourceRange sourceRange, Name name, Expr* expr) :
         Expr(ExprKind::MemberExpr, parentStmt, sourceRange.begin),
         sourceRange(sourceRange),
         name(name),
@@ -153,20 +153,18 @@ struct TernaryExpr : Expr {
 };
 
 struct UnaryOpExpr : Expr {
-    SourceRange sourceRange;
     bool isPostfix;
     Expr* expr;
     TokenKind op;
 
     UnaryOpExpr(
         Stmt* parentStmt,
-        SourceRange sourceRange,
+        SourceLocation sourceLocation,
         bool isPostfix,
         Expr* expr,
         TokenKind op
     ) :
-        Expr(ExprKind::UnaryOpExpr, parentStmt, sourceRange.begin),
-        sourceRange(sourceRange),
+        Expr(ExprKind::UnaryOpExpr, parentStmt, sourceLocation),
         isPostfix(isPostfix),
         expr(expr),
         op(op)

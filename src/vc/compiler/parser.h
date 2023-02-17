@@ -86,13 +86,15 @@ struct Parser {
     Expr* parsePostfixExpr(Stmt* parentStmt, Expr* lhs, bool postfix);
     Expr* parseDeclRefExpr(Stmt* parentStmt);
     Expr* parseInitalizerExpr(Stmt* parentStmt);
+    Expr* parseParenExpr(Stmt* parentStmt);
+    Expr* parseMemberExpr(Stmt* parentStmt);
+
     Expr* parseLiteralExpr(Stmt* parentStmt);
     Expr* parseBooleanLiteralExpr(Stmt* parentStmt);
     Expr* parseCharacterLiteralExpr(Stmt* parentStmt);
+    Expr* parseStringLiteralExpr(Stmt* parentStmt);
     Expr* parseIntegerLiteralExpr(Stmt* parentStmt);
     Expr* parseRealLiteralExpr(Stmt* parentStmt);
-    Expr* parseParenExpr(Stmt* parentStmt);
-    Expr* parseMemberExpr(Stmt* parentStmt);
 
     ///
     /// Type parsing methods

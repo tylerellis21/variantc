@@ -194,14 +194,20 @@ Expr* Parser::parseArraySubscriptExpr(Stmt* parentStmt, Expr* lhs) {
     );
 }
 
-Expr* Parser::parse_unary_expr(Stmt* parentStmt, Expr* lhs, bool postfix) {
+Expr* Parser::parseUnaryExpr(Stmt* parentStmt, Expr* lhs, bool postfix) {
     Token op = current;
     consume();
-    Expr* expr = lhs ? lhs : parse_cast_expr(parentStmt);
-    return new UnaryOpExpr(op.loc, expr, op.kind, postfix, parentStmt);
+    Expr* expr = lhs ? lhs : parseCastExpr(parentStmt);
+    return new UnaryOpExpr(
+        parentStmt,
+        op.loc,
+        postfix,
+        expr,
+        op
+    );
 }
 
-Expr* Parser::parse_postfix_expr(Stmt* parentStmt, Expr* lhs, bool postfix) {
+Expr* Parser::parsePostfixExpr(Stmt* parentStmt, Expr* lhs, bool postfix) {
     switch(current.kind) {
     default: return 0;
     case TokenKind::Amp:
@@ -210,70 +216,23 @@ Expr* Parser::parse_postfix_expr(Stmt* parentStmt, Expr* lhs, bool postfix) {
     case TokenKind::Tilde:
     case TokenKind::Minus:
     case TokenKind::MinusMinus:
-    case TokenKind::PlusPlus: return parse_unary_expr(parentStmt, lhs, postfix);
-    case TokenKind::LSquare: return parse_array_subscript_expr(parentStmt, lhs);
+    case TokenKind::PlusPlus: return parseUnaryExpr(parentStmt, lhs, postfix);
+    case TokenKind::LSquare: return parseArraySubscriptExpr(parentStmt, lhs);
     }
 }
 
-Expr* Parser::parse_decl_ref_expr(Stmt* parentStmt) {
+Expr* Parser::parseDeclRefExpr(Stmt* parentStmt) {
     SourceLocation sloc = loc();
-    if (!expect_kind(TokenKind::Identifier)) return expr_error();
+    if (!expect(TokenKind::Identifier)) return exprError();
 
-    Name* name = 0;
-    if (!parse_name(&name, true)) return expr_error();
+    Name name;
+    if (!parseName(&name, true)) return exprError();
 
-    return new DeclRefExpr(sloc, name, 0, 0, parentStmt);
-}
-
-Expr* Parser::parse_literal_expr(Stmt* parentStmt) {
-    SourceLocation sloc = loc();
-    Token token = current;
-    consume();
-
-    Expr* result = 0;
-
-    switch (token.kind) {
-
-    case TokenKind::BooleanLiteral: {
-        bool value;
-        if (token.str.compare("true") == 0)
-            value = true;
-        else
-            value = false;
-        result = new BooleanLiteral(sloc, value, parentStmt);
-    } break;
-
-    case TokenKind::CharacterLiteral: {
-
-        u64 length = utf8_sequence_length(token.str.buffer[0]);
-        rune value = utf8_decode_rune(token.str.buffer, length);
-
-        result = new CharLiteral(token.loc, value, parentStmt);
-    } break;
-
-    case TokenKind::StringLiteral: {
-        result = new StringLiteral(token.loc, token.str, parentStmt);
-    } break;
-
-    case TokenKind::IntegerLiteral: {
-        // TODO: Figure out the proper integer type.
-        //bool is_signed = token.str[0] == '-';
-        i64 value = atoll((char*)token.str.buffer);
-        result = new IntegerLiteral(token.loc, value, parentStmt);
-    } break;
-
-    case TokenKind::RealLiteral: {
-        r64 value = atof((char*)token.str.buffer);
-        result = new RealLiteral(token.loc, value, parentStmt);
-    } break;
-
-    default: {
-        result = expr_error();
-        printf("unhandled literal type\n");
-    } break;
-
-    } // switch (token.kind)
-    return result;
+    return new DeclRefExpr(
+        parentStmt,
+        sloc,
+        name
+    );
 }
 
 Expr* Parser::parse_paren_expr(Stmt* parentStmt) {
@@ -334,6 +293,78 @@ Expr* Parser::parse_call_expr(
         if (!this->expect_semi()) return expr_error();
 
     return new CallExpr(sloc, name, 0, template_type, args, parentStmt);
+}
+
+Expr* Parser::parseLiteralExpr(Stmt* parentStmt) {
+    switch (current.kind) {
+
+    case TokenKind::BooleanLiteral: return parseBooleanLiteralExpr(parentStmt);
+    case TokenKind::CharacterLiteral: return parseCharacterLiteralExpr(parentStmt);
+    case TokenKind::StringLiteral: return parseStringLiteralExpr(parentStmt);
+    case TokenKind::RealLiteral: return parseRealLiteralExpr(parentStmt);
+
+    default: {
+        printf("unhandled literal type\n");
+        return exprError();
+    }
+
+    } // switch (current.kind)
+}
+
+Expr* Parser::parseBooleanLiteralExpr(Stmt* parentStmt) {
+    if (!expect(TokenKind::BooleanLiteral)) return 0;
+
+    SourceLocation sloc = loc();
+    bool value;
+
+    if (current.string.compare("true") == 0)
+        value = true;
+    else
+        value = false;
+
+    consume();
+
+    return new BooleanLiteral(parentStmt, sloc, value);
+}
+
+Expr* Parser::parseCharacterLiteralExpr(Stmt* parentStmt) {
+
+case TokenKind::CharacterLiteral: {
+
+    u64 length = utf8_sequence_length(token.str.buffer[0]);
+    rune value = utf8_decode_rune(token.str.buffer, length);
+
+    result = new CharLiteral(token.loc, value, parentStmt);
+} break;
+
+}
+
+Expr* Parser::parseStringLiteralExpr(Stmt* parentStmt) {
+
+case TokenKind::StringLiteral: {
+    result = new StringLiteral(token.loc, token.str, parentStmt);
+} break;
+
+}
+
+Expr* Parser::parseIntegerLiteralExpr(Stmt* parentStmt) {
+
+case TokenKind::IntegerLiteral: {
+    // TODO: Figure out the proper integer type.
+    //bool is_signed = token.str[0] == '-';
+    i64 value = atoll((char*)token.str.buffer);
+    result = new IntegerLiteral(token.loc, value, parentStmt);
+} break;
+
+}
+
+Expr* Parser::parseRealLiteralExpr(Stmt* parentStmt) {
+
+case TokenKind::RealLiteral: {
+    r64 value = atof((char*)token.str.buffer);
+    result = new RealLiteral(token.loc, value, parentStmt);
+} break;
+
 }
 
 } // namespace vc
