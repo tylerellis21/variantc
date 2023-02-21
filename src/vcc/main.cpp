@@ -54,6 +54,13 @@ int main(int argc, char** args) {
         return -1;
     }
 
+    DeclGroup* moduleDeclGroup = new DeclGroup(0);
+    ModuleDecl* moduleDecl = new ModuleDecl(0, SourceLocation::None, moduleDeclGroup);
+
+    while (parser.valid()) {
+        if (!parser.parseDecl(moduleDecl, moduleDeclGroup)) return -1;
+    }
+
 
     return 0;
 }
