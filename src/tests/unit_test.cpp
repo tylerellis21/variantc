@@ -55,11 +55,14 @@ void runAllTests() {
     std::cout << "[running " << unitTests->size() << " tests]" << std::endl;
 
     int total  = 0;
+    int totalPassed = 0;
+    int totalFailed = 0;
     int passed = 0;
     int failed = 0;
 
     // TODO(@Tyler): Clean this up, perhaps break up into two functions?
     for (UnitTestMap::iterator i = unitTests->begin(); i != unitTests->end(); i++) {
+
         std::string name = i->first;
         UnitTest* unit = i->second;
 
@@ -68,32 +71,40 @@ void runAllTests() {
         // Gross, fix this by returning a test result structure of some sorts?
         currentUnit = unit;
 
+        total = 0;
+        passed = 0;
+        failed = 0;
+
         for (TestCaseVector::iterator t = unit->tests.begin(); t != unit->tests.end(); t++) {
             TestCase testCase = *t;
 
             // Gross, fix this by returning a test result structure of some sorts?
             currentCase = &testCase;
 
-            std::cout << "    [running test case] " << testCase.name << std::endl;
+            std::cout << "    [" << testCase.name << "] - ";
+
+
+            total++;
 
             bool results = testCase.function();
 
-            total++;
             if (results) {
-                std::cout << "        passed" << std::endl;
+                std::cout << "pass" << std::endl;
                 passed++;
+                totalPassed++;
             }
             else {
-                std::cout << "        failed" << std::endl;
+                std::cout << "fail" << std::endl;
                 failed++;
+                totalFailed++;
             }
-
-            std::cout << std::endl;
         }
 
-        std::cout << "[finished running all tests]" << std::endl;
-        std::cout << "\tpassed " << passed << " out of " << total << std::endl;
-        std::cout << "\tfailed " << failed << " out of " << total << std::endl << std::endl;
+        std::cout << "[finished unit " << name << "]" << std::endl;
+        if (passed)
+            std::cout << "\tpassed " << passed << " out of " << total << std::endl;
+        if (failed)
+            std::cout << "\tfailed " << failed << " out of " << total << std::endl;
     }
 }
 
