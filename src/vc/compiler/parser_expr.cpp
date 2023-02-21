@@ -59,6 +59,9 @@ Expr* Parser::parseRhsBinaryOp(Stmt* parentStmt, Expr* lhs, i32 minPrecedence) {
     return lhs;
 }
 
+// TODO(@Tyler): Why is this seperated from parseExpr?
+// I think there was a reason at one point
+
 Expr* Parser::parseCastExpr(Stmt* parentStmt) {
     Expr* result = 0;
 
@@ -67,7 +70,8 @@ Expr* Parser::parseCastExpr(Stmt* parentStmt) {
     case TokenKind::BooleanLiteral:
     case TokenKind::CharacterLiteral:
     case TokenKind::IntegerLiteral:
-    case TokenKind::RealLiteral:
+    case TokenKind::Real32Literal:
+    case TokenKind::Real64Literal:
     case TokenKind::StringLiteral:
         result = parseLiteralExpr(parentStmt);
         break;
@@ -203,7 +207,7 @@ Expr* Parser::parseUnaryExpr(Stmt* parentStmt, Expr* lhs, bool postfix) {
         op.loc,
         postfix,
         expr,
-        op
+        op.kind
     );
 }
 
@@ -235,64 +239,71 @@ Expr* Parser::parseDeclRefExpr(Stmt* parentStmt) {
     );
 }
 
-Expr* Parser::parse_paren_expr(Stmt* parentStmt) {
-    SourceLocation lparen_loc = loc();
-    consume();
+Expr* Parser::parseParenExpr(Stmt* parentStmt) {
+    SourceRange sourceRange = SourceRange::None;
+    sourceRange.begin = loc();
+    if (!expectConsume(TokenKind::LParen)) return exprError();
 
-    Expr* expr = parse_expr(parentStmt);
+    Expr* expr = parseExpr(parentStmt);
 
-    SourceLocation rparen_loc = loc();
-    if (!expect_consume(TokenKind::RParen)) return expr_error();
+    sourceRange.end = loc();
+    if (!expectConsume(TokenKind::RParen)) return exprError();
 
-    return new ParenExpr(lparen_loc, lparen_loc, rparen_loc, expr, parentStmt);
+    return new ParenExpr(parentStmt, sourceRange, expr);
 }
 
-Expr* Parser::parse_member_expr(Stmt* parentStmt) {
+Expr* Parser::parseMemberExpr(Stmt* parentStmt) {
 
     SourceLocation sloc = loc();
 
-    Name* name = 0;
-    if (!parse_name(&name, true)) return 0;
+    Name name;
+    if (!parseName(&name, true)) return 0;
 
-    if (!expect_consume(TokenKind::Period)) return 0;
+    if (!expectConsume(TokenKind::Period)) return 0;
 
-    Expr* expr = parse_cast_expr(parentStmt);
+    Expr* expr = parseCastExpr(parentStmt);
 
-    return new MemberExpr(sloc, name, expr, 0, parentStmt);
+    return new MemberExpr(parentStmt, sloc, name, expr);
 }
 
-Expr* Parser::parse_call_expr(
+Expr* Parser::parseCallExpr(
     Stmt* parentStmt,
-    bool expect_semi,
-    Name* name,
-    Type* template_type) {
+    bool expectSemi) {
 
-    SourceLocation sloc = loc();
-    List<Expr*> args(1);
+    SourceRange sourceRange;
+    sourceRange.begin = loc();
 
-    if (ahead.kind == TokenKind::At) {
-        if (!parse_template_type(&template_type)) return expr_error();
+    std::vector<Expr*> args;
+/*
+    if (next.kind == TokenKind::At) {
+        if (!parseTemplateType(&templateType)) return exprError();
     }
-    else if (!name)
-         if (!parse_name(&name, true)) return 0;
+    else if (name.identifiers.size() == 0)
+*/
+    Name name;
+    if (!parseName(&name, true)) return 0;
 
-    if (!expect_consume(TokenKind::LParen)) return 0;
+    if (!expectConsume(TokenKind::LParen)) return 0;
 
     while (valid()) {
         if (current.kind == TokenKind::RParen) break;
-        Expr* expr = parse_assignment_expr(parentStmt);
-        args.push(expr);
+
+        Expr* expr = parseAssignmentExpr(parentStmt);
+
+        args.push_back(expr);
+
         if (current.kind == TokenKind::Comma) {
             consume();
             continue;
         } else break;
     }
+    sourceRange.end = loc();
+    if (!expectConsume(TokenKind::RParen)) return 0;
 
-    if (!expect_consume(TokenKind::RParen)) return 0;
-    if (expect_semi)
-        if (!this->expect_semi()) return expr_error();
+    if (expectSemi && !this->expectSemi())
+        return exprError();
 
-    return new CallExpr(sloc, name, 0, template_type, args, parentStmt);
+    return new CallExpr(parentStmt, sourceRange, name, args);
 }
 
 Expr* Parser::parseLiteralExpr(Stmt* parentStmt) {
@@ -301,7 +312,10 @@ Expr* Parser::parseLiteralExpr(Stmt* parentStmt) {
     case TokenKind::BooleanLiteral: return parseBooleanLiteralExpr(parentStmt);
     case TokenKind::CharacterLiteral: return parseCharacterLiteralExpr(parentStmt);
     case TokenKind::StringLiteral: return parseStringLiteralExpr(parentStmt);
-    case TokenKind::RealLiteral: return parseRealLiteralExpr(parentStmt);
+
+    case TokenKind::Real32Literal:
+    case TokenKind::Real64Literal: return parseRealLiteralExpr(parentStmt);
+
 
     default: {
         printf("unhandled literal type\n");
@@ -324,47 +338,58 @@ Expr* Parser::parseBooleanLiteralExpr(Stmt* parentStmt) {
 
     consume();
 
-    return new BooleanLiteral(parentStmt, sloc, value);
+    return new BooleanLiteralExpr(parentStmt, sloc, value);
 }
 
 Expr* Parser::parseCharacterLiteralExpr(Stmt* parentStmt) {
 
-case TokenKind::CharacterLiteral: {
+    //u64 length = utf8_sequence_length(token.str.buffer[0]);
+    //rune value = utf8_decode_rune(token.str.buffer, length);
+    // TODO(@Tyler): Implement unicode character support
 
-    u64 length = utf8_sequence_length(token.str.buffer[0]);
-    rune value = utf8_decode_rune(token.str.buffer, length);
+    // TODO(@Tyler): I was thinking... since we are using utf8, do we really need character literals?
+    //since one character doesn't really equal to one byte.
+    //so what if we just used string literals instead?
+    // a 1 character string literal is literally the same thing right?!?
 
-    result = new CharLiteral(token.loc, value, parentStmt);
-} break;
+    rune value = *current.string.begin();
+    consume();
 
+    return new CharLiteralExpr(parentStmt, current.loc, value);
 }
 
 Expr* Parser::parseStringLiteralExpr(Stmt* parentStmt) {
-
-case TokenKind::StringLiteral: {
-    result = new StringLiteral(token.loc, token.str, parentStmt);
-} break;
-
+    SourceLocation sloc = loc();
+    std::string value = current.string;
+    consume();
+    // TODO(@Tyler): Implement unicode character support
+    return new StringLiteralExpr(parentStmt, sloc, value);
 }
 
 Expr* Parser::parseIntegerLiteralExpr(Stmt* parentStmt) {
-
-case TokenKind::IntegerLiteral: {
+    SourceLocation sloc = loc();
     // TODO: Figure out the proper integer type.
     //bool is_signed = token.str[0] == '-';
-    i64 value = atoll((char*)token.str.buffer);
-    result = new IntegerLiteral(token.loc, value, parentStmt);
-} break;
-
+    i64 value = atoll((char*)current.string.c_str());
+    consume();
+    return 0;
+    //return new IntegerLiteralExpr(parentStmt, sloc, value);
 }
 
 Expr* Parser::parseRealLiteralExpr(Stmt* parentStmt) {
+    TokenKind tokenKind = current.kind;
+    SourceLocation sloc = loc();
+    r64 value = atof((char*)current.string.c_str());
+    consume();
 
-case TokenKind::RealLiteral: {
-    r64 value = atof((char*)token.str.buffer);
-    result = new RealLiteral(token.loc, value, parentStmt);
-} break;
-
+    BuiltinKind builtinKind;
+    if (current.kind == TokenKind::Real32Literal) {
+        return new RealLiteralExpr(parentStmt, sloc, (r32)value);
+    }
+    else if (current.kind == TokenKind::Real64Literal) {
+        return new RealLiteralExpr(parentStmt, sloc, value);
+    }
+    return 0;
 }
 
 } // namespace vc

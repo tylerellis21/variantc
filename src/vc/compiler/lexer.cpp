@@ -155,7 +155,9 @@ void Lexer::lexBinaryNumber(Token* token) {
         appendConsume();
     }
 
-    constructToken(token, TokenKind::BinaryIntegerLiteral);
+    // TODO(@Tyler): Convert to base10 for simplicity.
+
+    constructToken(token, TokenKind::IntegerLiteral);
 }
 
 void Lexer::lexOctalNumber(Token* token) {
@@ -167,7 +169,8 @@ void Lexer::lexOctalNumber(Token* token) {
         appendConsume();
     }
 
-    constructToken(token, TokenKind::OctalIntegerLiteral);
+    // TODO(@Tyler): Convert to base10 for simplicity.
+    constructToken(token, TokenKind::IntegerLiteral);
 }
 
 void Lexer::lexHexNumber(Token* token) {
@@ -181,7 +184,8 @@ void Lexer::lexHexNumber(Token* token) {
         appendConsume();
     }
 
-    constructToken(token, TokenKind::HexIntegerLiteral);
+    // TODO(@Tyler): Convert to base10 for simplicity.
+    constructToken(token, TokenKind::IntegerLiteral);
 }
 
 void Lexer::lexNumeric(Token* token) {
@@ -208,8 +212,12 @@ void Lexer::lexNumeric(Token* token) {
         if (std::isdigit(current) || current == '-') {
             appendConsume();
         }
-        else if (current == '.' || current == 'f' || current == 'd') {
-            numericType = TokenKind::RealLiteral;
+        else if (current == '.' || current == 'd') {
+            numericType = TokenKind::Real64Literal;
+            appendConsume();
+        }
+        else if (current == 'f') {
+            numericType = TokenKind::Real32Literal;
             appendConsume();
         }
         else break;

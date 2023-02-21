@@ -29,6 +29,7 @@ enum class TokenKind {
 };
 
 bool isBuiltinKind(TokenKind tokenKind);
+bool isTypeTokenKind(TokenKind tokenKind);
 bool isKeywordKind(TokenKind tokenKind);
 bool isOperatorKind(TokenKind tokenKind);
 

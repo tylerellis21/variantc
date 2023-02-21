@@ -15,7 +15,7 @@ enum class TypeKind {
     BuiltinType,
     DeclRefType,
     PointerType,
-    TemplateType
+    //TemplateType
 };
 
 struct Type {
@@ -66,6 +66,8 @@ struct DeclRefType : Type {
     { }
 };
 
+/*
+
 struct TemplateType : Type {
     Name name;
     std::vector<Type*> types;
@@ -76,6 +78,8 @@ struct TemplateType : Type {
         types(types)
     { }
 };
+
+*/
 
 } // namespace vc
 

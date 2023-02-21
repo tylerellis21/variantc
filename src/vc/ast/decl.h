@@ -26,8 +26,10 @@ enum class DeclKind {
     NamespaceDecl,
     PackageDecl,
     RecordDecl,
-    TemplateDecl,
-    TemplateNameDecl,
+
+    //TemplateDecl,
+    //TemplateNameDecl,
+
     TypedefDecl,
     UsingDecl,
     VarDecl,
@@ -56,7 +58,7 @@ inline void setDeclParent(Decl* decl, Decl* parent) {
     }
 }
 
-struct TemplateDecl;
+// struct TemplateDecl;
 struct VarDecl;
 
 struct EnumConstDecl : Decl {
@@ -111,7 +113,7 @@ struct FunctionDecl : Decl {
     std::vector<FunctionArgDecl*> args;
     Type* returnType;
     Stmt* body;
-    TemplateDecl* templateDecl;
+    //TemplateDecl* templateDecl;
 
     FunctionDecl(
         Decl* parent,
@@ -188,7 +190,7 @@ struct RecordDecl : Decl {
     Name name;
     DeclGroup* declGroup;
     SourceRange sourceRange;
-    TemplateDecl* templateDecl;
+    //TemplateDecl* templateDecl;
 
     RecordDecl(
         Decl* parent,
@@ -204,6 +206,7 @@ struct RecordDecl : Decl {
     { }
 };
 
+/*
 struct TemplateDecl : Decl {
     DeclGroup* declGroup;
 
@@ -221,6 +224,7 @@ struct TemplateNameDecl : Decl {
         name(name)
     { }
 };
+*/
 
 struct TypedefDecl : Decl {
     Name name;

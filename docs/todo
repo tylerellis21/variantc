@@ -2,8 +2,13 @@
 
 Finish parser
 
+
 Work on IR Generation
 
 Work on CPP Generation
 
 'Cascadia Mono', 'Fantasque Sans Mono', 'Source Code Pro', Inconsolata, 'JetBrains Mono', 'Blender Mono I18n', 'IBM 3270 Condensed', 'Input Mono', 'Droid Sans Mono', 'Ubuntu Mono', 'Noto Mono', 'Monoid', 'Terminus (TTF)'
+
+v0.1 will be the base language features
+v0.2 will be templates/generics
+

@@ -157,69 +157,6 @@ bool Parser::parseBreakStmt(Stmt* parentStmt, Stmt** out) {
     return true;
 }
 
-bool Parser::parseTemplateStmt(Stmt* parentStmt, TemplateDecl** out) {
-/*
-    WTF IS THIS DOING?!?
-
-    struct Vector<T> {
-        T x;
-        T y;
-    };
-    //     TemplateDecl
-    //      name T
-    def add<T>(Vector<T> lhs, Vector<T> rhs) Vector<T> {
-        //
-        return Vector<T> {
-            lhs.x + rhs.x,
-            lhs.y + rhs.y
-        };
-    }
-
-    typedef Vector<i32> v2i;
-    typedef Vector<r32> v2f;
-
-    v2f a = { 10.0f, 10.0f };
-    v2f b = { 20.0f, 20.0f };
-    v2f c = a + b;
-
-    Vector<r32> aa = Vector<r32>::zero + add(a, b);
-
-    def add(v2f lhs, v2f rhs) v2f {
-        return v2f {
-            lhs.x + rhs.x,
-            lhs.y + rhs.y
-        };
-    }
-
-    SourceLocation sloc = loc();
-
-    TemplateType* templateType = 0;
-    if (!parseTemplateType(&type)) return false;
-
-    if (current.kind == TokenKind::LParen) {
-        Expr* expr = parseCallExpr(
-            parentStmt,
-            true,
-            templateType,
-            template_type
-        );
-        expr->parentStmt = parentStmt;
-        *out = expr;
-        return true;
-    }
-    else {
-        DeclGroup* dg = new DeclGroup(0);
-        DeclStmt* decl_stmt = new DeclStmt(start_loc, parentStmt, dg);
-
-        if (!parse_compound_var_decl(0, dg, template_type)) return false;
-
-        *out = decl_stmt;
-        return expect_semi();
-    }
-*/
-    return false;
-}
-
 bool Parser::parseDeclStmt(Stmt* parentStmt, Stmt** out) {
     SourceLocation sloc = loc();
     DeclGroup* declGroup = new DeclGroup(0);

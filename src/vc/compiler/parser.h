@@ -38,8 +38,6 @@ struct Parser {
 
     bool parseUsingDecl(Decl* parent, DeclGroup* declGroup);
     bool parseTypedefDecl(Decl* parent, DeclGroup* declGroup);
-    bool parseTemplateDecl(Decl* parent, DeclGroup* declGroup, TemplateDecl** templateDecl);
-    bool parseTemplateDecl(Decl* parent, DeclGroup* declGroup);
     bool parseImportDecl(Decl* parent, DeclGroup* declGroup);
     bool parseEnumDecl(Decl* parent, DeclGroup* declGroup);
     bool parseNamespaceDecl(Decl* parent, DeclGroup* declGroup);
@@ -49,13 +47,15 @@ struct Parser {
     bool parseSingleVarDecl(Decl* parent, VarDecl** out, Type* type = 0);
     bool parseCompoundVarDecl(Decl* parent, DeclGroup* declGroup, Type* type = 0);
 
+    // bool parseTemplateDecl(Decl* parent, DeclGroup* declGroup, TemplateDecl** templateDecl);
+    // bool parseTemplateDecl(Decl* parent, DeclGroup* declGroup);
+
     bool parseStmt(Stmt* parentStmt, Stmt** out);
 
     bool parseCompoundStmt(Stmt* parentStmt, Stmt** out);
     bool parseOptionalCompoundStmt(Stmt* parentStmt, Stmt** out);
     bool parseBreakStmt(Stmt* parentStmt, Stmt** out);
     bool parseContinueStmt(Stmt* parentStmt, Stmt** out);
-    bool parseTemplateStmt(Stmt* parentStmt, TemplateDecl** out);
     bool parseDeclStmt(Stmt* parentStmt, Stmt** out);
     bool parseDoStmt(Stmt* parentStmt, Stmt** out);
     bool parseForStmt(Stmt* parentStmt, Stmt** out);
@@ -67,6 +67,8 @@ struct Parser {
     bool parseDefaultStmt(Stmt* parentStmt, Stmt** out);
     bool parseCaseStmt(Stmt* parentStmt, Stmt** out);
     bool parseReturnStmt(Stmt* parentStmt, Stmt** out);
+
+    // bool parseTemplateStmt(Stmt* parentStmt, TemplateDecl** out);
 
     ///
     /// Expression parsing methods
@@ -80,7 +82,8 @@ struct Parser {
     Expr* parseArraySubscriptExpr(Stmt* parentStmt, Expr* lhs);
     Expr* parseUnaryExpr(Stmt* parentStmt, Expr* lhs, bool postfix);
     Expr* parseRhsBinaryOp(Stmt* parentStmt, Expr* lhs, i32 minPrecedence);
-    Expr* parseCallExpr(Stmt* parentStmt, bool expectSemi, Name* name = 0, Type* templateType = 0);
+    // Expr* parseCallExpr(Stmt* parentStmt, bool expectSemi, Name name, Type* templateType = 0);
+    Expr* parseCallExpr(Stmt* parentStmt, bool expectSemi);
     Expr* parseCastExpr(Stmt* parentStmt);
     Expr* parseTernaryExpr(Stmt* parentStmt, Expr* condition);
     Expr* parsePostfixExpr(Stmt* parentStmt, Expr* lhs, bool postfix);
@@ -102,14 +105,14 @@ struct Parser {
 
     bool parseType(Type** type, bool firstCall = true);
 
-    bool parseBuiltinType(BuiltinType** type);
-    bool parsePointerType(PointerType** type);
-    bool parseDeclRefType(DeclRefType** type, Name* name = 0);
-    bool parseTemplateType(TemplateType** type, Name* name = 0);
-    bool parseArrayType(ArrayType** type);
+    bool parseBuiltinType(Type** type);
+    bool parsePointerType(Type** type);
+    bool parseDeclRefType(Type** type);
+    bool parseArrayType(Type** type);
     bool parseVarargType(Type** type);
 
-    bool parseTemplateType(Type** type, Name* name = 0);
+    // bool parseTemplateType(TemplateType** type, Name* name = 0);
+    // ibool parseTemplateType(Type** type, Name* name = 0);
 };
 
 } // namespace vc

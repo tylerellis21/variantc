@@ -4,12 +4,30 @@ namespace vc {
 
 bool isBuiltinKind(TokenKind tokenKind) {
     switch (tokenKind) {
+
         #define BUILTIN_KIND(NAME, SYMBOL, SIZE) case TokenKind::##NAME:
         #include <vc/defs/builtin_kinds.inl>
             return true;
         #undef BUILTIN_KIND
 
         default: return false;
+    }
+}
+
+bool isTypeTokenKind(TokenKind tokenKind) {
+    switch (tokenKind) {
+
+    #define BUILTIN_KIND(NAME, SYMBOL, SIZE) case TokenKind::##NAME:
+    #include <vc/defs/builtin_kinds.inl>
+        return true;
+    #undef BUILTIN_KIND
+
+    case TokenKind::Less:
+    case TokenKind::LSquare:
+    case TokenKind::Star:
+    case TokenKind::Ellipsis: return true;
+
+    default: return false;
     }
 }
 

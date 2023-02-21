@@ -110,13 +110,11 @@ struct InitalizerExpr : Expr {
 };
 
 struct MemberExpr : Expr {
-    SourceRange sourceRange;
     Name name;
     Expr* expr;
 
-    MemberExpr(Stmt* parentStmt, SourceRange sourceRange, Name name, Expr* expr) :
-        Expr(ExprKind::MemberExpr, parentStmt, sourceRange.begin),
-        sourceRange(sourceRange),
+    MemberExpr(Stmt* parentStmt, SourceLocation sourceLocation, Name name, Expr* expr) :
+        Expr(ExprKind::MemberExpr, parentStmt, sourceLocation),
         name(name),
         expr(expr)
     { }
@@ -248,7 +246,32 @@ struct IntegerLiteralExpr : Expr {
 // real32,
 // real64
 struct RealLiteralExpr : Expr {
+    union {
+        r32 real32_value;
+        r64 real64_value;
+    };
+
     BuiltinKind builtinKind;
+
+    RealLiteralExpr(
+        Stmt* parentStmt,
+        SourceLocation sourceLocation,
+        r32 real32_value
+    ) :
+        Expr(ExprKind::RealLiteralExpr, parentStmt, sourceLocation),
+        builtinKind(BuiltinKind::Real32),
+        real32_value(real32_value)
+    { }
+
+    RealLiteralExpr(
+        Stmt* parentStmt,
+        SourceLocation sourceLocation,
+        r64 real64_value
+    ) :
+        Expr(ExprKind::RealLiteralExpr, parentStmt, sourceLocation),
+        builtinKind(BuiltinKind::Real64),
+        real64_value(real64_value)
+    { }
 };
 
 // how to handle ascii/utf8, utf16 and utf32 strings? utf32("test")
@@ -259,7 +282,13 @@ struct RealLiteralExpr : Expr {
     Utf32,
 */
 struct StringLiteralExpr : Expr {
+    std::string value;
     BuiltinKind builtinKind;
+
+    StringLiteralExpr(Stmt* stmtParent, SourceLocation sourceLocation, std::string value) :
+        Expr(ExprKind::StringLiteralExpr, parentStmt, sourceLocation),
+        value(value)
+    { }
 };
 
 } // namespace vc

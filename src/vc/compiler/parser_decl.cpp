@@ -83,6 +83,8 @@ bool Parser::parseTypedefDecl(Decl* parentDecl, DeclGroup* declGroup) {
     return true;
 }
 
+/*
+
 bool Parser::parseTemplateDecl(Decl* parentDecl, DeclGroup* declGroup) {
     TemplateDecl* templateDecl = 0;
     bool result = parseTemplateDecl(parentDecl, declGroup, &templateDecl);
@@ -120,6 +122,8 @@ bool Parser::parseTemplateDecl(Decl* parentDecl, DeclGroup* declGroup, TemplateD
 
     return true;
 }
+
+*/
 
 bool Parser::parseImportDecl(Decl* parentDecl, DeclGroup* declGroup) {
     SourceLocation loc = consume();
@@ -246,7 +250,7 @@ bool Parser::parseNamespaceDecl(Decl* parentDecl, DeclGroup* declGroup) {
 
 bool Parser::parseRecordDecl(Decl* parentDecl, DeclGroup* declGroup) {
     Name recordName;
-    TemplateDecl* recordTemplateDecl = 0;
+    //TemplateDecl* recordTemplateDecl = 0;
 
     RecordKind recordKind;
 
@@ -272,10 +276,12 @@ bool Parser::parseRecordDecl(Decl* parentDecl, DeclGroup* declGroup) {
         declGroup
     );
 
+    /*
     // We have a template declaration
     if (current.kind == TokenKind::At) {
         if (!parseTemplateDecl(recordDecl, declGroup, &recordTemplateDecl)) return false;
     }
+    */
 
     SourceRange sourceRange;
     sourceRange.begin = loc();
@@ -291,7 +297,7 @@ bool Parser::parseRecordDecl(Decl* parentDecl, DeclGroup* declGroup) {
     if (!expectConsume(TokenKind::RBrace)) return false;
 
     recordDecl->sourceRange = sourceRange;
-    recordDecl->templateDecl = recordTemplateDecl;
+    // recordDecl->templateDecl = recordTemplateDecl;
 
     declGroup->add(recordDecl);
     return true;
@@ -308,7 +314,7 @@ bool Parser::parseFunctionDecl(Decl* parentDecl, DeclGroup* declGroup) {
     Name functionName;
     Type* functionReturnType = 0;
     Stmt* functionBodyStmt = 0;
-    TemplateDecl* functionTemplateDecl = 0;
+    // TemplateDecl* functionTemplateDecl = 0;
 
     std::vector<FunctionArgDecl*> functionArgs;
 
@@ -336,10 +342,12 @@ bool Parser::parseFunctionDecl(Decl* parentDecl, DeclGroup* declGroup) {
         functionBodyStmt
     );
 
+    /*
     // Check for template declaration
     if (current.kind == TokenKind::Less) {
         if (!parseTemplateDecl(functionDecl, declGroup, &functionTemplateDecl)) return false;
     }
+    */
 
     if (!expectConsume(TokenKind::LParen)) return false;
 
@@ -374,7 +382,7 @@ bool Parser::parseFunctionDecl(Decl* parentDecl, DeclGroup* declGroup) {
     functionDecl->isPrototype = isProto;
     functionDecl->isInline = isInline;
     functionDecl->isExtern = isExtern;
-    functionDecl->templateDecl = functionTemplateDecl;
+    // functionDecl->templateDecl = functionTemplateDecl;
 
     declGroup->add(functionDecl);
 
