@@ -4,6 +4,7 @@
 #include <vc/compiler/lexer.h>
 #include <vc/compiler/parser.h>
 
+#include <vc/ast/astprinter.h>
 #include <vc/ast/decl.h>
 #include <vc/ast/declgroup.h>
 #include <vc/ast/expr.h>
@@ -61,6 +62,7 @@ int main(int argc, char** args) {
         if (!parser.parseDecl(moduleDecl, moduleDeclGroup)) return -1;
     }
 
+    printDecl(moduleDecl);
 
     return 0;
 }

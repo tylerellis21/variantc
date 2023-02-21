@@ -12,6 +12,8 @@ set (SRC
     ${SRC_DIR}/assembler/assembler.h
     ${SRC_DIR}/assembler/assembler.cpp
 
+    ${SRC_DIR}/ast/astprinter.h
+    ${SRC_DIR}/ast/astprinter.cpp
     ${SRC_DIR}/ast/decl.h
     ${SRC_DIR}/ast/declgroup.h
     ${SRC_DIR}/ast/expr.h
