@@ -62,7 +62,7 @@ int main(int argc, char** args) {
         if (!parser.parseDecl(moduleDecl, moduleDeclGroup)) return -1;
     }
 
-    printDecl(moduleDecl);
+    printDecl(moduleDecl, 0);
 
     return 0;
 }
