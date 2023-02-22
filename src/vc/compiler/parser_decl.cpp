@@ -383,7 +383,8 @@ bool Parser::parseFunctionDecl(Decl* parentDecl, DeclGroup* declGroup) {
     functionDecl->isInline = isInline;
     functionDecl->isExtern = isExtern;
     functionDecl->args = functionArgs;
-    // functionDecl->templateDecl = functionTemplateDecl;
+    functionDecl->body = functionBodyStmt;
+    functionDecl->returnType = functionReturnType;
 
     declGroup->add(functionDecl);
 
