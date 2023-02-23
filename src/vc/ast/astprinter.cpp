@@ -60,10 +60,6 @@ void printDecl(Decl* decl, i32 indent) {
             std::cout << "[ImportDecl] '" << importDecl->name  << "'" << std::endl;
         } break;
 
-        case DeclKind::InterfaceDecl: {
-            std::cout << "[InterfaceDecl]" << std::endl;
-        } break;
-
         case DeclKind::ModuleDecl: {
             ModuleDecl* moduleDecl = static_cast<ModuleDecl*>(decl);
             std::cout << "[ModuleDecl]" << std::endl;
@@ -71,11 +67,14 @@ void printDecl(Decl* decl, i32 indent) {
         } break;
 
         case DeclKind::NamespaceDecl: {
-            std::cout << "[NamespaceDecl]" << std::endl;
+            NamespaceDecl* namespaceDecl = static_cast<NamespaceDecl*>(decl);
+            std::cout << "[NamespaceDecl] '" << namespaceDecl->name << "'" << std::endl;
+            printDeclGroup(namespaceDecl->declGroup, indent + 1);
         } break;
 
         case DeclKind::PackageDecl: {
-            std::cout << "[PackageDecl]" << std::endl;
+            PackageDecl* packageDecl = static_cast<PackageDecl*>(decl);
+            std::cout << "[PackageDecl] '" << packageDecl->name << "'" << std::endl;
         } break;
 
         case DeclKind::PPDefDecl: {

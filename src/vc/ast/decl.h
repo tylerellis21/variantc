@@ -21,7 +21,6 @@ enum class DeclKind {
     FunctionArgDecl,
     FunctionDecl,
     ImportDecl,
-    InterfaceDecl,
     ModuleDecl,
     NamespaceDecl,
     PackageDecl,
