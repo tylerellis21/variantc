@@ -312,6 +312,7 @@ Expr* Parser::parseLiteralExpr(Stmt* parentStmt) {
     case TokenKind::BooleanLiteral: return parseBooleanLiteralExpr(parentStmt);
     case TokenKind::CharacterLiteral: return parseCharacterLiteralExpr(parentStmt);
     case TokenKind::StringLiteral: return parseStringLiteralExpr(parentStmt);
+    case TokenKind::IntegerLiteral: return parseIntegerLiteralExpr(parentStmt);
 
     case TokenKind::Real32Literal:
     case TokenKind::Real64Literal: return parseRealLiteralExpr(parentStmt);

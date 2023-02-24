@@ -273,7 +273,7 @@ bool Parser::parseRecordDecl(Decl* parentDecl, DeclGroup* declGroup) {
         keywordLoc,
         recordKind,
         recordName,
-        declGroup
+        recordDeclGroup
     );
 
     /*

@@ -48,6 +48,7 @@ void printDecl(Decl* decl, i32 indent) {
             FunctionDecl* functionDecl = static_cast<FunctionDecl*>(decl);
             std::cout << "[FunctionDecl] '" << functionDecl->name << "' ReturnType: ";
             printType(functionDecl-> returnType);
+            std::cout << std::endl;
             for (int i = 0; i < functionDecl->args.size(); i++) {
                 Decl* functionArgDecl = functionDecl->args[i];
                 printDecl(functionArgDecl, indent + 1);
@@ -90,19 +91,41 @@ void printDecl(Decl* decl, i32 indent) {
         } break;
 
         case DeclKind::RecordDecl: {
-            std::cout << "[RecordDecl]" << std::endl;
+            RecordDecl* recordDecl = static_cast<RecordDecl*>(decl);
+            std::cout << "[RecordDecl] '" << recordDecl->name << "' ";
+            switch (recordDecl->recordKind) {
+                case RecordKind::AllocatorKind: std::cout << "Allocator"; break;
+                case RecordKind::AttributeKind: std::cout << "Attribute"; break;
+                case RecordKind::StructKind: std::cout << "Struct"; break;
+                case RecordKind::InterfaceKind: std::cout << "Interface"; break;
+            }
+            std::cout << std::endl;
+            printDeclGroup(recordDecl->declGroup, indent + 1);
         } break;
 
         case DeclKind::TypedefDecl: {
-            std::cout << "[TypedefDecl]" << std::endl;
+            TypedefDecl* typedefDecl = static_cast<TypedefDecl*>(decl);
+            std::cout << "[TypedefDecl] '" << typedefDecl->name << "' ";
+            printType(typedefDecl->type);
+            std::cout << std::endl;
         } break;
 
         case DeclKind::UsingDecl: {
-            std::cout << "[UsingDecl]" << std::endl;
+            UsingDecl* usingDecl = static_cast<UsingDecl*>(decl);
+            std::cout << "[UsingDecl] '" << usingDecl->name << "'" << std::endl;
         } break;
 
         case DeclKind::VarDecl: {
-            std::cout << "[VarDecl]" << std::endl;
+            VarDecl* varDecl = static_cast<VarDecl*>(decl);
+            std::cout << "[VarDecl] '" << varDecl->name << "' ";
+            printType(varDecl->type);
+            std::cout << std::endl;
+            if (varDecl->bitsize) {
+                printExpr(varDecl->bitsize, indent + 1);
+            }
+            if (varDecl->assignment) {
+                printExpr(varDecl->assignment, indent + 1);
+            }
         } break;
 
         default:
@@ -127,10 +150,12 @@ void printStmt(Stmt* stmt, i32 indent) {
         } break;
 
         case StmtKind::CaseStmt: {
+            CaseStmt* caseStmt = static_cast<CaseStmt*>(stmt);
             std::cout << "[CaseStmt]" << std::endl;
         } break;
 
         case StmtKind::CompoundStmt: {
+            CompoundStmt* compoundStmt = static_cast<CompoundStmt*>(stmt);
             std::cout << "[CompoundStmt]" << std::endl;
         } break;
 
@@ -139,38 +164,47 @@ void printStmt(Stmt* stmt, i32 indent) {
         } break;
 
         case StmtKind::DeclStmt: {
+            DeclStmt* declStmt = static_cast<DeclStmt*>(stmt);
             std::cout << "[DeclStmt]" << std::endl;
         } break;
 
         case StmtKind::DefaultStmt: {
+            DefaultStmt* defaultStmt = static_cast<DefaultStmt*>(stmt);
             std::cout << "[DefaultStmt]" << std::endl;
         } break;
 
         case StmtKind::DeferStmt: {
+            DeferStmt* deferStmt = static_cast<DeferStmt*>(stmt);
             std::cout << "[DeferStmt]" << std::endl;
         } break;
 
         case StmtKind::DoStmt: {
+            DoStmt* doStmt = static_cast<DoStmt*>(stmt);
             std::cout << "[DoStmt]" << std::endl;
         } break;
 
         case StmtKind::ExprStmt: {
+            ExprStmt* exprStmt = static_cast<ExprStmt*>(stmt);
             std::cout << "[ExprStmt]" << std::endl;
         } break;
 
         case StmtKind::ForStmt: {
+            ForStmt* forStmt = static_cast<ForStmt*>(stmt);
             std::cout << "[ForStmt]" << std::endl;
         } break;
 
         case StmtKind::GotoStmt: {
+            GotoStmt* gotoStmt = static_cast<GotoStmt*>(stmt);
             std::cout << "[GotoStmt]" << std::endl;
         } break;
 
         case StmtKind::IfStmt: {
+            IfStmt* ifStmt = static_cast<IfStmt*>(stmt);
             std::cout << "[IfStmt]" << std::endl;
         } break;
 
         case StmtKind::LabelStmt: {
+            LabelStmt* labelStmt = static_cast<LabelStmt*>(stmt);
             std::cout << "[LabelStmt]" << std::endl;
         } break;
 
@@ -179,14 +213,17 @@ void printStmt(Stmt* stmt, i32 indent) {
         } break;
 
         case StmtKind::SwitchStmt: {
+            SwitchStmt* switchStmt = static_cast<SwitchStmt*>(stmt);
             std::cout << "[SwitchStmt]" << std::endl;
         } break;
 
         case StmtKind::UseStmt: {
+            UseStmt* useStmt = static_cast<UseStmt*>(stmt);
             std::cout << "[UseStmt]" << std::endl;
         } break;
 
         case StmtKind::WhileStmt: {
+            WhileStmt* whileStmt = static_cast<WhileStmt*>(stmt);
             std::cout << "[WhileStmt]" << std::endl;
         } break;
 
@@ -268,19 +305,19 @@ void printExpr(Expr* expr, i32 indent) {
 void printType(Type* type) {
     switch (type->typeKind) {
         case TypeKind::ArrayType: {
-            std::cout << "[ArrayType]" << std::endl;
+            std::cout << "[ArrayType]";
         } break;
 
         case TypeKind::BuiltinType: {
-            std::cout << "[BuiltinType]" << std::endl;
+            std::cout << "[BuiltinType]";
         } break;
 
         case TypeKind::DeclRefType: {
-            std::cout << "[DeclRefType]" << std::endl;
+            std::cout << "[DeclRefType]";
         } break;
 
         case TypeKind::PointerType: {
-            std::cout << "[PointerType]" << std::endl;
+            std::cout << "[PointerType]";
         } break;
 
         default:

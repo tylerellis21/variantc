@@ -1,3 +1,15 @@
+
+int i = 0;
+
+namespace foo::bar {
+
+struct Vector2i {
+    i32 x = 0;
+    i32 y = 1;
+}
+
+}
+
 namespace foo::bar {
 
 def helloWorld(i32 argc, u8** args) void {
