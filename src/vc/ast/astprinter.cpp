@@ -184,7 +184,7 @@ void printStmt(Stmt* stmt, i32 indent) {
         } break;
 
         case StmtKind::ExprStmt: {
-            ExprStmt* exprStmt = static_cast<ExprStmt*>(stmt);
+            Expr* exprStmt = static_cast<Expr*>(stmt);
             std::cout << "[ExprStmt]" << std::endl;
         } break;
 
@@ -237,62 +237,77 @@ void printExpr(Expr* expr, i32 indent) {
     printIndent(indent);
     switch (expr->exprKind) {
         case ExprKind::ArraySubscriptExpr: {
+            ArraySubscriptExpr* arraySubscriptExpr = static_cast<ArraySubscriptExpr*>(expr);
             std::cout << "[ArraySubscriptExpr]" << std::endl;
         } break;
 
         case ExprKind::BinaryOpExpr: {
+            BinaryOpExpr* binaryOpExpr = static_cast<BinaryOpExpr*>(stmt);
             std::cout << "[BinaryOpExpr]" << std::endl;
         } break;
 
         case ExprKind::CallExpr: {
+            CallExpr* callExpr = static_cast<CallExpr*>(expr);
             std::cout << "[CallExpr]" << std::endl;
         } break;
 
         case ExprKind::CastExpr: {
+            CastExpr* castExpr = static_cast<CastExpr*>(expr);
             std::cout << "[CastExpr]" << std::endl;
         } break;
 
         case ExprKind::DeclRefExpr: {
+            DeclRefExpr* declRefExpr = static_cast<DeclRefExpr*>(expr);
             std::cout << "[DeclRefExpr]" << std::endl;
         } break;
 
         case ExprKind::InitalizerExpr: {
+            InitalizerExpr* initalizerExpr = static_cast<InitalizerExpr*>(expr);
             std::cout << "[InitalizerExpr]" << std::endl;
         } break;
 
         case ExprKind::MemberExpr: {
+            MemberExpr* memberExpr = static_cast<MemberExpr*>(expr);
             std::cout << "[MemberExpr]" << std::endl;
         } break;
 
         case ExprKind::ParenExpr: {
+            ParenExpr* parenExpr = static_cast<ParenExpr*>(expr);
             std::cout << "[ParenExpr]" << std::endl;
         } break;
 
         case ExprKind::TernaryExpr: {
+            TernaryExpr* ternaryExpr = static_cast<TernaryExpr*>(expr);
             std::cout << "[TernaryExpr]" << std::endl;
         } break;
 
         case ExprKind::UnaryOpExpr: {
+            UnaryOpExpr* unaryOpExpr = static_cast<UnaryOpExpr*>(expr);
             std::cout << "[UnaryOpExpr]" << std::endl;
         } break;
 
         case ExprKind::BooleanLiteralExpr: {
+            BooleanLiteralExpr* booleanLiteralExpr = static_cast<BooleanLiteralExpr*>(expr);
             std::cout << "[BooleanLiteralExpr]" << std::endl;
         } break;
 
         case ExprKind::CharLiteralExpr: {
+            CharLiteralExpr* charLiteralExpr = static_cast<CharLiteralExpr*>(expr);
             std::cout << "[CharLiteralExpr]" << std::endl;
         } break;
 
         case ExprKind::IntegerLiteralExpr: {
+            IntegerLiteralExpr* integerLiteralExpr = static_cast<IntegerLiteralExpr*>(expr);
             std::cout << "[IntegerLiteralExpr]" << std::endl;
         } break;
 
         case ExprKind::RealLiteralExpr: {
+            RealLiteralExpr* realLiteralExpr = static_cast<RealLiteralExpr*>(expr);
             std::cout << "[RealLiteralExpr]" << std::endl;
         } break;
 
         case ExprKind::StringLiteralExpr: {
+            StringLiteralExpr* stringLiteralExpr = static_cast<StringLiteralExpr*>(expr);
             std::cout << "[StringLiteralExpr]" << std::endl;
         } break;
 
