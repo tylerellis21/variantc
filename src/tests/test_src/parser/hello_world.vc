@@ -6,6 +6,8 @@ namespace foo::bar {
 struct Vector2i {
     i32 x = 0;
     i32 y = 1;
+    i32* xPtr;
+    i32* yPtr = &x + 1;
 }
 
 }
