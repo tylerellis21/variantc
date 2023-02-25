@@ -214,9 +214,9 @@ bool Parser::parseForStmt(Stmt* parentStmt, Stmt** out) {
     );
 
     // TODO(@Tyler): I don't think having to do this :(
-    setStmtParent(forStmt->initStmt, forStmt);
-    setStmtParent(forStmt->conditionStmt, forStmt);
-    setStmtParent(forStmt->incrementStmt, forStmt);
+    setStmtParent(forStmt->initExpr, forStmt);
+    setStmtParent(forStmt->conditionExpr, forStmt);
+    setStmtParent(forStmt->incrementExpr, forStmt);
     setStmtParent(forStmt->bodyStmt, forStmt);
 
     *out = forStmt;
@@ -258,7 +258,7 @@ bool Parser::parseIfStmt(Stmt* parentStmt, Stmt** out) {
         elseStmt
     );
 
-    setStmtParent(ifStmt->conditionStmt, ifStmt);
+    setStmtParent(ifStmt->conditionExpr, ifStmt);
     setStmtParent(ifStmt->bodyStmt, ifStmt);
     setStmtParent(ifStmt->elseStmt, ifStmt);
 

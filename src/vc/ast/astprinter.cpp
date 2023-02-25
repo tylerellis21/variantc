@@ -152,11 +152,17 @@ void printStmt(Stmt* stmt, i32 indent) {
         case StmtKind::CaseStmt: {
             CaseStmt* caseStmt = static_cast<CaseStmt*>(stmt);
             std::cout << "[CaseStmt]" << std::endl;
+            printExpr(caseStmt->valueExpr, indent + 1);
+            printStmt(caseStmt->bodyStmt, indent + 1);
         } break;
 
         case StmtKind::CompoundStmt: {
             CompoundStmt* compoundStmt = static_cast<CompoundStmt*>(stmt);
             std::cout << "[CompoundStmt]" << std::endl;
+            for (int i = 0; i < compoundStmt->statements.size(); i++) {
+                Stmt* subStmt = compoundStmt->statements[i];
+                printStmt(subStmt, indent + 1);
+            }
         } break;
 
         case StmtKind::ContinueStmt: {
@@ -166,6 +172,7 @@ void printStmt(Stmt* stmt, i32 indent) {
         case StmtKind::DeclStmt: {
             DeclStmt* declStmt = static_cast<DeclStmt*>(stmt);
             std::cout << "[DeclStmt]" << std::endl;
+            printDeclGroup(declStmt->declGroup, indent + 1);
         } break;
 
         case StmtKind::DefaultStmt: {
@@ -176,36 +183,49 @@ void printStmt(Stmt* stmt, i32 indent) {
         case StmtKind::DeferStmt: {
             DeferStmt* deferStmt = static_cast<DeferStmt*>(stmt);
             std::cout << "[DeferStmt]" << std::endl;
+            printStmt(deferStmt->bodyStmt, indent + 1);
         } break;
 
         case StmtKind::DoStmt: {
             DoStmt* doStmt = static_cast<DoStmt*>(stmt);
             std::cout << "[DoStmt]" << std::endl;
+            printStmt(doStmt->bodyStmt, indent + 1);
+            printExpr(doStmt->whileExpr, indent + 1);
         } break;
 
         case StmtKind::ExprStmt: {
             Expr* exprStmt = static_cast<Expr*>(stmt);
             std::cout << "[ExprStmt]" << std::endl;
+            printExpr(exprStmt, indent + 1);
         } break;
 
         case StmtKind::ForStmt: {
             ForStmt* forStmt = static_cast<ForStmt*>(stmt);
             std::cout << "[ForStmt]" << std::endl;
+            printExpr(forStmt->initExpr, indent + 1);
+            printExpr(forStmt->conditionExpr, indent + 1);
+            printExpr(forStmt->incrementExpr, indent + 1);
+            printStmt(forStmt->bodyStmt, indent + 1);
         } break;
 
         case StmtKind::GotoStmt: {
             GotoStmt* gotoStmt = static_cast<GotoStmt*>(stmt);
-            std::cout << "[GotoStmt]" << std::endl;
+            std::cout << "[GotoStmt] '" << gotoStmt->name << "'" << std::endl;
         } break;
 
         case StmtKind::IfStmt: {
             IfStmt* ifStmt = static_cast<IfStmt*>(stmt);
             std::cout << "[IfStmt]" << std::endl;
+            printExpr(ifStmt->conditionExpr, indent + 1);
+            printStmt(ifStmt->bodyStmt, indent + 1);
+            if (ifStmt->elseStmt) {
+                printStmt(ifStmt->elseStmt, indent + 1);
+            }
         } break;
 
         case StmtKind::LabelStmt: {
             LabelStmt* labelStmt = static_cast<LabelStmt*>(stmt);
-            std::cout << "[LabelStmt]" << std::endl;
+            std::cout << "[LabelStmt] '" << labelStmt->name << "'" << std::endl;
         } break;
 
         case StmtKind::ReturnStmt: {
@@ -215,16 +235,21 @@ void printStmt(Stmt* stmt, i32 indent) {
         case StmtKind::SwitchStmt: {
             SwitchStmt* switchStmt = static_cast<SwitchStmt*>(stmt);
             std::cout << "[SwitchStmt]" << std::endl;
+            printExpr(switchStmt->conditionExpr, indent + 1);
+            printStmt(switchStmt->bodyStmt, indent + 1);
         } break;
 
         case StmtKind::UseStmt: {
             UseStmt* useStmt = static_cast<UseStmt*>(stmt);
             std::cout << "[UseStmt]" << std::endl;
+            printExpr(useStmt->expr, indent + 1);
         } break;
 
         case StmtKind::WhileStmt: {
             WhileStmt* whileStmt = static_cast<WhileStmt*>(stmt);
             std::cout << "[WhileStmt]" << std::endl;
+            printExpr(whileStmt->conditionExpr, indent + 1);
+            printStmt(whileStmt->bodyStmt, indent + 1);
         } break;
 
         default:
@@ -242,7 +267,7 @@ void printExpr(Expr* expr, i32 indent) {
         } break;
 
         case ExprKind::BinaryOpExpr: {
-            BinaryOpExpr* binaryOpExpr = static_cast<BinaryOpExpr*>(stmt);
+            BinaryOpExpr* binaryOpExpr = static_cast<BinaryOpExpr*>(expr);
             std::cout << "[BinaryOpExpr]" << std::endl;
         } break;
 

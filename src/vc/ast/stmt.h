@@ -116,41 +116,41 @@ struct WhileStmt;
 
 struct DoStmt : Stmt {
     Stmt* bodyStmt;
-    Stmt* whileStmt;
+    Expr* whileExpr;
 
     DoStmt(
         Stmt* parentStmt,
         SourceLocation sourceLocation,
         Stmt* bodyStmt,
-        Stmt* whileStmt
+        Expr* whileExpr
     ) :
         Stmt(StmtKind::WhileStmt, parentStmt, sourceLocation),
         bodyStmt(bodyStmt),
-        whileStmt(whileStmt)
+        whileExpr(whileExpr)
     { }
 };
 
 struct ForStmt : Stmt {
     SourceRange sourceRange;
-    Stmt* initStmt;
-    Expr* conditionStmt;
-    Expr* incrementStmt;
+    Stmt* initExpr;
+    Expr* conditionExpr;
+    Expr* incrementExpr;
     Stmt* bodyStmt;
 
     ForStmt(
         Stmt* parentStmt,
         SourceLocation sourceLocation,
         SourceRange sourceRange,
-        Stmt* initStmt,
-        Expr* conditionStmt,
-        Expr* incrementStmt,
+        Expr* initExpr,
+        Expr* conditionExpr,
+        Expr* incrementExpr,
         Stmt* bodyStmt
     ) :
         Stmt(StmtKind::ForStmt, parentStmt, sourceLocation),
         sourceRange(sourceRange),
-        initStmt(initStmt),
-        conditionStmt(conditionStmt),
-        incrementStmt(incrementStmt),
+        initExpr(initExpr),
+        conditionExpr(conditionExpr),
+        incrementExpr(incrementExpr),
         bodyStmt(bodyStmt)
     { }
 };
@@ -166,7 +166,7 @@ struct GotoStmt : Stmt {
 
 struct IfStmt : Stmt {
     SourceRange sourceRange;
-    Expr* conditionStmt;
+    Expr* conditionExpr;
     Stmt* bodyStmt;
     Stmt* elseStmt;
 
@@ -174,13 +174,13 @@ struct IfStmt : Stmt {
         Stmt* parentStmt,
         SourceLocation sourceLocation,
         SourceRange sourceRange,
-        Expr* conditionStmt,
+        Expr* conditionExpr,
         Stmt* bodyStmt,
         Stmt* elseStmt
     ) :
         Stmt(StmtKind::IfStmt, parentStmt, sourceLocation),
         sourceRange(sourceRange),
-        conditionStmt(conditionStmt),
+        conditionExpr(conditionExpr),
         bodyStmt(bodyStmt),
         elseStmt(elseStmt)
     { }
