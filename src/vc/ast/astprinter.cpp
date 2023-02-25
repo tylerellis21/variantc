@@ -190,7 +190,7 @@ void printStmt(Stmt* stmt, i32 indent) {
             DoStmt* doStmt = static_cast<DoStmt*>(stmt);
             std::cout << "[DoStmt]" << std::endl;
             printStmt(doStmt->bodyStmt, indent + 1);
-            printExpr(doStmt->whileExpr, indent + 1);
+            printStmt(doStmt->WhileStmt, indent + 1);
         } break;
 
         case StmtKind::ExprStmt: {

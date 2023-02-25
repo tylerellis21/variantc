@@ -116,23 +116,23 @@ struct WhileStmt;
 
 struct DoStmt : Stmt {
     Stmt* bodyStmt;
-    Expr* whileExpr;
+    Stmt* WhileStmt;
 
     DoStmt(
         Stmt* parentStmt,
         SourceLocation sourceLocation,
         Stmt* bodyStmt,
-        Expr* whileExpr
+        Stmt* WhileStmt
     ) :
         Stmt(StmtKind::WhileStmt, parentStmt, sourceLocation),
         bodyStmt(bodyStmt),
-        whileExpr(whileExpr)
+        WhileStmt(WhileStmt)
     { }
 };
 
 struct ForStmt : Stmt {
     SourceRange sourceRange;
-    Stmt* initExpr;
+    Expr* initExpr;
     Expr* conditionExpr;
     Expr* incrementExpr;
     Stmt* bodyStmt;

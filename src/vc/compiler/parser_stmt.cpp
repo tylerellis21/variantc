@@ -171,8 +171,10 @@ bool Parser::parseDoStmt(Stmt* parentStmt, Stmt** out) {
     SourceLocation keywordLoc = consume();
     Stmt* bodyStmt = 0;
     Stmt* whileStmt = 0;
+
     if (!parseOptionalCompoundStmt(parentStmt, &bodyStmt)) return false;
     if (!parseWhileStmt(parentStmt, &whileStmt)) return false;
+
     *out = new DoStmt(parentStmt, keywordLoc, bodyStmt, whileStmt);
     return true;
 }
@@ -180,9 +182,11 @@ bool Parser::parseDoStmt(Stmt* parentStmt, Stmt** out) {
 // for (init, condition, increment) body;
 bool Parser::parseForStmt(Stmt* parentStmt, Stmt** out) {
     SourceLocation keywordLoc = consume();
-    Stmt* initStmt = 0;
-    Expr* conditionStmt = 0;
-    Expr* incrementStmt = 0;
+
+    Expr* initExpr = 0;
+    Expr* conditionExpr = 0;
+    Expr* incrementExpr = 0;
+
     Stmt* bodyStmt = 0;
 
     SourceRange braceRange;
@@ -190,13 +194,16 @@ bool Parser::parseForStmt(Stmt* parentStmt, Stmt** out) {
     if (!expectConsume(TokenKind::LParen)) return false;
 
     // initalizer
-    if (!parseStmt(0, &initStmt)) return false;
+    initExpr = parseExpr(0);
+    if (!initExpr) return false;
 
-    conditionStmt = parseExpr(0);
+    conditionExpr = parseExpr(0);
+    if (!conditionExpr) return false;
 
     if (!expectSemi()) return false;
 
-    incrementStmt = parseExpr(parentStmt);
+    incrementExpr = parseExpr(parentStmt);
+    if (!incrementExpr) return false;
 
     braceRange.end = loc();
     if (!expectConsume(TokenKind::RParen)) return false;
@@ -207,9 +214,9 @@ bool Parser::parseForStmt(Stmt* parentStmt, Stmt** out) {
         parentStmt,
         keywordLoc,
         braceRange,
-        initStmt,
-        conditionStmt,
-        incrementStmt,
+        initExpr,
+        conditionExpr,
+        incrementExpr,
         bodyStmt
     );
 

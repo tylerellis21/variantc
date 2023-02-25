@@ -13,6 +13,10 @@ struct Vector2i {
 namespace foo::bar {
 
 def helloWorld(i32 argc, u8** args) void {
+    if (argc == 0) {
+        print("no arguments specified.");
+        return;
+    }
 }
 
 }
