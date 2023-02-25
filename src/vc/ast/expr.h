@@ -132,7 +132,7 @@ struct ParenExpr : Expr {
 };
 
 struct TernaryExpr : Expr {
-    Expr* condition;
+    Expr* conditionExpr;
     Expr* lhs;
     Expr* rhs;
 
@@ -144,7 +144,7 @@ struct TernaryExpr : Expr {
         Expr* rhs
     ) :
         Expr(ExprKind::TernaryExpr, parentStmt, sourceLocation),
-        condition(condition),
+        conditionExpr(condition),
         lhs(lhs),
         rhs(rhs)
     { }

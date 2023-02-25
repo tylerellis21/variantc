@@ -270,7 +270,7 @@ void printExpr(Expr* expr, i32 indent) {
 
         case ExprKind::BinaryOpExpr: {
             BinaryOpExpr* binaryOpExpr = static_cast<BinaryOpExpr*>(expr);
-            std::cout << "[BinaryOpExpr]" << std::endl;
+            std::cout << "[BinaryOpExpr] " << toSymbol(binaryOpExpr->op) << std::endl;
             printExpr(binaryOpExpr->lhs, indent + 1);
             printExpr(binaryOpExpr->rhs, indent + 1);
         } break;
@@ -287,61 +287,89 @@ void printExpr(Expr* expr, i32 indent) {
         case ExprKind::CastExpr: {
             CastExpr* castExpr = static_cast<CastExpr*>(expr);
             std::cout << "[CastExpr]" << std::endl;
+            printType(castExpr->type);
+            std::cout << std::endl;
+            printExpr(castExpr->expr, indent + 1);
         } break;
 
         case ExprKind::DeclRefExpr: {
             DeclRefExpr* declRefExpr = static_cast<DeclRefExpr*>(expr);
-            std::cout << "[DeclRefExpr]" << std::endl;
+            std::cout << "[DeclRefExpr] '" << declRefExpr->name << "'" << std::endl;
         } break;
 
         case ExprKind::InitalizerExpr: {
             InitalizerExpr* initalizerExpr = static_cast<InitalizerExpr*>(expr);
             std::cout << "[InitalizerExpr]" << std::endl;
+            for (int i = 0; i < initalizerExpr->values.size(); i++) {
+                Expr* subExpr = initalizerExpr->values[i];
+                printExpr(subExpr, indent + 1);
+            }
         } break;
 
         case ExprKind::MemberExpr: {
             MemberExpr* memberExpr = static_cast<MemberExpr*>(expr);
-            std::cout << "[MemberExpr]" << std::endl;
+            std::cout << "[MemberExpr] '" << memberExpr->name << "'" << std::endl;
         } break;
 
         case ExprKind::ParenExpr: {
             ParenExpr* parenExpr = static_cast<ParenExpr*>(expr);
             std::cout << "[ParenExpr]" << std::endl;
+            printExpr(parenExpr->expr, indent + 1);
         } break;
 
         case ExprKind::TernaryExpr: {
             TernaryExpr* ternaryExpr = static_cast<TernaryExpr*>(expr);
             std::cout << "[TernaryExpr]" << std::endl;
+            printExpr(ternaryExpr->conditionExpr, indent + 1);
+            printExpr(ternaryExpr->lhs, indent + 1);
+            printExpr(ternaryExpr->rhs, indent + 1);
         } break;
 
         case ExprKind::UnaryOpExpr: {
             UnaryOpExpr* unaryOpExpr = static_cast<UnaryOpExpr*>(expr);
-            std::cout << "[UnaryOpExpr]" << std::endl;
+            std::cout << "[UnaryOpExpr] " << toSymbol(unaryOpExpr->op) << std::endl;
+            printExpr(unaryOpExpr->expr, indent + 1);
         } break;
 
         case ExprKind::BooleanLiteralExpr: {
             BooleanLiteralExpr* booleanLiteralExpr = static_cast<BooleanLiteralExpr*>(expr);
-            std::cout << "[BooleanLiteralExpr]" << std::endl;
+            std::cout << "[BooleanLiteralExpr] " << (booleanLiteralExpr->value ? "true" : "false") << std::endl;
         } break;
 
         case ExprKind::CharLiteralExpr: {
             CharLiteralExpr* charLiteralExpr = static_cast<CharLiteralExpr*>(expr);
-            std::cout << "[CharLiteralExpr]" << std::endl;
+            std::cout << "[CharLiteralExpr] '" << charLiteralExpr->rune_value << "'" << std::endl;
         } break;
 
         case ExprKind::IntegerLiteralExpr: {
             IntegerLiteralExpr* integerLiteralExpr = static_cast<IntegerLiteralExpr*>(expr);
-            std::cout << "[IntegerLiteralExpr]" << std::endl;
+            if (integerLiteralExpr->builtinKind == BuiltinKind::Int64) {
+                std::cout << "[IntegerLiteralExpr] " << integerLiteralExpr->i64_value << std::endl;
+            }
+            else if (integerLiteralExpr->builtinKind == BuiltinKind::Uint64) {
+                std::cout << "[IntegerLiteralExpr] " << integerLiteralExpr->u64_value << std::endl;
+            }
+            else {
+                std::cout << "unhandled integer literal BuiltinKind" << std::endl;
+            }
         } break;
 
         case ExprKind::RealLiteralExpr: {
             RealLiteralExpr* realLiteralExpr = static_cast<RealLiteralExpr*>(expr);
-            std::cout << "[RealLiteralExpr]" << std::endl;
+            if (realLiteralExpr->builtinKind == BuiltinKind::Real32) {
+                std::cout << "[RealLiteralExpr] " << realLiteralExpr->real32_value << std::endl;
+            }
+            else if (realLiteralExpr->builtinKind == BuiltinKind::Real64) {
+                std::cout << "[RealLiteralExpr] " << realLiteralExpr->real64_value << std::endl;
+            }
+            else {
+                std::cout << "unhandled real literal BuiltinKind" << std::endl;
+            }
         } break;
 
         case ExprKind::StringLiteralExpr: {
             StringLiteralExpr* stringLiteralExpr = static_cast<StringLiteralExpr*>(expr);
-            std::cout << "[StringLiteralExpr]" << std::endl;
+            std::cout << "[StringLiteralExpr] '" << stringLiteralExpr->value << "'" << std::endl;
         } break;
 
         default:
