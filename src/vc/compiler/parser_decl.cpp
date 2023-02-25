@@ -425,7 +425,7 @@ bool Parser::parseSingleVarDecl(Decl* parentDecl, VarDecl** out, Type* type) {
     }
 
     if (current.kind == TokenKind::Equal)
-        assignment = parseAssignmentExpr(0);
+        assignment = parseExpr(0);
 
     VarDecl* varDecl = new VarDecl(
         parentDecl,

@@ -264,16 +264,24 @@ void printExpr(Expr* expr, i32 indent) {
         case ExprKind::ArraySubscriptExpr: {
             ArraySubscriptExpr* arraySubscriptExpr = static_cast<ArraySubscriptExpr*>(expr);
             std::cout << "[ArraySubscriptExpr]" << std::endl;
+            printExpr(arraySubscriptExpr->lhs, indent + 1);
+            printExpr(arraySubscriptExpr->rhs, indent + 1);
         } break;
 
         case ExprKind::BinaryOpExpr: {
             BinaryOpExpr* binaryOpExpr = static_cast<BinaryOpExpr*>(expr);
             std::cout << "[BinaryOpExpr]" << std::endl;
+            printExpr(binaryOpExpr->lhs, indent + 1);
+            printExpr(binaryOpExpr->rhs, indent + 1);
         } break;
 
         case ExprKind::CallExpr: {
             CallExpr* callExpr = static_cast<CallExpr*>(expr);
-            std::cout << "[CallExpr]" << std::endl;
+            std::cout << "[CallExpr] '" << callExpr->name << "'" << std::endl;
+            for (int i = 0; i < callExpr->args.size(); i++) {
+                Expr* argument = callExpr->args[i];
+                printExpr(argument, indent + 1);
+            }
         } break;
 
         case ExprKind::CastExpr: {

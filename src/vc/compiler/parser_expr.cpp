@@ -373,8 +373,17 @@ Expr* Parser::parseIntegerLiteralExpr(Stmt* parentStmt) {
     //bool is_signed = token.str[0] == '-';
     i64 value = atoll((char*)current.string.c_str());
     consume();
-    return 0;
-    //return new IntegerLiteralExpr(parentStmt, sloc, value);
+    IntegerLiteralExpr* result;
+    
+    if (value < 0) {
+        result = new IntegerLiteralExpr(parentStmt, sloc, BuiltinKind::Uint64);
+        result->u64_value = (u64)value;
+        return result;
+    }
+
+    result = new IntegerLiteralExpr(parentStmt, sloc, BuiltinKind::Int64);
+    result->i64_value = value;
+    return result;
 }
 
 Expr* Parser::parseRealLiteralExpr(Stmt* parentStmt) {
