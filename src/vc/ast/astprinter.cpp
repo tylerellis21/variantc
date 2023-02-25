@@ -381,19 +381,25 @@ void printExpr(Expr* expr, i32 indent) {
 void printType(Type* type) {
     switch (type->typeKind) {
         case TypeKind::ArrayType: {
-            std::cout << "[ArrayType]";
+            ArrayType* arrayType = static_cast<ArrayType*>(type);
+            printType(arrayType->type);
+            std::cout << "[" << arrayType->length << "]";
         } break;
 
         case TypeKind::BuiltinType: {
-            std::cout << "[BuiltinType]";
+            BuiltinType* builtinType = static_cast<BuiltinType*>(type);
+            std::cout << builtinKindString(builtinType->builtinKind);
         } break;
 
         case TypeKind::DeclRefType: {
-            std::cout << "[DeclRefType]";
+            DeclRefType* declRefType = static_cast<DeclRefType*>(type);
+            std::cout << declRefType->name;
         } break;
 
         case TypeKind::PointerType: {
-            std::cout << "[PointerType]";
+            PointerType* pointerType = static_cast<PointerType*>(type);
+            printType(pointerType->type);
+            std::cout << "*";
         } break;
 
         default:

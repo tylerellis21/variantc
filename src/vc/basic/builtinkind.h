@@ -12,6 +12,7 @@ enum class BuiltinKind {
 };
 
 BuiltinKind builtinKindFromTokenKind(TokenKind tokenKind);
+std::string builtinKindString(BuiltinKind builtinKind);
 
 } // namespace vc
 
