@@ -1,0 +1,14 @@
+$<alloc_id> = stack_alloc <type>
+$<alloc_id> = heap_alloc <type>
+
+$0 = stack_alloc i32*
+$1 = heap_alloc i32*
+
+load <type> <alloc_id>
+load i32*
+store
+
+add
+mul
+div
+mod

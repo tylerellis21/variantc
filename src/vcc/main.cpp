@@ -16,10 +16,10 @@
 #include <vc/ir/ir_opcode.h>
 #include <vc/ir/ir_optimizer.h>
 
-using namespace vc;
-
 #include <string>
 #include <iostream>
+
+using namespace vc;
 
 int main(int argc, char** args) {
 
@@ -63,6 +63,25 @@ int main(int argc, char** args) {
     }
 
     printDecl(moduleDecl, 0);
+
+
+    IRGen irGen;
+
+    std::vector<ir_opcode> opcodes;
+
+    std::string labelName = "hello";
+
+    ir_opcode labelA(ir_label{labelName.c_str()});
+    ir_opcode nop(ir_nop{});
+
+    opcodes.push_back(labelA);
+    opcodes.push_back(nop);
+
+    for (int i = 0; i < opcodes.size(); i++) {
+        ir_opcode opcode = opcodes[i];
+
+        std::cout << opcode;
+    }
 
     return 0;
 }

@@ -49,10 +49,11 @@ set (SRC
     #${SRC_DIR}/defs/tokenkinds.inl
     #${SRC_DIR}/defs/builtinkinds.inl
 
+    ${SRC_DIR}/ir/ir_function.h
     ${SRC_DIR}/ir/ir_gen.h
     ${SRC_DIR}/ir/ir_gen.cpp
-
     ${SRC_DIR}/ir/ir_opcode.h
+    ${SRC_DIR}/ir/ir_opcode.cpp
     ${SRC_DIR}/ir/ir_optimizer.h
 )
 

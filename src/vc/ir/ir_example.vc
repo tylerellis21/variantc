@@ -1,0 +1,11 @@
+def add(i32 x, i32 y) i32 {
+    return x + y;
+}
+
+def main(i32 argc, utf8** args) void {
+    i64 a = 100;
+    // stack_alloc i64 $0
+    i64 b = 200;
+    i32 c = add(a, b);
+    return 0;
+}

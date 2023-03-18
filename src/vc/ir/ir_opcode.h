@@ -1,13 +1,16 @@
 #ifndef IR_OPCODE_H_INCLUDE
 #define IR_OPCODE_H_INCLUDE
 
-#include <vc/types.h>
 #include <string>
+
+#include <vc/types.h>
+#include <vc/basic/builtinkind.h>
 
 namespace vc {
 
 enum class ir_opcode_id {
     NOP = 0,
+    Label = 1,
     JO,
     JNO,
     JB,
@@ -15,8 +18,13 @@ enum class ir_opcode_id {
 };
 
 struct ir_label {
-    std::string name;
+    const char* name;
     u64 offset;
+
+    ir_label(const char* name) :
+        name(name),
+        offset(0)
+    { }
 };
 
 struct ir_nop { };
@@ -199,6 +207,8 @@ struct ir_opcode {
     union {
         ir_nop nop;
 
+        ir_label label;
+
         ir_jo jo;
         ir_jno jno;
 
@@ -210,14 +220,28 @@ struct ir_opcode {
         opcodeType(opcodeType)
     { }
 
+    ir_opcode()
+    { }
+
+    ~ir_opcode()
+    { }
+
     ir_opcode(ir_nop nop) :
         opcodeId(ir_opcode_id::NOP),
         opcodeType(BuiltinKind::Null),
         nop(nop)
     { }
+
+    ir_opcode(ir_label label) :
+        opcodeId(ir_opcode_id::Label),
+        opcodeType(BuiltinKind::Null),
+        label(label)
+    { }
 };
 
 constexpr int OPCODE_SIZE = sizeof(ir_opcode);
+
+std::ostream& operator <<(std::ostream& out, const ir_opcode& opcode);
 
 } // namespace vc
 

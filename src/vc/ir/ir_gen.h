@@ -10,10 +10,11 @@ struct Expr;
 struct Type;
 
 struct IRGen {
-    void generate(Decl* decl);
-    void generate(Stmt* stmt);
-    void generate(Expr* expr);
-    void generate(Type* type);
+    void generateDeclGroup(DeclGroup* declGroup);
+    void generateDecl(Decl* decl);
+    void generateStmt(Stmt* stmt);
+    void generateExpr(Expr* expr);
+    void generateType(Type* type);
 };
 
 
