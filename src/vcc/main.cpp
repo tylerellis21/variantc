@@ -71,7 +71,7 @@ int main(int argc, char** args) {
 
     std::string labelName = "hello";
 
-    ir_opcode labelA(ir_label{labelName.c_str()});
+    ir_opcode labelA(ir_label{labelName});
     ir_opcode nop(ir_nop{});
 
     opcodes.push_back(labelA);
@@ -79,6 +79,10 @@ int main(int argc, char** args) {
 
     for (int i = 0; i < opcodes.size(); i++) {
         ir_opcode opcode = opcodes[i];
+
+        if (opcode.opcodeId != ir_opcode_id::Label) {
+            std::cout << "    ";
+        }
 
         std::cout << opcode;
     }

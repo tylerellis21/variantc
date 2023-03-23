@@ -1,5 +1,5 @@
-#ifndef IR_OPCODE_H_INCLUDE
-#define IR_OPCODE_H_INCLUDE
+#ifndef VC_IR_OPCODE_H_INCLUDE
+#define VC_IR_OPCODE_H_INCLUDE
 
 #include <string>
 
@@ -18,12 +18,10 @@ enum class ir_opcode_id {
 };
 
 struct ir_label {
-    const char* name;
-    u64 offset;
+    const std::string& name;
 
-    ir_label(const char* name) :
-        name(name),
-        offset(0)
+    ir_label(const std::string& name) :
+        name(name)
     { }
 };
 
@@ -31,101 +29,110 @@ struct ir_nop { };
 
 // jo - jump if overflow
 struct ir_jo {
-    u64 address;
+    const std::string& name;
+
+    ir_jo(const std::string& name) :
+        name(name)
+    { }
 };
 
 // jno - jump if not overflow
 struct ir_jno {
-    u64 address;
+    const std::string& name;
+
+    ir_jno(const std::string& name) :
+        name(name)
+    { }
 };
 
 // jb - jump if below
 struct ir_jb {
-    u64 address;
+    const std::string& name;
 };
 
 // jnb - jump if not below
 struct ir_jnb {
-    u64 address;
+    const std::string& name;
 };
 
 // jz - jump if zero
 struct ir_jz {
-    u64 address;
+    const std::string& name;
 };
 
 // jnz - jump if not zero
 struct ir_jnz {
-    u64 address;
+    const std::string& name;
 };
 
 // jbe - jump if below or equal
 struct ir_jbe {
-    u64 address;
+    const std::string& name;
 };
 
 // jnbe - jump if not below or equal
 struct ir_jnbe {
-    u64 address;
+    const std::string& name;
 };
 
 // js - jump if sign
 struct ir_js {
-    u64 address;
+    const std::string& name;
 };
 
 // jns - jump if not sign
 struct ir_jns {
-    u64 address;
+    const std::string& name;
 };
 
 // jp - jump if parity
 struct ir_jp {
-    u64 address;
+    const std::string& name;
 };
 
 // jnp - jump if not parity
 struct ir_jnp {
-    u64 address;
+    const std::string& name;
 };
 
 // jl - jump if less
 struct ir_jl {
-    u64 address;
+    const std::string& name;
 };
 
 // jnl - jump if not less
 struct ir_jnl {
-    u64 address;
+    const std::string& name;
 };
 
 // jle - jump if less or equal
 struct ir_jle {
-    u64 address;
+    const std::string& name;
 };
 
 // jnle - jump if not less or equal
 struct ir_jnle {
-    u64 address;
+    const std::string& name;
 };
 
 // call
 struct ir_call {
-    u64 address;
+    const std::string& name;
 };
 
 // ret
 struct ir_ret {
-
 };
 
 // mov
 struct ir_load {
     u64 src;
     u64 dest;
+    BuiltinKind type;
 };
 
 struct ir_store {
+    u64 src;
     u64 dest;
 };
 
@@ -139,70 +146,41 @@ struct ir_lea {
 };
 
 // cmp - compare two operands
-
 // test - logical compare
-
 // add - add
-
 // adc - add with carry
-
 // sub - subtract
-
 // sbb - subtract with borrow
-
 // mul - multiply
-
 // div - divide
-
 // inc - add 1
-
 // dec - subtract 1
-
 // or - logical inclusive OR
-
 // and - logical AND
-
 // xor - logical exclusive OR
-
 // not - one's complement negation
-
 // neg - two's complement negation
-
-// rol - rotate left
-// <<<
-
-// ror - rotate right
-// >>>
-
-// rcl - rotate carry left
-// @<<
-
-// rcr - rotate carry right
-// @>>
-
-// shl - shift left, unsigned multiply
-// <<
-
-// shr - shift right, unsigned divide
-// >>
-
-// sal - shift left, signed multiply
-// <<
-
-// sar - shift right, signed divide
-// <<
-
+// rol - rotate left <<<
+// ror - rotate right >>>
+// rcl - rotate carry left @<<
+// rcr - rotate carry right @>>
+// shl - shift left, unsigned multiply <<
+// shr - shift right, unsigned divide >>
+// sal - shift left, signed multiply <<
+// sar - shift right, signed divide <<
 // clc - clear carry flag
 
 // push - push bytes to the stack
 // pop - pop values from the stack
+
+// load i32, dest, src
+// load i32, $1, $0
 
 // how do we want to use mmx instructions?
 // should we leave that to the optimizer? or allow their use in the IR
 
 struct ir_opcode {
     ir_opcode_id opcodeId;
-    BuiltinKind opcodeType;
 
     union {
         ir_nop nop;
@@ -216,10 +194,6 @@ struct ir_opcode {
         ir_jnb jnb;
     };
 
-    ir_opcode(BuiltinKind opcodeType) :
-        opcodeType(opcodeType)
-    { }
-
     ir_opcode()
     { }
 
@@ -228,13 +202,11 @@ struct ir_opcode {
 
     ir_opcode(ir_nop nop) :
         opcodeId(ir_opcode_id::NOP),
-        opcodeType(BuiltinKind::Null),
         nop(nop)
     { }
 
     ir_opcode(ir_label label) :
         opcodeId(ir_opcode_id::Label),
-        opcodeType(BuiltinKind::Null),
         label(label)
     { }
 };
@@ -245,4 +217,4 @@ std::ostream& operator <<(std::ostream& out, const ir_opcode& opcode);
 
 } // namespace vc
 
-#endif // IR_OPCODE_H_INCLUDE
+#endif // VC_IR_OPCODE_H_INCLUDE
