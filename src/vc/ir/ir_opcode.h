@@ -15,6 +15,55 @@ enum class ir_opcode_id {
     JNO,
     JB,
     JNB,
+    JZ,
+    JNZ,
+    JBE,
+    JNBE,
+    JS,
+    JNS,
+    JP,
+    JNP,
+    JL,
+    JNL,
+    JLE,
+    JNLE,
+    JG,
+    JGE,
+    JNG,
+    JNGE,
+
+    CALL,
+    RET,
+
+    ALLOC,
+    LOAD,
+    STORE,
+
+    CMP,
+
+    ADD,
+    SUB,
+    MUL,
+    MOD,
+    INC,
+    DEC,
+
+    OR,
+    AND,
+    XOR,
+    NOT,
+
+    ROL,
+    ROR,
+
+    RCL,
+    RCR,
+
+    SHL,
+    SHR,
+
+    SAL,
+    SAR,
 };
 
 struct ir_label {
@@ -170,6 +219,43 @@ struct ir_jnle {
     { }
 };
 
+// jg - jump if less
+struct ir_jg {
+    const std::string& name;
+
+    ir_jg(const std::string& name) :
+        name(name)
+    { }
+};
+
+// jge - jump if less
+struct ir_jge {
+    const std::string& name;
+
+    ir_jge(const std::string& name) :
+        name(name)
+    { }
+};
+
+// jng - jump if less
+struct ir_jng {
+    const std::string& name;
+
+    ir_jng(const std::string& name) :
+        name(name)
+    { }
+};
+
+
+// jnge - jump if less
+struct ir_jnge {
+    const std::string& name;
+
+    ir_jnge(const std::string& name) :
+        name(name)
+    { }
+};
+
 struct ir_call {
     const std::string& name;
 
@@ -243,21 +329,6 @@ struct ir_add {
     { }
 };
 
-// adc - add with carry
-struct ir_adc {
-    u64 lhs;
-    u64 rhs;
-    u64 dest;
-    BuiltinKind type;
-
-    ir_adc(u64 lhs, u64 rhs, u64 dest, BuiltinKind type) :
-        lhs(lhs),
-        rhs(rhs),
-        dest(dest),
-        type(type)
-    { }
-};
-
 // sub - subtract
 struct ir_sub {
     u64 lhs;
@@ -266,21 +337,6 @@ struct ir_sub {
     BuiltinKind type;
 
     ir_sub(u64 lhs, u64 rhs, u64 dest, BuiltinKind type) :
-        lhs(lhs),
-        rhs(rhs),
-        dest(dest),
-        type(type)
-    { }
-};
-
-// sbb - subtract with borrow
-struct ir_sbb {
-    u64 lhs;
-    u64 rhs;
-    u64 dest;
-    BuiltinKind type;
-
-    ir_sbb(u64 lhs, u64 rhs, u64 dest, BuiltinKind type) :
         lhs(lhs),
         rhs(rhs),
         dest(dest),
@@ -311,6 +367,21 @@ struct ir_div {
     BuiltinKind type;
 
     ir_div(u64 lhs, u64 rhs, u64 dest, BuiltinKind type) :
+        lhs(lhs),
+        rhs(rhs),
+        dest(dest),
+        type(type)
+    { }
+};
+
+// mod - module
+struct ir_mod {
+    u64 lhs;
+    u64 rhs;
+    u64 dest;
+    BuiltinKind type;
+
+    ir_mod(u64 lhs, u64 rhs, u64 dest, BuiltinKind type) :
         lhs(lhs),
         rhs(rhs),
         dest(dest),
@@ -396,19 +467,6 @@ struct ir_not {
     BuiltinKind type;
 
     ir_not(u64 lhs, u64 dest, BuiltinKind type) :
-        lhs(lhs),
-        dest(dest),
-        type(type)
-    { }
-};
-
-// neg - two's complement negation
-struct ir_neg {
-    u64 lhs;
-    u64 dest;
-    BuiltinKind type;
-
-    ir_neg(u64 lhs, u64 dest, BuiltinKind type) :
         lhs(lhs),
         dest(dest),
         type(type)
