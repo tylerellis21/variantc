@@ -11,26 +11,6 @@ namespace vc {
 enum class ir_opcode_id {
     NOP = 0,
     Label = 1,
-    JO,
-    JNO,
-    JB,
-    JNB,
-    JZ,
-    JNZ,
-    JBE,
-    JNBE,
-    JS,
-    JNS,
-    JP,
-    JNP,
-    JL,
-    JNL,
-    JLE,
-    JNLE,
-    JG,
-    JGE,
-    JNG,
-    JNGE,
 
     CALL,
     RET,
@@ -38,8 +18,37 @@ enum class ir_opcode_id {
     ALLOC,
     LOAD,
     STORE,
+    STORE_CONST,
 
     CMP,
+
+    JO,
+    JNO,
+
+    JB,
+    JNB,
+
+    JZ,
+    JNZ,
+
+    JBE,
+    JNBE,
+
+    JS,
+    JNS,
+
+    JP,
+    JNP,
+
+    JL,
+    JNL,
+    JLE,
+    JNLE,
+
+    JG,
+    JGE,
+    JNG,
+    JNGE,
 
     ADD,
     SUB,
@@ -297,6 +306,29 @@ struct ir_store {
     ir_store(u64 dest, u64 src, BuiltinKind type) :
         dest(dest),
         src(src),
+        type(type)
+    { }
+};
+
+struct ir_store_const {
+
+    union {
+        i64 value_i64;
+        u64 value_u64;
+    };
+
+    u64 dest;
+    BuiltinKind type;
+
+    ir_store_const(u64 dest, u64 value, BuiltinKind type) :
+        dest(dest),
+        value_u64(value),
+        type(type)
+    { }
+
+    ir_store_const(u64 dest, i64 value, BuiltinKind type) :
+        dest(dest),
+        value_i64(value),
         type(type)
     { }
 };
@@ -601,11 +633,57 @@ struct ir_opcode {
 
         ir_label label;
 
+        ir_call call;
+        ir_ret ret;
+        ir_alloc alloc;
+        ir_load load;
+        ir_store store;
+        ir_store_const store_const;
+        ir_cmp cmp;
+
         ir_jo jo;
         ir_jno jno;
-
         ir_jb jb;
         ir_jnb jnb;
+        ir_jz jz;
+        ir_jnz jnz;
+        ir_jbe jbe;
+        ir_jnbe jnbe;
+        ir_js js;
+        ir_jns jns;
+        ir_jp jp;
+        ir_jnp jnp;
+        ir_jl jl;
+        ir_jnl jnl;
+        ir_jle jle;
+        ir_jnle jnle;
+        ir_jg jg;
+        ir_jge jge;
+        ir_jng jng;
+        ir_jnge jnge;
+
+        ir_add add;
+        ir_sub sub;
+        ir_div div;
+        ir_mul mul;
+        ir_mod mod;
+        ir_inc inc;
+        ir_dec dec;
+
+        ir_or or;
+        ir_and and;
+        ir_xor xor;
+        ir_not not;
+
+        ir_rol rol;
+        ir_ror ror;
+
+        ir_rcl rcl;
+        ir_rcr rcr;
+        ir_shl shl;
+        ir_shr shr;
+        ir_sal sal;
+        ir_sar sar;
     };
 
     ir_opcode()
@@ -622,6 +700,41 @@ struct ir_opcode {
     ir_opcode(ir_label label) :
         opcodeId(ir_opcode_id::Label),
         label(label)
+    { }
+
+    ir_opcode(ir_call call) :
+        opcodeId(ir_opcode_id::CALL),
+        call(call)
+    { }
+
+    ir_opcode(ir_load load) :
+        opcodeId(ir_opcode_id::LOAD),
+        load(load)
+    { }
+
+    ir_opcode(ir_store store) :
+        opcodeId(ir_opcode_id::STORE),
+        store(store)
+    { }
+
+    ir_opcode(ir_store_const store_const) :
+        opcodeId(ir_opcode_id::STORE_CONST),
+        store_const(store_const)
+    { }
+
+    ir_opcode(ir_cmp cmp) :
+        opcodeId(ir_opcode_id::CMP),
+        cmp(cmp)
+    { }
+
+    ir_opcode(ir_jo jo) :
+        opcodeId(ir_opcode_id::JO),
+        jo(jo)
+    { }
+
+    ir_opcode(ir_jno jno) :
+        opcodeId(ir_opcode_id::JNO),
+        jo(jo)
     { }
 };
 
