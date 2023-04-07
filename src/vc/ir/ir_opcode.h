@@ -736,6 +736,141 @@ struct ir_opcode {
         opcodeId(ir_opcode_id::JNO),
         jo(jo)
     { }
+
+    ir_opcode(ir_jb jb) :
+        opcodeId(ir_opcode_id::JB),
+        jb(jb)
+    { }
+
+    ir_opcode(ir_jnb jnb) :
+        opcodeId(ir_opcode_id::JNB),
+        jnb(jnb)
+    { }
+
+    ir_opcode(ir_jz jz) :
+        opcodeId(ir_opcode_id::JZ),
+        jz(jz)
+    { }
+
+    ir_opcode(ir_jnz jnz) :
+        opcodeId(ir_opcode_id::JNZ),
+        jnz(jnz)
+    { }
+
+    ir_opcode(ir_jbe jbe) :
+        opcodeId(ir_opcode_id::JBE),
+        jbe(jbe)
+    { }
+
+    ir_opcode(ir_jnbe jnbe) :
+        opcodeId(ir_opcode_id::JNBE),
+        jnbe(jnbe)
+    { }
+
+    ir_opcode(ir_js js) :
+        opcodeId(ir_opcode_id::JS),
+        js(js)
+    { }
+
+    ir_opcode(ir_jns jns) :
+        opcodeId(ir_opcode_id::JNS),
+        jns(jns)
+    { }
+
+    ir_opcode(ir_jp jp) :
+        opcodeId(ir_opcode_id::JP),
+        jp(jp)
+    { }
+
+    ir_opcode(ir_jnp jnp) :
+        opcodeId(ir_opcode_id::JNP),
+        jnp(jnp)
+    { }
+
+    ir_opcode(ir_jl jl) :
+        opcodeId(ir_opcode_id::JL),
+        jl(jl)
+    { }
+
+    ir_opcode(ir_jnl jnl) :
+        opcodeId(ir_opcode_id::JNL),
+        jnl(jnl)
+    { }
+
+    ir_opcode(ir_jle jle) :
+        opcodeId(ir_opcode_id::JLE),
+        jle(jle)
+    { }
+
+    ir_opcode(ir_jnle jnle) :
+        opcodeId(ir_opcode_id::JNLE),
+        jnle(jnle)
+    { }
+
+    ir_opcode(ir_jg jg) :
+        opcodeId(ir_opcode_id::JG),
+        jg(jg)
+    { }
+
+    ir_opcode(ir_jge jge) :
+        opcodeId(ir_opcode_id::JGE),
+        jge(jge)
+    { }
+
+    ir_opcode(ir_jng jng) :
+        opcodeId(ir_opcode_id::JNG),
+        jng(jng)
+    { }
+
+    ir_opcode(ir_jnge jnge) :
+        opcodeId(ir_opcode_id::JNGE),
+        jnge(jnge)
+    { }
+
+    ir_opcode(ir_add add) :
+        opcodeId(ir_opcode_id::ADD),
+        add(add)
+    { }
+
+    ir_opcode(ir_sub sub) :
+        opcodeId(ir_opcode_id::SUB),
+        sub(sub)
+    { }
+
+    ir_opcode(ir_mul mul) :
+        opcodeId(ir_opcode_id::MUL),
+        mul(mul)
+    { }
+
+    ir_opcode(ir_mul mul) :
+        opcodeId(ir_opcode_id::MUL),
+        mul(mul)
+    { }
+    /*
+
+    SUB,
+    MUL,
+    MOD,
+    INC,
+    DEC,
+
+    OR,
+    AND,
+    XOR,
+    NOT,
+
+    ROL,
+    ROR,
+
+    RCL,
+    RCR,
+
+    SHL,
+    SHR,
+
+    SAL,
+    SAR,
+    */
 };
 
 constexpr int OPCODE_SIZE = sizeof(ir_opcode);
