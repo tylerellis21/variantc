@@ -1,0 +1,42 @@
+// if you have used a language with namespaces this will be vary similar
+namespace foo {
+
+struct Bar {
+    i32 x;
+    i32 y;
+}
+
+}
+
+def test1() void {
+    foo::Bar bar;
+
+// option one
+    bar.x = 10;
+    bar.y = 255;
+// another option
+    bar = {10, 255};
+}
+
+def test2() void {
+    using foo::Bar;
+
+    Bar bar;
+// option one
+    bar.x = 10;
+    bar.y = 255;
+// another option
+    bar = {10, 255};
+}
+
+// we could also do a global using
+// this will be avaliable in the entire file.
+using foo;
+
+// We can also set the namespace with the following and all code that follows this declaration will
+// now be in the specified namespace.
+namespace foo::bar::testing;
+
+// This declaration will reset the scope back to global.
+// It's prefered to not use this if possible.
+namespace ::;

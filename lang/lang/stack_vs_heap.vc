@@ -1,0 +1,12 @@
+struct test {
+    i32 x;
+    i32 y;
+}
+
+def function() void {
+    // creates an instance of test on the stack with the specified values
+    test a = test{10, 10};
+    test* a = new test{10, 10};
+
+    test* a = test.new{10, 10};
+}

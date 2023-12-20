@@ -1,0 +1,35 @@
+
+// templates are similar in syntax to the standard c++ style
+// but they are much more simplified 
+
+// here the <T> declares the function as a template function 
+// and specified the argument names.
+// after the <T> you can use the T type as normal.
+
+def template_method@T(T x, T y) T {
+    return x + y;
+}
+
+struct Vec2@T {
+    T x;
+    T y;
+}
+
+
+// just some standard vector types.
+typedef Vec2@r32 vec2f;
+typedef Vec2@i32 vec2i;
+typedef Vec2@r64 vec2d;
+typedef Vec2@u32 vec2u;
+
+// useage
+def test() void {
+    // the generic type will be resolved by the compiler.
+    template_method(10, 10);
+
+    vec2f example;
+    example.x = 1.f;
+    example.y = 1.f;
+}
+
+

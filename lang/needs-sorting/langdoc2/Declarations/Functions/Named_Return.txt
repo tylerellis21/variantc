@@ -1,0 +1,13 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2020-08-08T01:51:12-07:00
+
+====== Named Return ======
+--------------------
+
+Example:
+
+def foo(i32 a, i32 b) i32 result {
+	result = a + b;
+}
+

@@ -1,0 +1,61 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2020-08-04T23:07:14-07:00
+
+--------------------
+
+Lexer
+
+
+
+
+Parser
+
+Compiler
+
+* Constructors
+* Destructors
+* Deconstruction
+* Reflection
+
+Declarations
+	* Initalizers
+	* Struct
+	* Union
+	* Constructors
+	* Destructors
+	* Functions
+		* Multiple Return Values
+		* Named Return
+		* Extention Methods
+	* Interfaces
+	* Enums
+	* Anonymous Methods
+	* Namespaces
+	* Packages
+	* Import
+	* Templates
+	* Attributes
+	* Alignment
+	* Packing and Padding
+	* Preprocesser
+		* Compile Time Execution
+
+Statements
+	* Flow Control
+		* If
+		* For
+		* For Each
+		* While
+		* Do While
+		* Defer
+	* Use
+	* Threading
+		* Async
+		* Await
+
+
+Expressions
+	* Lambda Expressions
+
+

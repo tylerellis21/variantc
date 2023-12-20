@@ -1,0 +1,15 @@
+package tmr;
+// tuples and multi return values.
+
+struct Tuple<T> {
+    union {
+        struct {
+            T x;
+            T y;
+        }
+        struct {
+            T a;
+            T b;
+        }
+    }
+}

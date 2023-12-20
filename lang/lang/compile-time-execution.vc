@@ -1,0 +1,24 @@
+Compile Time Execution
+
+
+@if (WIN32) {
+	@i32[100] some_array;
+	@for (i32 x = 0; x < 100; x++) {
+		some_array[x] = x * 100;
+	}
+
+}
+else {
+	@i32[256] some_array;
+	@for (i32 x = 0; x < 256; x++) {
+		some_array[x] = x * 100;
+	}
+}
+
+
+
+i32[100] some_array = {
+
+
+};
+

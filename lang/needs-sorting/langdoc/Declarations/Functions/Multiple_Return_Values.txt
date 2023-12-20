@@ -1,0 +1,15 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2020-08-08T01:50:57-07:00
+
+====== Multiple Return Values ======
+--------------------
+
+Syntax:
+def <identifier> ( <arguments...> ) [ <typed-named-values> ] { <body> }
+
+Example:
+def test(i32 x, i32 y) [i32 x, i32 y] {
+	x = x - 1;
+	y = y + 1;
+}

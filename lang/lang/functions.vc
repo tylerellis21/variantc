@@ -1,0 +1,29 @@
+// basic function declaration 
+def test() void {
+    
+}
+
+// question... should we allow implied void returns?
+def test() {
+}
+
+def method() void {
+    i32 const_a = 10;
+    i32 const_b = 22;
+
+    i32 result_a = add(const_a, const_b);
+    i32 result_b = sub(const_a, const_b);
+
+    printf("10 + 22 = %i\n10 - 22 = %i\n", result_a, result_b);
+}
+
+def add(i32 x, y) i32 { return x + y; }
+def sub(i32 x, i32 y) i32 { return x - y; }
+
+def default_args(i32 x, i32 y, i32 mode = 0) void {
+}
+
+def test() void {
+    default_args(10, 10);
+    default_args(10, 20, 1);
+}

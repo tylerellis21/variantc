@@ -1,0 +1,38 @@
+def test() void {
+    atomic u32 a = 100;
+    atomic {
+        a = a * a;
+        a = a + a;
+        a = a * a * a;
+    }
+    return a;
+}
+/*
+    Atomic can't be used with:
+        mov (MOV is always atomic)
+        simd:
+            mmx 
+            sse
+            avx
+*/
+
+// atomic uses the assembly LOCK instruction as needed
+asm {
+    inc dword ptr [rcx] ; <- Not atomic
+    lock inc dword ptr [rcx] ; <- Atomic
+}
+
+// Same as the above except the entire method is marked atomic
+def atomic atomic_method() void {
+
+}
+
+// Not sure which syntax is better
+// look ahead might be required here, 
+// perhaps not if we have a flexable type def system.
+//  IE: It keeps parsing type keywords as long as the context is valid.
+atomic struct foo { }
+
+// Probably this since it's easier for the compiler to parse
+// No look ahead required here
+struct atomic bar { }

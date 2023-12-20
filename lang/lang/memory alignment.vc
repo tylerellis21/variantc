@@ -1,0 +1,25 @@
+// Alignment of memory is critical to some operations!
+// So it is very important that the language support alignment
+
+// Any time this structure is allocate it is aligned to 32 bits 
+struct foo align(32) {
+
+}
+
+struct packed_foo pack {
+    i32 x;
+    i32 y;
+}
+
+def example_function() void {
+
+    // foo is aligned to 32 on the stack in this case
+    // so if you were to get the address it is aligned to 32 bits
+    foo a;
+    
+    // somehow this should be aligned to 32 
+    // somehow the allocation function needs to be informed
+    //  that we want to align the allocation to 32
+    foo* b = alloc<foo align(28)>();
+}
+

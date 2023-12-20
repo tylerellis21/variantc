@@ -1,0 +1,65 @@
+
+/*
+#define
+#ifndef
+#if
+#endif
+*/
+
+// define a predefessing symbol
+
+// no need to actually try and define theses variables
+// theses are a few of the ones define by the compiler
+
+//#bool win32 = true; 
+//#bool unix = true;
+//#bool apple = true;
+//#bool x64 = true;
+//#bool x86 = true;
+
+i64[100] table;    
+
+# {
+    for (i64 i = 0; i < 100; i++) table[i] = i;
+}
+
+#if (win32) {
+
+    def test() void {
+        printf("called on win32\n");
+    }
+
+} // #if (win32) 
+else if (unix) {
+
+    def test() void {
+        printf("called on unix\n");
+    }
+    else {
+        printf("test no implemented on this platform!\n");
+
+        // some sort of function that we can call which
+        // invokes an error in the compiler and reports so...
+        compiler::not_implemented();
+    }
+
+    def test() void {
+        for (i32 i = 0; i < 10; i++) {
+        }
+        while (true) { }
+        do { } while(true);
+
+        // hmm, compile time structure creation
+        List<i32> list = {10, 10, 10};
+
+        for (i32 i : list) {
+            printf("item %i32\n", i);
+        }
+    }
+
+} // #if (unix)
+
+
+def main() void {
+    test();
+}

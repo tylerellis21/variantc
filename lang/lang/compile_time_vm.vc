@@ -1,0 +1,58 @@
+// how would a runtime virtual machine come into play in this language?
+// it would allow code to be executed while the compiling is still taking place
+// but this will add major complextity to the compiler.. which in the end may be worth in the end
+
+// hmmmmmmm
+
+def vm_test() void {
+    // execution block
+    // when the compiler encounters a execution block
+    // the code in the block will be compiled into bytecode an executed in a virtual machine
+    ${
+        i32 x = 0;
+        for (i32 i = 0; i < 100; i++) {
+            x += i;
+        }
+    }
+
+    // define blocks
+    // define blocks are the variant c version of a preprocessor
+    @win32 = true;
+
+    // the syntax for the preprocessor needs to be the same as the base language just
+    // with a minor symbol for noting that it is to be executed
+    @if (win32) {
+        // here we don't need to use the preprocessor symbol because it is
+        // implied by the context
+        expand("hello", 100); // expands 100 times...
+    }
+    
+    // we need to let the compiler and the virtual machine need to run as one unit
+    // info needs to travel in both directions
+}
+
+// so we have a basic function... what could we do??
+def example_code() void {
+
+    // so this will be executed in a virtual machine after the full ast is parsed... at least i think..
+    // this still needs to be thought through
+    
+    @i32[10] vm_array;
+    @for (uint i = 0; i < 10; i++) {
+        vm_array[i] = (i * i) >> 2;     
+    }
+
+    // okay so this data now exists in the vm and has been executed...
+    // what can we do with this vm data? we can't directly use it in the source since it's in a "different context"
+    // we need a way to bring it back into the source code which is the generated c code.
+    // this will bring the calculated array back into the source file scope
+
+    // i really don't like using symbols like this but it might be the only option for preprocessing
+    // we might just have to try and think of a few different ways of doing preprocessing/virtual machine
+    $vm_array;
+
+    if (vm_array[0] == 0) {
+
+    }
+}
+

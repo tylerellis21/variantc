@@ -1,0 +1,26 @@
+struct Vec3 {
+    r32 x;
+    r32 y;
+    r32 x;
+}
+
+def test() {
+    
+    Vec3 exampleA = Vec3{x = 10; y = 20; z = 30 };
+
+    Vec3 exampleB = Vec3{10, 20, 30};
+
+
+    r32{x, y, z} = exampleA;
+
+
+    printf(x);
+}
+
+def named_return(i32 a, i32 b) i32 result {
+    result = 0;
+    return;
+}
+
+/*/
+

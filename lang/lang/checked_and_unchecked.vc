@@ -1,0 +1,8 @@
+// https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/checked-and-unchecked
+// https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/arithmetic-operators#user-defined-checked-operators
+
+unchecked {
+}
+
+checked {
+}

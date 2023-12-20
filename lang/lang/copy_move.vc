@@ -1,0 +1,11 @@
+struct Buffer {
+
+def copy() Buffer {
+
+}
+
+def free() void {
+
+}
+
+}

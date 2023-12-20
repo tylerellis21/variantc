@@ -1,0 +1,23 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2020-08-08T01:25:12-07:00
+
+====== Allocator ======
+--------------------
+
+Allocators can be set via attributes. Or manually pushed and popped on the allocator stack.
+
+Example:
+
+[allocator(DefaultAllocator)]
+struct Vector2f { }
+
+static Allocator* allocator;
+
+def push() void {
+	Allocator::push(allocator);
+}
+
+def pop() void {
+	Allocator::pop();
+}

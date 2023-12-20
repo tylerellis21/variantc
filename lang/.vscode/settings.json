@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "iterator": "cpp",
+        "memory": "cpp",
+        "ostream": "cpp",
+        "streambuf": "cpp",
+        "xlocale": "cpp",
+        "xstring": "cpp",
+        "xtree": "cpp"
+    },
+    "cmake.sourceDirectory": "${workspaceFolder}/vc-old/lib/vc"
+}

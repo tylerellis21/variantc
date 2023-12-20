@@ -1,0 +1,28 @@
+namespace system.text;
+
+struct Utf<T> {
+    u64 length;
+    T* buffer;
+}
+
+typedef Utf<char> cstr;
+typedef Utf<u8> utf8;
+typedef Utf<u16> utf16;
+typedef Utf<u32> utf32;
+
+def operator+(Utf<T> lhs, Utf<T> rhs) Utf<T> {
+    u64 total = lhs.length + rhs.length;
+    u8* buffer = new u8[total + 1];
+    memcpy(lhs.buffer, buffer, lhs.length);
+    memcpy(rhs.buffer, buffer + lhs.length, rhs.length);
+    return Utf<T> {
+        length = total,
+        buffer = buffer
+    };
+}
+
+def usage() void {
+    utf8 left = "left hand side";
+    utf8 right = "right hand side";
+    utf8 combined = left + right;
+}

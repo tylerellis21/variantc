@@ -1,0 +1,44 @@
+interface ISocket {
+
+    def new() void {
+
+    }
+
+    def delete() void {
+
+    }
+
+    def connect() bool; 
+    def disconnect() bool; 
+}
+
+def new(ISocket* socket) ISocket* {
+
+}
+
+@win32 
+impl Socket : ISocket {
+    def new() void { 
+
+    }
+
+    def delete() void { 
+
+    }
+
+    def connect() bool { 
+
+
+    }    
+} // interface win32_socket
+
+
+@unix
+impl Socket : ISocket {
+
+} // interface unix_socket
+
+def function() void { 
+    socket* s = socket.new(); 
+    s.delete();
+}

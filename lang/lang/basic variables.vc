@@ -1,0 +1,44 @@
+import std::core;
+
+export struct Foo<T> {
+    T x, y;
+}
+
+// This is the same as above just seperate declarations.
+struct Foo { }
+export struct Foo;
+
+/*
+Plain old data types:
+    
+signed:
+    i8
+    i16
+    i32
+    i64
+    i128
+
+unsigned:
+    u8
+    u16
+    u32
+    u64
+    u128
+
+other types:
+    void
+    bool
+
+floating point:
+    r16
+    r32
+    r64
+    r128
+    r256
+other:
+    uint = architecture sized unsigned integer.
+        - 32bit or 64bit
+    int = architecture sized integer. ie the register size
+        - 32bit or 64bit
+    uptr = archicture sized pointer.
+*/

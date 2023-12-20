@@ -1,0 +1,35 @@
+package allocator;
+
+interface Allocator {
+    def test() void;
+}
+
+allocator DefaultAllocator {
+    def test() void {
+
+    }
+}
+
+struct LinkedList<T> {
+/* 
+    struct Node<T> {
+        Node* next;
+        Node* prev;
+        T value;
+    }
+
+    Node*<T> begin;
+    Node<T>* end;
+*/      Node<T>* begin;
+}
+
+struct Allocator {
+    struct Page {
+    
+        struct Chunk {
+
+        }
+
+        Chunk* head;
+    }
+} 

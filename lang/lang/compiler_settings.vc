@@ -1,0 +1,18 @@
+enum arch {
+    x86,
+    x64
+}
+
+enum cmode {
+    exe = executable,
+    dll = dynamic,
+    lib = library
+}
+
+@def settings() void {
+    compiler.arch = arch.x86;
+    compiler.mode = cmode.exe; 
+    if (win32) printf("compiler is in win32 mode\n");
+    else if (#win64) printf("compiler is in win64 mode\n"); 
+}
+

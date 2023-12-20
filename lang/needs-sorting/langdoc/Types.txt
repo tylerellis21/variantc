@@ -1,0 +1,9 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2020-08-05T04:17:11-07:00
+
+====== Types ======
+--------------------
+[[+Arrays]]
+[[+Built-In Types]]
+

@@ -1,0 +1,28 @@
+struct Slice<T> {
+    u64 length;
+    T* begin;
+    T* end;
+}
+
+def static Slice<T> Slice::make(T* array, u64 begin, u64 end) {
+    u64 length = end - begin;
+    
+    assert(length > 0);
+
+    return Slice<T> {
+        length,
+        array + begin,
+        array + end
+    };
+}
+
+
+def stringSlices() void {
+    utf8 string = "Hello World! How are ya doing?!?";
+
+    u64 start = string.indexOf(" ");
+    u64 next = string.indexOf(start, " ");
+
+    Slice<utf8> sliceA = Slice<utf8>::make(string.buffer, start, next); 
+    Slice<utf8> sliceB = Slice::make(string.buffer, start, next); 
+}

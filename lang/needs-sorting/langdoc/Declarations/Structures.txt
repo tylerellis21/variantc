@@ -1,0 +1,13 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2020-08-08T03:11:03-07:00
+
+====== Structures ======
+--------------------
+
+Syntax:
+struct <identifer> { <decl-body> }
+
+Example:
+struct Foo { i32 x, i32 y; }
+

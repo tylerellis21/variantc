@@ -1,0 +1,17 @@
+// using static
+
+namespace test {
+    static def Add(i32 x, i32 y) i32  {
+        return x + y;
+    }
+}
+
+def Test() void {
+    test::Add(10, 20);
+}
+
+def Test2() void {
+    //using static test::Add;
+    import static test::Add;
+    Add(10, 20);
+}

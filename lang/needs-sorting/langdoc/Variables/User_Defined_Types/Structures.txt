@@ -1,0 +1,14 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2020-08-07T20:58:47-07:00
+
+====== Structures ======
+--------------------
+
+Structs are defined the same way as in C expect no ending semicolon is required.
+
+Syntax:
+struct <identifier> { <declarations> }
+
+Example:
+struct Vector2f { r32 x, y; }

@@ -1,0 +1,22 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2020-08-08T02:01:29-07:00
+
+====== Enums ======
+--------------------
+
+Syntax:
+enum <identifier> { <decl-body> }
+enum <identifier> <type> { <decl-body> }
+
+Example:
+
+enum Foo {
+    A,
+    B
+}
+
+Usage:
+
+Foo a = Foo::A;
+Foo b = Foo::B;

@@ -1,0 +1,12 @@
+struct Foo {
+    i32 a;
+    i32 b;
+}
+
+
+def test() void {
+    Type type = Foo.type
+    type.methods.count;
+}
+
+

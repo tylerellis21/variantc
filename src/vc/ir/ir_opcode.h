@@ -16,6 +16,8 @@ enum class ir_opcode_id {
     RET,
 
     ALLOC,
+    DEALLOC,
+
     LOAD,
     STORE,
     STORE_CONST,
@@ -53,6 +55,7 @@ enum class ir_opcode_id {
     ADD,
     SUB,
     MUL,
+    DIV,
     MOD,
     INC,
     DEC,
@@ -276,11 +279,17 @@ struct ir_call {
 struct ir_ret {
 };
 
+enum class ir_alloc_type {
+    Stack,
+    Heap
+};
+
 struct ir_alloc {
     u64 index;
     BuiltinKind type;
+    ir_alloc_type alloc_type;
 
-    ir_alloc(u64 index, BuiltinKind type) :
+    ir_alloc(u64 index, BuiltinKind type, ir_alloc_type alloc_type) :
         index(index),
         type(type)
     { }
@@ -406,7 +415,7 @@ struct ir_div {
     { }
 };
 
-// mod - module
+// mod
 struct ir_mod {
     u64 lhs;
     u64 rhs;
@@ -727,6 +736,16 @@ struct ir_opcode {
         cmp(cmp)
     { }
 
+    ir_opcode(ir_ret ret) :
+        opcodeId(ir_opcode_id::RET),
+        ret(ret)
+    { }
+
+    ir_opcode(ir_alloc alloc) :
+        opcodeId(ir_opcode_id::ALLOC),
+        alloc(alloc)
+    { }
+
     ir_opcode(ir_jo jo) :
         opcodeId(ir_opcode_id::JO),
         jo(jo)
@@ -842,20 +861,45 @@ struct ir_opcode {
         mul(mul)
     { }
 
-    ir_opcode(ir_mul mul) :
-        opcodeId(ir_opcode_id::MUL),
-        mul(mul)
+    ir_opcode(ir_div div) :
+        opcodeId(ir_opcode_id::DIV),
+        div(div)
     { }
+
+    ir_opcode(ir_mod mod) :
+        opcodeId(ir_opcode_id::MOD),
+        mod(mod)
+    { }
+
+    ir_opcode(ir_inc inc) :
+        opcodeId(ir_opcode_id::INC),
+        inc(inc)
+    { }
+
+    ir_opcode(ir_dec dec) :
+        opcodeId(ir_opcode_id::DEC),
+        dec(dec)
+    { }
+
+    ir_opcode(ir_or or) :
+        opcodeId(ir_opcode_id::OR),
+        or(or)
+    { }
+
+    ir_opcode(ir_and and) :
+        opcodeId(ir_opcode_id::AND),
+        and(and)
+    { }
+
+    ir_opcode(ir_xor xor) :
+        opcodeId(ir_opcode_id::XOR),
+        xor(xor)
+    { }
+
+
     /*
 
-    SUB,
-    MUL,
-    MOD,
-    INC,
-    DEC,
 
-    OR,
-    AND,
     XOR,
     NOT,
 

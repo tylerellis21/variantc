@@ -1,0 +1,12 @@
+def function() void {
+    i32 x = 10;
+    i32 y = 20;
+
+    use (x, y) {
+        x = 20; 
+        // would print 20
+        println(x);
+    }
+    // would print 10
+    println(x);
+} 

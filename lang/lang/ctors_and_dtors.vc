@@ -1,0 +1,20 @@
+package lang;
+
+struct Buffer<T> {
+    T* data;
+    u64 size;
+}
+
+// copy, move
+
+def test() Buffer<T>^ {
+    Buffer<T> buffer;
+    // so what happens here?
+    return ^buffer;
+}
+
+
+def test() void {
+    Buffer<i32> data = new Buffer<i32>;
+}
+

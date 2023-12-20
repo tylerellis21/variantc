@@ -1,0 +1,18 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2020-08-08T01:25:00-07:00
+
+====== Attributes ======
+--------------------
+
+attribute TestAttibute {
+	r32 x, y;
+}
+
+[TestAttribute{ 10, 10}]
+struct Foo { 
+
+}
+
+[TestAttribute{ x = 10, y = 10}]
+struct Test { }

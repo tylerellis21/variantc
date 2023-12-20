@@ -1,0 +1,69 @@
+// scope resolution tests
+namespace foo {
+namespace bar {
+
+i32 a;
+
+struct type_a {
+    i32 x;
+    i32 y;
+}
+
+}
+}
+
+namespace foo::bar {
+
+i32 b;
+
+struct type_b {
+    i32 x;
+    i32 y;
+    // should throw a warning here.
+    i32 x;
+}
+
+}
+
+def test() void {
+    /*
+    // Theses two cases are same during the start so we can't tell the difference between the two
+    // since we can only look ahead on token at a time and in the worst case we will have a long name which is 
+    // something like down below so we will need to parse the full long name before we understand the case
+    // we will then need to pass the full name into the next functions which is kinda a pain...
+    foo::bar::a = 0;
+    foo::bar::b = 0;
+
+    foo::bar::type_a local_type_a;
+    foo::bar::type_b local_type_b;
+    */
+}
+
+def scope_test() void {
+    i32 x = 0;
+    
+    {
+        // we should get a warning here, something like 'x' shadows another variable
+        //
+        i32 x = 10;
+    }
+
+    // this is not valid since we are redeclaring the same name in the same scope
+    i32 x = 0;
+
+    if (x > 0) {
+        
+    } else { }
+
+    while (x == 0) {
+        x++;
+    }
+
+    for (i32 x = 0; x < 10; x++) {
+
+    }       
+}
+
+// end scope resolution 
+
+

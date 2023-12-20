@@ -18,6 +18,6 @@ struct IRGen {
 };
 
 
-}
+} // namespace vc
 
 #endif // VC_IR_GEN_H_INCLUDE

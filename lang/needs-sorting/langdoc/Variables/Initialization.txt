@@ -1,0 +1,32 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2020-08-05T04:53:02-07:00
+
+====== Initialization ======
+--------------------
+
+Initalization of objects works the same as in C++ with the use of a stack and heap.
+Initalization expressions can be named and unamed.
+
+
+Syntax:
+<type> <identifier> = <initialization expression> ;
+<type> <identifier> = new { <initalization expression> } ;
+
+Example:
+
+struct Vector2f { r32 x, y; }
+
+def stack() void {
+	// Unamed initalization
+	Vector2f a = Vector2f{ 0.f, 0.f};
+	   Vector2f b = { 0.f, 0.f};
+	Vector2f d;
+}
+
+def heap() void {	
+	// Unamed initalization
+	Vector2f* a = new Vector2f{10.f, 10.f};
+	Vector2f* a = new  {10.f, 10.f};
+}
+

@@ -1,0 +1,44 @@
+                                                                                                        
+▪ Types
+    ▪ Builtin 
+    ▪ Casting 
+    ▪ Typedef 
+    ▪ Generic 
+
+▪ Variables
+    ▪ Initialization Methods
+
+▪ Functions
+    ▪ Function pointers
+    ▪ Generics
+    ▪ Anonymous functions.
+
+▪ Structures
+    ▪ Constructors/Destructors 
+    ▪ Packing And Memory Alignment
+    ▪ Templates/Generics
+
+▪ Unions
+▪ Interfaces
+
+▪ Namespaces
+    ▪ Modules and Packages
+    ▪ Import/Export
+    ▪ Using vs Use
+
+▪ Flow Control
+    ▪ Defer
+
+▪ Expressions And Operators
+    ▪ Operators
+    ▪ Standard Operators
+    ▪ Unique Operators 
+
+▪ Threading
+    ▪ Tasks 
+    ▪ Async and Await
+
+▪ SIMD                      
+▪ Reflection
+▪ Preprocessor
+    ▪ Compile Time Execution

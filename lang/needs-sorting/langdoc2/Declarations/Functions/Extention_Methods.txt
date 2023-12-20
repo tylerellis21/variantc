@@ -1,0 +1,23 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2020-08-08T01:51:29-07:00
+
+====== Extention Methods ======
+--------------------
+Extention methods allow packages to expand upon existing types.
+
+Example:
+
+struct Foo {
+	i32 x, y;
+}
+
+def Foo::add(i32 x, i32 y) Foo* {
+	this->x += x;
+	this->y += y;
+	return this;
+}
+
+def Foo::sum() i32 {
+	return this->x + this->y;
+}

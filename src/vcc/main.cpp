@@ -73,9 +73,11 @@ int main(int argc, char** args) {
 
     ir_opcode labelA(ir_label{labelName});
     ir_opcode nop(ir_nop{});
+    ir_opcode allocate(ir_alloc{0, BuiltinKind::Uint32});
 
     opcodes.push_back(labelA);
     opcodes.push_back(nop);
+    opcodes.push_back(allocate);
 
     for (int i = 0; i < opcodes.size(); i++) {
         ir_opcode opcode = opcodes[i];

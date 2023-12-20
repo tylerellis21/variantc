@@ -1,0 +1,55 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2020-08-08T02:09:09-07:00
+
+====== Import ======
+--------------------
+Syntax:
+import <long-identifier>;
+
+Examples:
+
+module math;
+
+export struct v2i {
+    i32 x;
+    i32 y;
+}
+
+export namespace vectors {
+
+    struct Vector2<T> {
+        [op(Expression::LHS)]
+        T x;
+        [op(Expression::RHS)]
+        T y;
+    }
+
+    typedef Vector2<r32> v2f;
+    typedef Vector2<r64> v2d;
+    typedef Vector2<i64> v2i;
+
+    def operator+ Vector2<T>(Vector2<T> lhs, Vector2<T> rhs) 
+        => Vector2<T> {
+            x: lhs.x + rhs.x,
+            y: lhs.y + rhs.y
+        };
+
+
+}
+
+
+
+// other file
+import math::v2i;
+
+// another file
+import math;
+
+vectors::v2f aVector = {x: 10.0f, y: 10.0f};
+
+vectors::v2i bVector = {100, 200};
+
+vectors::v2d cVector = {400.0, 400.0};
+
+vectors::v2f dVector = aVector + as<v2f>(bVector);

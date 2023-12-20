@@ -1,0 +1,8 @@
+def inlineASM(i32 a, i32 b) i32 {
+    asm {
+        mov a, eax
+        mov b, ebx
+        add eax, ebx
+        ret
+    }
+}

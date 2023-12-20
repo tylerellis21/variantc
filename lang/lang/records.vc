@@ -1,0 +1,6 @@
+// TODO(@Tyler): Figure out if records make sense or if we need to alter them to fit our language
+// or should we even include them?
+record A {
+	string Name;
+	string[] Args;
+}

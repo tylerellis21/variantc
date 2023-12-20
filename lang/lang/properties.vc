@@ -1,0 +1,17 @@
+// Properties are the same as in c#
+
+struct Test {
+
+public:
+    utf8 Name {
+        get => name;
+        set {
+            name = value.ToLower();
+        }
+    }
+
+    utf8 Foo { get; set; }
+
+private:
+    utf8 name;
+}

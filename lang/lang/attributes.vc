@@ -1,0 +1,15 @@
+attribute(AttributeUsage.All) SomeAttribute {
+    i32 a;
+    i32 b;
+    i32 c;
+}
+
+attribute(AttributeUsage.Method) SomeMethodAttribute { }
+attribute(AttributeUsage.Method) AnotherAttribute { }
+
+[SomeAttribute{a = 10, b = 20, c = 30}]
+[SomeMethodAttribute]
+[AnotherAttribute()]
+def a_method_with_attributes() void {
+
+}

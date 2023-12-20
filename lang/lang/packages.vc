@@ -1,0 +1,35 @@
+// packages are basically an external namespace 
+// so anytime another file needs to use this package it must
+// reference using the package name either by using import statement or 
+// referencing directly.
+
+// the filename doesn't matter it's only used internally when mapping functions
+// each source file can build more than one package if needed.
+
+package test;
+
+import system::core;
+
+struct Foo {
+    i32 x;
+    i32 y;
+}
+
+// another vc file.... bar.vc
+using test;
+
+// using 
+def test1() void {
+    Foo foo;
+    foo.x = 0;
+    foo.y = 0;
+    foo = {0, 0};
+}
+
+// direct reference
+def test2() void {
+    test::Foo foo;
+    foo.x = 0;
+    foo.y = 0;
+    foo = {0, 0};
+}

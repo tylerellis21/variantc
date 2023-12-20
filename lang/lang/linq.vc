@@ -1,0 +1,25 @@
+// LINQ - Language-Integrated Query.
+
+table DatabaseTableType {
+
+    [AutoIncrement()]
+    i32 id;
+
+    [DefaultValue(0)]
+    i32 value;
+}
+
+attribute AutoIncrement { }
+
+attribute DefaultValue {
+
+    object Value { get; set; }
+
+    DefaultValue(object value) :
+        Value(value)
+    { }
+}
+
+def main() void {
+    auto result = select {id, value} from DatabaseTableType where { id > 0 };
+}

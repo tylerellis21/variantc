@@ -1,0 +1,26 @@
+struct Iterator<T> {
+    T* begin;
+    T* end;
+}
+
+struct List<T> {
+    T* buffer;
+    u64 size;
+    u64 offset;
+}
+
+def Iterator<T> operator(List<T>* list) {
+    return {
+        list.buffer,
+        list.buffer + list.offset
+    };
+}
+
+def test() void {
+    List<i32> list;
+    list_add(&list, 10, 10);
+    for (i32 item : list) {
+        
+    }
+
+}

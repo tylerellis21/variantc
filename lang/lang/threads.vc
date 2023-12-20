@@ -1,0 +1,43 @@
+package tests::threading;
+
+import os::thread;
+
+// todo: locks
+//
+
+// should we default to void?
+// proc() { }
+
+def thread_a_proc() void {
+    while (true) {
+        sleep(10);
+        printf("hello from thread a");
+    }        
+}
+
+def thread_b_proc() void {
+    while (true) {
+        sleep(10);
+        thread_wait(&thread_a);
+        printf("hello from thread b");
+    }
+}
+
+thread thread_a;
+thread thread_b;
+
+def main(i32 argc, utf8** args) i32 {
+    thread_new(&thread_a);
+    thread_new(*thread_b);
+
+    wait(thread_a);
+    wait(thread_b);
+
+    // we actually have three threads running
+    // the main thread which is spawned with the application
+    // the second thread which is spawned as thread_a   
+    // the third thread which is spawned as thread_b   
+
+    // don't return until both threads have finished
+    return 0;
+}

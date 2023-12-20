@@ -1,0 +1,6 @@
+DEFINE(Type, ArrayType)
+DEFINE(Type, BasicType)
+DEFINE(Type, DeclRefType)
+DEFINE(Type, PointerType)
+DEFINE(Type, TemplateType)
+DEFINE(Type, VarArgType)

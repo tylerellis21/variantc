@@ -1,0 +1,43 @@
+def test() void {
+    // not valid
+    i32 a = 5 + 5.0f;
+    // valid
+    r32 b = 5 + 5.0f;
+}
+// we can never loose precision unless casted
+
+// This defines a "Type" of 'Test'
+A {
+    u32 var1;
+}
+
+B {
+    u32 var1;
+}
+
+A.var1 = 10;
+
+B = A;
+
+
+def a* = new A {10};
+
+
+def b {
+
+    def a {
+
+        def ab() {
+
+        }
+
+
+        return ab();
+    }
+}
+
+b = def {
+    return a + b;
+}
+
+b.a.a();

@@ -1,5 +1,5 @@
-project (variant-c)
 cmake_minimum_required(VERSION 3.18)
+project (variant-c)
 
 # Set the output path for libraries to lib/
 # Set the output path for exe's to bin/

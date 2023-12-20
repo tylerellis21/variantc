@@ -1,0 +1,5 @@
+// basic structures
+struct Foo {
+    i32 x;
+    i32 y;
+}

@@ -1,0 +1,22 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2020-08-05T04:35:18-07:00
+
+====== Arrays ======
+--------------------
+
+Arrays in Variant C are declared the same as in C like languages with one difference being the array modifier binds to the type its self.
+
+The syntax is as follows:
+<type> [ <array-length> ] <identifier>  ;
+<type> [ <array-length> ] <identifier>   = <expression> ;
+
+Examples:
+i32[10] values;
+i32[10] values = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+The importance difference is to note the array modifier binds to the type it's self.
+What that means is that the following values 'x' and 'y' are of the same type/
+
+i32[16] x, y;
+r32[16] matrix_x, matrix_y;

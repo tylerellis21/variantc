@@ -1,0 +1,10 @@
+IList<u32> unsignedIntegerList = new IList<u32>();
+
+// The above can be shortened to the following:
+IList<u32> unsignedIntegerList = new();
+
+// It's prefered to initalize with the first method if the variable declaration is 
+// in a different location than the initialization, that way we as the programmer can easily infer the type 
+// being constructed without having to backtrack to the variable declaration.
+// While the second method is very nice for initalize variable declaration 
+// in place since the variable type tells us what we are initializing. 

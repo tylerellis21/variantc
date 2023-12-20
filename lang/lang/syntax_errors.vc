@@ -1,0 +1,3 @@
+def a_function() r32 { }
+def b_function() void { }
+def c_function() u8 { } 

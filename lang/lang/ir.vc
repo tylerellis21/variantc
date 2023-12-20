@@ -1,0 +1,20 @@
+// intermediate representation
+
+// vc code
+def test() void {
+    i32 const_a = 22;
+    i32 const_b = 11;
+
+    i32 x = const_a + const_b;
+   
+    if (x == 0) {
+        x = 10;
+    } else x = 20;
+}
+// end
+
+// ir code
+
+
+// end
+

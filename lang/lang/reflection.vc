@@ -1,0 +1,12 @@
+// Reflection will be added but it will be added down the line
+struct Foo {
+    i32 x;
+    i32 y;
+}
+
+struct type {
+    bool is_struct;
+    bool is_union;
+    utf8 name;
+    list<type> types; 
+}
