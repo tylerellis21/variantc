@@ -12,3 +12,7 @@ Work on CPP Generation
 v0.1 will be the base language features
 v0.2 will be templates/generics
 
+lsp support.
+
+constexpr
+consteval

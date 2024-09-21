@@ -1,0 +1,1443 @@
+package allocator;
+
+interface Allocator {
+    def test() void;
+}
+
+allocator DefaultAllocator {
+    def test() void {
+
+    }
+}
+
+struct LinkedList<T> {
+/*
+    struct Node<T> {
+        Node* next;
+        Node* prev;
+        T value;
+    }
+
+    Node*<T> begin;
+    Node<T>* end;
+*/      Node<T>* begin;
+}
+
+struct Allocator {
+    struct Page {
+
+        struct Chunk {
+
+        }
+
+        Chunk* head;
+    }
+}
+def method() void {
+
+    def anon() void { }
+}
+async def test() void {
+
+}
+
+async def asyncIncrement(i32 value) Task<i32> {
+    return i += value;
+}
+
+async def asyncFileOpen(utf8 filePath) Task<(bool, File*)> {
+    File* file = await async_system_open(filePath);
+    if (file == 0) {
+        return false, 0;
+    }
+    return file;
+}
+
+def async fileOpenAsync() async i32 {
+}def test() void {
+    atomic u32 a = 100;
+    atomic {
+        a = a * a;
+        a = a + a;
+        a = a * a * a;
+    }
+    return a;
+}
+/*
+    Atomic can't be used with:
+        mov (MOV is always atomic)
+        simd:
+            mmx
+            sse
+            avx
+*/
+
+// atomic uses the assembly LOCK instruction as needed
+asm {
+    inc dword ptr [rcx] ; <- Not atomic
+    lock inc dword ptr [rcx] ; <- Atomic
+}
+
+// Same as the above except the entire method is marked atomic
+def atomic atomic_method() void {
+
+}
+
+// Not sure which syntax is better
+// look ahead might be required here,
+// perhaps not if we have a flexable type def system.
+//  IE: It keeps parsing type keywords as long as the context is valid.
+atomic struct foo { }
+
+// Probably this since it's easier for the compiler to parse
+// No look ahead required here
+struct atomic bar { }attribute(AttributeUsage.All) SomeAttribute {
+    i32 a;
+    i32 b;
+    i32 c;
+}
+
+attribute(AttributeUsage.Method) SomeMethodAttribute { }
+attribute(AttributeUsage.Method) AnotherAttribute { }
+
+[SomeAttribute{a = 10, b = 20, c = 30}]
+[SomeMethodAttribute]
+[AnotherAttribute()]
+def a_method_with_attributes() void {
+
+}
+
+/*
+#define
+#ifndef
+#if
+#endif
+*/
+
+// define a predefessing symbol
+
+// no need to actually try and define theses variables
+// theses are a few of the ones define by the compiler
+
+//#bool win32 = true;
+//#bool unix = true;
+//#bool apple = true;
+//#bool x64 = true;
+//#bool x86 = true;
+
+i64[100] table;
+
+# {
+    for (i64 i = 0; i < 100; i++) table[i] = i;
+}
+
+#if (win32) {
+
+    def test() void {
+        printf("called on win32\n");
+    }
+
+} // #if (win32)
+else if (unix) {
+
+    def test() void {
+        printf("called on unix\n");
+    }
+    else {
+        printf("test no implemented on this platform!\n");
+
+        // some sort of function that we can call which
+        // invokes an error in the compiler and reports so...
+        compiler::not_implemented();
+    }
+
+    def test() void {
+        for (i32 i = 0; i < 10; i++) {
+        }
+        while (true) { }
+        do { } while(true);
+
+        // hmm, compile time structure creation
+        List<i32> list = {10, 10, 10};
+
+        for (i32 i : list) {
+            printf("item %i32\n", i);
+        }
+    }
+
+} // #if (unix)
+
+
+def main() void {
+    test();
+}
+import std::core;
+
+export struct Foo<T> {
+    T x, y;
+}
+
+// This is the same as above just seperate declarations.
+struct Foo { }
+export struct Foo;
+
+/*
+Plain old data types:
+
+signed:
+    i8
+    i16
+    i32
+    i64
+    i128
+
+unsigned:
+    u8
+    u16
+    u32
+    u64
+    u128
+
+other types:
+    void
+    bool
+
+floating point:
+    r16
+    r32
+    r64
+    r128
+    r256
+other:
+    uint = architecture sized unsigned integer.
+        - 32bit or 64bit
+    int = architecture sized integer. ie the register size
+        - 32bit or 64bit
+    uptr = archicture sized pointer.
+*/
+// We need support for bit fields
+
+struct Test {
+    u64 number;
+    union {
+        bool firstFlag : 1;
+        bool secondFlag : 1;
+        u8 b : 2;
+        u8 c : 2;
+        u8 d : 2;
+
+        u8[4] remBytes;
+    } named_union;
+}
+
+def using_union_example() void {
+
+    Test a;
+
+    a.named_union.firstFlag = true;
+    a.named_union.secondFlag = true;
+
+    a.named_union.b = 0;
+    a.named_union.c = 0;
+    a.named_union.d = 0;
+
+    a.named_union.remBytes = {10, 20, 30, 40};
+}// Calling conventions
+struct Foo {
+
+}
+
+struct Bar : Foo {
+
+}
+
+def as(T in) T => cast<T>(in);
+
+
+def main() void {
+    Bar* bar = new Bar;
+
+    // Theses both do the exact same thing.
+    Bar* foo = cast<Foo*>(bar);
+    // This is the prefered method though since it's shorter.
+    Foo* foo = as<Foo*>(bar);
+
+    Foo* foo = bar as<Foo*>;
+}
+// https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/checked-and-unchecked
+// https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/arithmetic-operators#user-defined-checked-operators
+
+unchecked {
+}
+
+checked {
+}
+
+enum arch {
+    x86,
+    x64
+}
+
+enum cmode {
+    exe = executable,
+    dll = dynamic,
+    lib = library
+}
+
+@def settings() void {
+    compiler.arch = arch.x86;
+    compiler.mode = cmode.exe;
+    if (win32) printf("compiler is in win32 mode\n");
+    else if (#win64) printf("compiler is in win64 mode\n");
+}
+
+Compile Time Execution
+
+
+@if (WIN32) {
+	@i32[100] some_array;
+	@for (i32 x = 0; x < 100; x++) {
+		some_array[x] = x * 100;
+	}
+
+}
+else {
+	@i32[256] some_array;
+	@for (i32 x = 0; x < 256; x++) {
+		some_array[x] = x * 100;
+	}
+}
+
+
+
+i32[100] some_array = {
+
+
+};
+
+// how would a runtime virtual machine come into play in this language?
+// it would allow code to be executed while the compiling is still taking place
+// but this will add major complextity to the compiler.. which in the end may be worth in the end
+
+// hmmmmmmm
+
+def vm_test() void {
+    // execution block
+    // when the compiler encounters a execution block
+    // the code in the block will be compiled into bytecode an executed in a virtual machine
+    ${
+        i32 x = 0;
+        for (i32 i = 0; i < 100; i++) {
+            x += i;
+        }
+    }
+
+    // define blocks
+    // define blocks are the variant c version of a preprocessor
+    @win32 = true;
+
+    // the syntax for the preprocessor needs to be the same as the base language just
+    // with a minor symbol for noting that it is to be executed
+    @if (win32) {
+        // here we don't need to use the preprocessor symbol because it is
+        // implied by the context
+        expand("hello", 100); // expands 100 times...
+    }
+
+    // we need to let the compiler and the virtual machine need to run as one unit
+    // info needs to travel in both directions
+}
+
+// so we have a basic function... what could we do??
+def example_code() void {
+
+    // so this will be executed in a virtual machine after the full ast is parsed... at least i think..
+    // this still needs to be thought through
+
+    @i32[10] vm_array;
+    @for (uint i = 0; i < 10; i++) {
+        vm_array[i] = (i * i) >> 2;
+    }
+
+    // okay so this data now exists in the vm and has been executed...
+    // what can we do with this vm data? we can't directly use it in the source since it's in a "different context"
+    // we need a way to bring it back into the source code which is the generated c code.
+    // this will bring the calculated array back into the source file scope
+
+    // i really don't like using symbols like this but it might be the only option for preprocessing
+    // we might just have to try and think of a few different ways of doing preprocessing/virtual machine
+    $vm_array;
+
+    if (vm_array[0] == 0) {
+
+    }
+}
+
+struct Buffer {
+
+def copy() Buffer {
+
+}
+
+def free() void {
+
+}
+
+}
+/*
+    C# version
+
+    // Covariant interface.
+    interface ICovariant<out R> { }
+
+    // Extending covariant interface.
+    interface IExtCovariant<out R> : ICovariant<R> { }
+
+    // Implementing covariant interface.
+    class Sample<R> : ICovariant<R> { }
+
+    class Program
+    {
+        static void Test()
+        {
+            ICovariant<Object> iobj = new Sample<Object>();
+            ICovariant<String> istr = new Sample<String>();
+
+            // You can assign istr to iobj because
+            // the ICovariant interface is covariant.
+            iobj = istr;
+        }
+    }
+*/
+
+// Covariant interface.
+interface ICovariant<out R> { }
+
+// Extending covariant interface.
+interface IExtCovariant<out R> : ICovariant<R> { }
+
+// Implementing covariant interface.
+class Sample<R> : ICovariant<R> { }
+
+def test(): void {
+    ICovariant<Object> iobj = new Sample<Object>();
+    ICovariant<String> istr = new Sample<String>();
+
+    // You can assign istr to iobj because
+    // the ICovariant interface is covariant.
+    iobj = istr;
+}package lang;
+
+struct Buffer<T> {
+    T* data;
+    u64 size;
+}
+
+// copy, move
+
+def test() Buffer<T>^ {
+    Buffer<T> buffer;
+    // so what happens here?
+    return ^buffer;
+}
+
+
+def test() void {
+    Buffer<i32> data = new Buffer<i32>;
+}
+
+struct Vec3 {
+    r32 x;
+    r32 y;
+    r32 x;
+}
+
+def test() {
+
+    Vec3 exampleA = Vec3{x = 10; y = 20; z = 30 };
+
+    Vec3 exampleB = Vec3{10, 20, 30};
+
+
+    r32{x, y, z} = exampleA;
+
+
+    printf(x);
+}
+
+def named_return(i32 a, i32 b) i32 result {
+    result = 0;
+    return;
+}
+
+/*/
+
+allocator a { }
+attribute B { }
+
+struct align(16) C { }
+
+align
+allocator
+as
+async
+atomic
+attribute
+await
+base
+catch
+class
+const
+continue
+def
+defer
+delegate
+delete
+do
+else
+enum
+explicit
+export
+extern
+false
+for
+foreach
+goto
+if
+implicit
+import
+interface
+lock
+nameof
+namespace
+new
+null
+operator
+package
+params
+private
+protected
+public
+readonly
+return
+sizeof
+static
+struct
+switch
+then
+this
+throw
+true
+try
+typeof
+union
+use
+using
+var
+virtual
+void
+volatile
+while
+yield
+
+def free(void* arg) void {
+}
+
+def test() void {
+
+    utf8 str = "test";
+
+    if (a == b) {
+
+    }
+    else {
+
+    }
+
+    defer free(a);
+}
+// Another neat feature which i think will fit in nicely.
+public delegate void Del(string message);
+Syntax:
+enum <identifier> { <decl-body> }
+enum <identifier> <type> { <decl-body> }
+
+Example:
+enum Test { A, B, C }
+
+
+--------------------
+Typed Enum
+--------------------
+Syntax:
+enum <identifier> <type> { <body> }
+
+Example:
+enum Foo i32 {
+	null = 0,
+	one = 1,
+	two = two
+}
+def IsNoneZero(this i32 i) bool {
+    return i != 0;
+}
+
+def main() void {
+    i32 x = 100;
+
+    bool test = x.IsNoneZero();
+}
+
+// just a simple function
+def test() void {
+
+}
+
+// some simple math operations
+def add(i32 x, i32 y) i32 { return x + y; }
+def sub(i32 x, i32 y) i32 { return x - y; }
+def mul(i32 x, i32 y) i32 { return x * y; }
+def div(i32 x, i32 y) i32 { return x / y; }
+
+// now let's create some function pointers
+
+// invoke them!
+def main(int argc, char** args) i32 {
+
+    // let the compiler resolve the args
+    func_ptr generic_method = test;
+
+    // invoke the generic function pointer which is resolved
+    // during compile time.
+    generic_method();
+
+    func_ptr add_method = add;
+    func_ptr sub_method = sub;
+    func_ptr mul_method = mul;
+    func_ptr div_method = div;
+
+    func_ptr* a_func_list = malloc(sizeof(add_method) * 4);
+    a_func_list[0] = add_method;
+    a_func_list[1] = sub_method;
+    a_func_list[2] = div_method;
+    a_func_list[3] = mul_method;
+
+    i32 x = 100;
+    i32 y = 25;
+
+    for (i32 i = 0; i < 4; i++) {
+        func_ptr method = a_func_list[i];
+
+        i32 result = method(x, y);
+
+        printf("result: %i\n", result);
+    }
+
+    return 0;
+}
+
+// basic function declaration
+def test() void {
+
+}
+
+// question... should we allow implied void returns?
+def test() {
+}
+
+def method() void {
+    i32 const_a = 10;
+    i32 const_b = 22;
+
+    i32 result_a = add(const_a, const_b);
+    i32 result_b = sub(const_a, const_b);
+
+    printf("10 + 22 = %i\n10 - 22 = %i\n", result_a, result_b);
+}
+
+def add(i32 x, y) i32 { return x + y; }
+def sub(i32 x, i32 y) i32 { return x - y; }
+
+def default_args(i32 x, i32 y, i32 mode = 0) void {
+}
+
+def test() void {
+    default_args(10, 10);
+    default_args(10, 20, 1);
+}
+implicit
+
+explicit// initalizer lists are a method of constructing structures.
+
+struct Foo {
+	i32 x;
+	i32 y;
+}
+
+def test1() void {
+	Foo bar;
+
+	// the standard method of initalizing variables.
+	// direct reference of the variable.
+	bar.x = 1;
+	bar.y = 1;
+
+	// with initalizer lists it becomes
+	// init lists will be translated down to the previous version
+	// so there is  no real difference other than syntax.
+	bar = {1, 1};
+
+    // Named initalizer list
+    bar = {y: 10, x: 10};
+}
+def inlineASM(i32 a, i32 b) i32 {
+    asm {
+        mov a, eax
+        mov b, ebx
+        add eax, ebx
+        ret
+    }
+}interface ISocket {
+
+    def new() void {
+
+    }
+
+    def delete() void {
+
+    }
+
+    def connect() bool;
+    def disconnect() bool;
+}
+
+def new(ISocket* socket) ISocket* {
+
+}
+
+@win32
+impl Socket : ISocket {
+    def new() void {
+
+    }
+
+    def delete() void {
+
+    }
+
+    def connect() bool {
+
+
+    }
+} // interface win32_socket
+
+
+@unix
+impl Socket : ISocket {
+
+} // interface unix_socket
+
+def function() void {
+    socket* s = socket.new();
+    s.delete();
+}
+// intermediate representation
+
+// vc code
+def test() void {
+    i32 const_a = 22;
+    i32 const_b = 11;
+
+    i32 x = const_a + const_b;
+
+    if (x == 0) {
+        x = 10;
+    } else x = 20;
+}
+// end
+
+// ir code
+
+
+// end
+
+struct Iterator<T> {
+    T* begin;
+    T* end;
+}
+
+struct List<T> {
+    T* buffer;
+    u64 size;
+    u64 offset;
+}
+
+def Iterator<T> operator(List<T>* list) {
+    return {
+        list.buffer,
+        list.buffer + list.offset
+    };
+}
+
+def test() void {
+    List<i32> list;
+    list_add(&list, 10, 10);
+    for (i32 item : list) {
+
+    }
+
+}
+def lambda => () {
+    return 0;
+}
+
+auto lambda => (i32 x, i32 y) {
+    return x + y;
+}
+
+def lambda_wrapper(i32 x, i32 y)
+    => return lamba(10, 10);
+
+def auto_lambda => (i32 a, i32 b) {
+    return a + b;
+}
+
+def useage() void {
+    auto a = lambda();
+    auto b = auto_lambda(10, 20);
+}// LINQ - Language-Integrated Query.
+
+table DatabaseTableType {
+
+    [AutoIncrement()]
+    i32 id;
+
+    [DefaultValue(0)]
+    i32 value;
+}
+
+attribute AutoIncrement { }
+
+attribute DefaultValue {
+
+    object Value { get; set; }
+
+    DefaultValue(object value) :
+        Value(value)
+    { }
+}
+
+def main() void {
+    auto result = select {id, value} from DatabaseTableType where { id > 0 };
+}// Alignment of memory is critical to some operations!
+// So it is very important that the language support alignment
+
+// Any time this structure is allocate it is aligned to 32 bits
+struct foo align(32) {
+
+}
+
+struct packed_foo pack {
+    i32 x;
+    i32 y;
+}
+
+def example_function() void {
+
+    // foo is aligned to 32 on the stack in this case
+    // so if you were to get the address it is aligned to 32 bits
+    foo a;
+
+    // somehow this should be aligned to 32
+    // somehow the allocation function needs to be informed
+    //  that we want to align the allocation to 32
+    foo* b = alloc<foo align(28)>();
+}
+
+// perhaps we could have a metadata block which is used to describe the source file
+// and libraries and other things needed.
+
+// compile time block
+// this code will be executed during compilation.
+@ {
+
+    // the virtal machine will execute some generated bytecode which will cause this to be
+    // stored.
+    i32 x = 0;
+
+    if (x == 0) {
+
+        // this syntax is very ugly and will definitly be changed
+        // once we can find a better way of doing this.
+
+        // this notation will bring this code back into the compiler
+        // and cause it to be generated in the output source code.
+        $if (x == 0) {
+
+        }
+
+    }
+    else {
+        printf("virtual machine execution test!!!!!!!!");
+    }
+
+}
+
+@i32[512] static_table;
+@ {
+    for(i32 i = 0; i < 512; i++) static_table[i] = i;
+}
+
+/*
+    - so before we begin execution we need to do a few different things
+    - we need a validated ast to work with.
+    - convert the ast into some simpler representation of the source code
+        - this form needs to be able to be executed in the virtual machine
+        while also being easy to insert new instructions/code splices as needed as they
+        are formed by the virtual machine execution.
+*/
+
+@meta {
+    @lib=false;
+    @lib=is_win32;
+}
+struct Container<T> {
+    T value;
+}
+
+def Container<T>::externalMethodDeclaration(i32 a, i32 b) i32 {
+    return a + b;
+}
+
+def usage() void {
+    Container<i32> intContainer = new();
+    i32 a = intContainer.externalMethodDeclaration(1, 2);
+
+}// if you have used a language with namespaces this will be vary similar
+namespace foo {
+
+struct Bar {
+    i32 x;
+    i32 y;
+}
+
+}
+
+def test1() void {
+    foo::Bar bar;
+
+// option one
+    bar.x = 10;
+    bar.y = 255;
+// another option
+    bar = {10, 255};
+}
+
+def test2() void {
+    using foo::Bar;
+
+    Bar bar;
+// option one
+    bar.x = 10;
+    bar.y = 255;
+// another option
+    bar = {10, 255};
+}
+
+// we could also do a global using
+// this will be avaliable in the entire file.
+using foo;
+
+// We can also set the namespace with the following and all code that follows this declaration will
+// now be in the specified namespace.
+namespace foo::bar::testing;
+
+// This declaration will reset the scope back to global.
+// It's prefered to not use this if possible.
+namespace ::;IList<u32> unsignedIntegerList = new IList<u32>();
+
+// The above can be shortened to the following:
+IList<u32> unsignedIntegerList = new();
+
+// It's prefered to initalize with the first method if the variable declaration is
+// in a different location than the initialization, that way we as the programmer can easily infer the type
+// being constructed without having to backtrack to the variable declaration.
+// While the second method is very nice for initalize variable declaration
+// in place since the variable type tells us what we are initializing.
+// packages are basically an external namespace
+// so anytime another file needs to use this package it must
+// reference using the package name either by using import statement or
+// referencing directly.
+
+// the filename doesn't matter it's only used internally when mapping functions
+// each source file can build more than one package if needed.
+
+package test;
+
+import system::core;
+
+struct Foo {
+    i32 x;
+    i32 y;
+}
+
+// another vc file.... bar.vc
+using test;
+
+// using
+def test1() void {
+    Foo foo;
+    foo.x = 0;
+    foo.y = 0;
+    foo = {0, 0};
+}
+
+// direct reference
+def test2() void {
+    test::Foo foo;
+    foo.x = 0;
+    foo.y = 0;
+    foo = {0, 0};
+}
+// Properties are the same as in c#
+
+struct Test {
+
+public:
+    utf8 Name {
+        get => name;
+        set {
+            name = value.ToLower();
+        }
+    }
+
+    utf8 Foo { get; set; }
+
+private:
+    utf8 name;
+}// TODO(@Tyler): Figure out if records make sense or if we need to alter them to fit our language
+// or should we even include them?
+record A {
+	string Name;
+	string[] Args;
+}
+// Reflection will be added but it will be added down the line
+struct Foo {
+    i32 x;
+    i32 y;
+}
+
+struct type {
+    bool is_struct;
+    bool is_union;
+    utf8 name;
+    list<type> types;
+}
+struct Foo {
+    i32 a;
+    i32 b;
+}
+
+
+def test() void {
+    Type type = Foo.type
+    type.methods.count;
+}
+
+
+struct Slice<T> {
+    u64 length;
+    T* begin;
+    T* end;
+}
+
+def static Slice<T> Slice::make(T* array, u64 begin, u64 end) {
+    u64 length = end - begin;
+
+    assert(length > 0);
+
+    return Slice<T> {
+        length,
+        array + begin,
+        array + end
+    };
+}
+
+
+def stringSlices() void {
+    utf8 string = "Hello World! How are ya doing?!?";
+
+    u64 start = string.indexOf(" ");
+    u64 next = string.indexOf(start, " ");
+
+    Slice<utf8> sliceA = Slice<utf8>::make(string.buffer, start, next);
+    Slice<utf8> sliceB = Slice::make(string.buffer, start, next);
+}struct test {
+    i32 x;
+    i32 y;
+}
+
+def function() void {
+    // creates an instance of test on the stack with the specified values
+    test a = test{10, 10};
+    test* a = new test{10, 10};
+
+    test* a = test.new{10, 10};
+}
+utf8 rawLiteral = !`
+hello world\nthis\t
+is a raw \t literal
+`;
+
+// Here the \n and \t will not be escaped by the compiler
+// The new lines are also included in the raw literal.
+// used a @prefix to prevent new lines from being included in the string.
+
+// Use the standard quoted string literals instead if you want to use escape sequences in a string.
+// eg: utf8 example = "hello\nworld\tTheses will be escaped by the compiler and replaced as needed"namespace system.text;
+
+struct Utf<T> {
+    u64 length;
+    T* buffer;
+}
+
+typedef Utf<char> cstr;
+typedef Utf<u8> utf8;
+typedef Utf<u16> utf16;
+typedef Utf<u32> utf32;
+
+def operator+(Utf<T> lhs, Utf<T> rhs) Utf<T> {
+    u64 total = lhs.length + rhs.length;
+    u8* buffer = new u8[total + 1];
+    memcpy(lhs.buffer, buffer, lhs.length);
+    memcpy(rhs.buffer, buffer + lhs.length, rhs.length);
+    return Utf<T> {
+        length = total,
+        buffer = buffer
+    };
+}
+
+def usage() void {
+    utf8 left = "left hand side";
+    utf8 right = "right hand side";
+    utf8 combined = left + right;
+}
+/*
+    String types in VariantC:
+
+    char - Standard c style character.
+
+    rune - Represents one character in the utf8 encoding.
+
+    cstr - A standard utf8/ascii encoded null terminated c string.
+
+    utf8 - The main and recommended string type to use.
+        This is backwards compatiable with cstr in every case.
+
+        This string is also always terminated with a zero/null terminator
+            but it's not included in the strings size
+
+        Operations don't rely on the string being null terminated
+            as all operations expect the strings length in bytes.
+
+    utf16 - Mostly exists to support environments that use utf16 encoding,
+        eg windows...
+
+    utf32 - Exists to provide super fast iteration over strings as the cost of every character being one integer,
+        useful for rendering strings, etc..
+
+    encoding conversion methods:
+
+    utf8_to_cstr(utf8 value) cstr;
+    utf8_to_utf16(utf8 value) utf16;
+    utf8_to_utf32(utf8 value) utf32;
+
+    utf16_to_cstr(utf16 value) cstr;
+    utf16_to_utf8(utf16 value) utf8;
+    utf16_to_utf32(utf16 value) utf32;
+
+    utf32_to_cstr(utf32 value) cstr;
+    utf32_to_utf8(utf32 value) utf8;
+    utf32_to_utf16(utf32 value) utf16;
+
+*/// basic structures
+struct Foo {
+    i32 x;
+    i32 y;
+}
+def a_function() r32 { }
+def b_function() void { }
+def c_function() u8 { }
+
+// templates are similar in syntax to the standard c++ style
+// but they are much more simplified
+
+// here the <T> declares the function as a template function
+// and specified the argument names.
+// after the <T> you can use the T type as normal.
+
+def template_method@T(T x, T y) T {
+    return x + y;
+}
+
+struct Vec2@T {
+    T x;
+    T y;
+}
+
+
+// just some standard vector types.
+typedef Vec2@r32 vec2f;
+typedef Vec2@i32 vec2i;
+typedef Vec2@r64 vec2d;
+typedef Vec2@u32 vec2u;
+
+// useage
+def test() void {
+    // the generic type will be resolved by the compiler.
+    template_method(10, 10);
+
+    vec2f example;
+    example.x = 1.f;
+    example.y = 1.f;
+}
+
+
+package tests::threading;
+
+import os::thread;
+
+// todo: locks
+//
+
+// should we default to void?
+// proc() { }
+
+def thread_a_proc() void {
+    while (true) {
+        sleep(10);
+        printf("hello from thread a");
+    }
+}
+
+def thread_b_proc() void {
+    while (true) {
+        sleep(10);
+        thread_wait(&thread_a);
+        printf("hello from thread b");
+    }
+}
+
+thread thread_a;
+thread thread_b;
+
+def main(i32 argc, utf8** args) i32 {
+    thread_new(&thread_a);
+    thread_new(*thread_b);
+
+    wait(thread_a);
+    wait(thread_b);
+
+    // we actually have three threads running
+    // the main thread which is spawned with the application
+    // the second thread which is spawned as thread_a
+    // the third thread which is spawned as thread_b
+
+    // don't return until both threads have finished
+    return 0;
+}
+package tmr;
+// tuples and multi return values.
+
+struct Tuple<T> {
+    union {
+        struct {
+            T x;
+            T y;
+        }
+        struct {
+            T a;
+            T b;
+        }
+    }
+}
+def test() void {
+    // not valid
+    i32 a = 5 + 5.0f;
+    // valid
+    r32 b = 5 + 5.0f;
+}
+// we can never loose precision unless casted
+
+// This defines a "Type" of 'Test'
+A {
+    u32 var1;
+}
+
+B {
+    u32 var1;
+}
+
+A.var1 = 10;
+
+B = A;
+
+
+def a* = new A {10};
+
+
+def b {
+
+    def a {
+
+        def ab() {
+
+        }
+
+
+        return ab();
+    }
+}
+
+b = def {
+    return a + b;
+}
+
+b.a.a();
+// unions
+
+// this is just a template struct
+struct<T> Vec3 {
+	union {
+		struct { T x, T y, T z; }
+		struct { T t, T u, T v; }
+	}
+}
+
+typedef Vec3<r32> vec3f;
+typedef Vec3<r64> vec3d;
+typedef Vec3<i32> vec3i;
+
+def test1() void {
+	vec3f test;
+
+	test.x = 0;
+	test.y = 0;
+	test.z = 0;
+
+	// hmm initalizer lists might pose a problem here
+	// example:
+	test = {1, 2, 3};
+	// would this use the xyz version or the tuv version?
+	// i mean they are both the same but in theory the aliases could be different?
+}
+
+struct Test2 {
+	union {
+		i16 x;
+		i32 y;
+		i64 z;
+	}
+}
+
+def test2() void {
+	i32 size = sizeof(Test2);
+	// this should be equal to 8 bytes.
+	assert(size == 8);
+}def function() void {
+    i32 x = 10;
+    i32 y = 20;
+
+    use (x, y) {
+        x = 20;
+        // would print 20
+        println(x);
+    }
+    // would print 10
+    println(x);
+}
+// using static
+
+namespace test {
+    static def Add(i32 x, i32 y) i32  {
+        return x + y;
+    }
+}
+
+def Test() void {
+    test::Add(10, 20);
+}
+
+def Test2() void {
+    //using static test::Add;
+    import static test::Add;
+    Add(10, 20);
+}// scope resolution tests
+namespace foo {
+namespace bar {
+
+i32 a;
+
+struct type_a {
+    i32 x;
+    i32 y;
+}
+
+}
+}
+
+namespace foo::bar {
+
+i32 b;
+
+struct type_b {
+    i32 x;
+    i32 y;
+    // should throw a warning here.
+    i32 x;
+}
+
+}
+
+def test() void {
+    /*
+    // Theses two cases are same during the start so we can't tell the difference between the two
+    // since we can only look ahead on token at a time and in the worst case we will have a long name which is
+    // something like down below so we will need to parse the full long name before we understand the case
+    // we will then need to pass the full name into the next functions which is kinda a pain...
+    foo::bar::a = 0;
+    foo::bar::b = 0;
+
+    foo::bar::type_a local_type_a;
+    foo::bar::type_b local_type_b;
+    */
+}
+
+def scope_test() void {
+    i32 x = 0;
+
+    {
+        // we should get a warning here, something like 'x' shadows another variable
+        //
+        i32 x = 10;
+    }
+
+    // this is not valid since we are redeclaring the same name in the same scope
+    i32 x = 0;
+
+    if (x > 0) {
+
+    } else { }
+
+    while (x == 0) {
+        x++;
+    }
+
+    for (i32 x = 0; x < 10; x++) {
+
+    }
+}
+
+// end scope resolution
+
+

@@ -21,13 +21,17 @@ std::ostream& operator <<(std::ostream& out, const ir_opcode& opcode) {
         break;
 
         case ir_opcode_id::ALLOC:
-            out << "ALLOC $"
-            << opcode.alloc.index
+            out << "ALLOC " << (opcode.alloc.alloc_type == ir_alloc_type::Stack ? "STACK " : "HEAP ");
+
+            out << "$" << opcode.alloc.value.index
             << ", "
-            << builtinKindString(opcode.alloc.type)
+            << builtinKindString(opcode.alloc.value.type)
             << std::endl;
         break;
 
+        case ir_opcode_id::LOAD:
+        break;
+/*
         LOAD
         STORE
         STORE_CONST
@@ -71,6 +75,7 @@ std::ostream& operator <<(std::ostream& out, const ir_opcode& opcode) {
         SHR
         SAL
         SAR
+*/
     }
     return out;
 }

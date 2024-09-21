@@ -5,7 +5,7 @@
 
 namespace vc {
 
-typedef std::vector<ir_opcode> opcode_list;
+using ir_opcode_list = std::vector<ir_opcode>;
 
 }
 

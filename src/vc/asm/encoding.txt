@@ -1,0 +1,134 @@
+The primary components involved in encoding are the prefix, opcode, modR/M, SIB (Scale-Index-Base), displacement, and immediate values.
+1. Prefix (Optional)
+
+Both x86 and x64 architectures may start an instruction with prefixes. Prefixes are optional 1-byte values that modify the behavior of the instruction. There are four kinds of prefixes:
+
+    Lock and Repeat Prefixes: Modify the behavior of certain instructions (e.g., LOCK for atomic operations).
+    Segment Override Prefixes: Override the default segment register.
+    Operand Size Prefix: Overrides the default operand size (16-bit/32-bit).
+    Address Size Prefix: Overrides the default addressing size (16-bit/32-bit).
+
+For x64:
+
+    An additional REX prefix is used, which extends register encodings to handle the 64-bit mode. It’s a 1-byte prefix, and its individual bits are used as flags to indicate operand sizes and register extensions.
+        REX is followed by a nibble (0100WRXB), where each bit indicates something:
+            W: 64-bit operand size (if set).
+            R/X/B: Extend the encodings for registers, index, and base.
+
+2. Opcode
+
+The opcode defines the operation being performed (e.g., ADD, MOV, etc.). It usually consists of 1–3 bytes.
+
+    x86: Opcodes can be 1, 2, or 3 bytes long, with many instructions having multiple opcodes for different variations (e.g., operand sizes or addressing modes).
+    x64: Same as x86 but with additional opcode extensions for new instructions introduced in 64-bit mode.
+
+The opcode may encode certain details like the type of instruction, direction (whether data is being moved to or from memory), and the size of operands. In some cases, parts of the opcode can encode specific registers or operations directly.
+3. modR/M (Optional)
+
+The modR/M byte is used to specify the register or memory location involved in the operation. It is usually present when an instruction involves a memory operand or a combination of registers and memory.
+
+It is broken down into three parts:
+
+    mod: Specifies whether the operand is a register or memory.
+    reg: Specifies a register (or an extension of the opcode in some cases).
+    rm: Specifies another register or memory operand.
+
+The modR/M byte can be omitted if the operation uses only implicit registers (like PUSH/POP instructions that implicitly work with the stack).
+
+Example structure:
+
+lua
+
++---+---+---+
+|mod|reg|rm |
++---+---+---+
+
+    mod:
+        00: Direct register or memory access without displacement.
+        01: 8-bit displacement follows.
+        10: 32-bit displacement follows.
+        11: Register-to-register operation.
+
+    reg: Specifies the register involved.
+
+    rm: Specifies either another register or a memory location (depending on the mod field).
+
+4. SIB (Scale-Index-Base) Byte (Optional)
+
+If an instruction uses more complex memory addressing (e.g., using base registers and index registers with scaling), a SIB byte is used. This byte specifies the base register, index register, and scale factor.
+
+SIB byte structure:
+
+diff
+
++---+---+---+
+|ss |index|base|
++---+---+---+
+
+    ss: Scale factor (used to multiply the index register).
+    index: Specifies the index register.
+    base: Specifies the base register.
+
+This byte is only present if the memory operand uses the SIB addressing mode (e.g., [base + index * scale + displacement]).
+5. Displacement (Optional)
+
+The displacement is used when an instruction references a memory location with an offset. The displacement can be 1 byte, 2 bytes, or 4 bytes, depending on the addressing mode.
+
+It is present when:
+
+    A memory address is specified using base + offset.
+    An instruction refers to an absolute memory address.
+
+6. Immediate (Optional)
+
+The immediate value is a constant that is encoded directly in the instruction. For example, in the MOV eax, 0x1234 instruction, the 0x1234 is an immediate value.
+
+    In x86, the size of the immediate value depends on the operand size (16-bit or 32-bit).
+    In x64, the immediate size can also be 64 bits, but instructions that use 64-bit immediates are rare.
+
+Example of Instruction Encoding
+
+Let's break down an example instruction to see how all these parts fit together:
+
+Example (x86): MOV eax, [ebx+4]
+
+    Opcode: The MOV instruction to a register from memory is encoded as 0x8B in x86.
+    modR/M: The modR/M byte is used to specify the register eax (destination) and the memory location [ebx+4] (source). In this case:
+        mod: 01 indicates an 8-bit displacement follows.
+        reg: eax is register code 000.
+        rm: ebx is register code 011. The resulting modR/M byte is 01 000 011 = 0x43.
+    Displacement: The 8-bit displacement 4 is encoded directly as 0x04.
+
+So, the entire instruction would be encoded as:
+
+scss
+
+Opcode (0x8B) | modR/M (0x43) | Displacement (0x04)
+
+Final machine code: 8B 43 04.
+
+Example (x64): MOV rax, [rbx+8]
+
+    REX Prefix: In 64-bit mode, the REX prefix is required to indicate 64-bit operand size. The REX prefix in this case is 0x48.
+    Opcode: The MOV instruction to a register from memory is still 0x8B.
+    modR/M: Similar structure to the x86 example, but the registers are 64-bit.
+        modR/M byte will specify rax and [rbx + 8].
+    Displacement: The displacement 8 will be encoded as 0x08.
+
+So, the entire instruction would be:
+
+scss
+
+REX (0x48) | Opcode (0x8B) | modR/M (0x43) | Displacement (0x08)
+
+Final machine code: 48 8B 43 08.
+Summary of Encoding Steps:
+
+    Prefixes (Optional): Include segment override, operand size, address size, or REX prefixes.
+    Opcode: The operation code representing the instruction.
+    modR/M byte (Optional): Specifies registers and memory access modes.
+    SIB byte (Optional): For more complex memory addressing modes.
+    Displacement (Optional): For memory access with an offset.
+    Immediate (Optional): For constants included directly in the instruction.
+
+In summary, the encoding format varies depending on the instruction, the addressing mode, and the operands involved, but the general structure follows this sequence of optional and required fields. The main difference between x86 and x64 encoding is the introduction of the REX prefix in x64 to handle 64-bit operands and extended registers.
