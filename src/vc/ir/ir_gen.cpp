@@ -4,8 +4,13 @@
 #include <vc/ast/stmt.h>
 #include <vc/ast/expr.h>
 #include <vc/ast/type.h>
-
 namespace vc {
+
+ir_module IRGen::generateModule(ModuleDecl* decl) {
+    ir_module result;
+
+    return result;
+}
 
 void IRGen::generateDeclGroup(DeclGroup* declGroup) {
     for (int i = 0; i < declGroup->entries.size(); i++) {

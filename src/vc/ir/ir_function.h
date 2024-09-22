@@ -5,6 +5,8 @@
 namespace vc {
 
 struct ir_function {
+    std::string name;
+    std::vector<ir_ssa_value> args;
     std::vector<ir_opcode> opcodes;
 };
 

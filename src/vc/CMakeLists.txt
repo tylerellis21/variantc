@@ -52,10 +52,13 @@ set (SRC
     ${SRC_DIR}/ir/ir_function.h
     ${SRC_DIR}/ir/ir_gen.h
     ${SRC_DIR}/ir/ir_gen.cpp
+    ${SRC_DIR}/ir/ir_module.h
     ${SRC_DIR}/ir/ir_opcode.h
     ${SRC_DIR}/ir/ir_opcode.cpp
     ${SRC_DIR}/ir/ir_opcodelist.h
     ${SRC_DIR}/ir/ir_optimizer.h
+    ${SRC_DIR}/ir/ir_printer.h
+    ${SRC_DIR}/ir/ir_printer.cpp
 )
 
 include_directories (${VC_INCLUDE})
