@@ -61,18 +61,27 @@ bool Parser::expectSemi() {
 }
 
 bool Parser::parseName(Name* name, bool fullyQualifiedName) {
-    if (expect(TokenKind::Identifier) == false) return false;
+    // Ensure the first token is an identifier
+    if (!expect(TokenKind::Identifier)) return false;
 
-    while (valid()) {
-        if (current.kind != TokenKind::Identifier) {
-            break;
-        }
+    // Add the first identifier to the name's identifier list
+    name->identifiers.push_back(current);
+    consume();  // Consume the identifier
 
-        name->identifiers.push_back(current);
-        consume();
+    // If fully qualified, continue parsing "::" and additional identifiers
+    while (fullyQualifiedName && valid()) {
+        if (current.kind == TokenKind::ColonColon) {
+            consume();  // Consume '::'
 
-        if (current.kind == TokenKind::ColonColon && fullyQualifiedName) {
+            if (!expect(TokenKind::Identifier)) {
+                return false;  // Error: expected identifier after '::'
+            }
+
+            // Add the next identifier and consume it
+            name->identifiers.push_back(current);
             consume();
+        } else {
+            break;  // No more "::", stop parsing
         }
     }
 

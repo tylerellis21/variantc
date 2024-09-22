@@ -1,0 +1,10 @@
+def add(vec2i lhs, vec2i rhs) vec2i {
+    result.x = lhs.x + rhs.x;
+    result.y = lhs.y + rhs.y;
+    return result;
+}
+
+struct vec2i {
+    i32 x;
+    i32 y;
+}

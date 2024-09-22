@@ -87,7 +87,7 @@ int main(int argc, char **args) {
 
     ir_opcode labelA(ir_label{labelName});
     ir_opcode nop(ir_nop{});
-    ir_opcode allocate(ir_alloc(ir_ssa_value(0, BuiltinKind::Uint32), ir_alloc_type::Heap));
+    ir_opcode allocate(ir_alloc(ir_ssa_value(2, BuiltinKind::Uint32), ir_alloc_type::Heap));
 
     func.opcodes.push_back(labelA);
     func.opcodes.push_back(nop);

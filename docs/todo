@@ -1,6 +1,8 @@
 # TODO
 
 Finish parser
+    named returns
+        VarDecl? instead of return type?
 
 
 Work on IR Generation
