@@ -1,9 +1,0 @@
-def i32::IsNoneZero(i32 i) bool {
-    return i != 0;
-}
-
-def main() void {
-    i32 x = 100;
-
-    bool test = x.IsNoneZero();
-}

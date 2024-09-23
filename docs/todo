@@ -1,4 +1,40 @@
 # TODO
+lang-docs/
+├── language-reference/
+│   ├── functions/
+│   │   ├── operator-overloading.md
+│   ├── control-flow/
+│   │   ├── if-switch.md
+│   │   ├── loops.md
+│   │   └── defer.md
+│   ├── templates/
+│   │   ├── templates.md
+│   │   └── covariant-generic-interfaces.md
+│   ├── concurrency/
+│   │   ├── threads.md
+│   │   ├── atomic.md
+│   │   └── async.md
+│   ├── memory/
+│   │   ├── allocator.md
+│   │   ├── slices.md
+│   │   └── copy-move.md
+│   ├── attributes/
+│   │   ├── attributes.md
+│   │   └── reflection.md
+│   ├── namespaces/
+│   │   └── namespaces.md
+│   └── error-handling/
+│       ├── exceptions.md
+│       ├── syntax-errors.md
+│       └── validation.md
+├── compile-time/
+│   ├── compile-time-execution.md
+│   ├── compiler-settings.md
+│   ├── compile-time-vm.md
+│   └── constexpr.md
+├── advanced-topics/
+│   ├── inline-asm.md
+│   └── calling-conventions.md
 
 Finish parser
     named returns
@@ -6,15 +42,5 @@ Finish parser
 
 
 Work on IR Generation
-
-Work on CPP Generation
-
-'Cascadia Mono', 'Fantasque Sans Mono', 'Source Code Pro', Inconsolata, 'JetBrains Mono', 'Blender Mono I18n', 'IBM 3270 Condensed', 'Input Mono', 'Droid Sans Mono', 'Ubuntu Mono', 'Noto Mono', 'Monoid', 'Terminus (TTF)'
-
-v0.1 will be the base language features
-v0.2 will be templates/generics
-
-lsp support.
-
-constexpr
-consteval
+Work on semantic validation.
+Work on assembly generation.

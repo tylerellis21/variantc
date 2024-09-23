@@ -1,2 +1,0 @@
-// Another neat feature which i think will fit in nicely.
-public delegate void Del(string message);

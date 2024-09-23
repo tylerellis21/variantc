@@ -1,9 +1,0 @@
-Content-Type: text/x-zim-wiki
-Wiki-Format: zim 0.4
-Creation-Date: 2020-08-08T02:12:23-07:00
-
-====== Anonymous Methods ======
---------------------
-Syntax:
-
-Example:

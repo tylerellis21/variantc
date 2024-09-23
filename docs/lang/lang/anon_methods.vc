@@ -1,4 +1,0 @@
-def method() void {
-    
-    def anon() void { }
-}
