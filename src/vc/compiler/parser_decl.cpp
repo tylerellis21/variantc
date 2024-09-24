@@ -313,6 +313,7 @@ bool Parser::parseFunctionDecl(Decl* parentDecl, DeclGroup* declGroup) {
 
     Name functionName;
     Type* functionReturnType = 0;
+    VarDecl* functionNamedReturn = 0;
     Stmt* functionBodyStmt = 0;
     // TemplateDecl* functionTemplateDecl = 0;
 
@@ -333,6 +334,8 @@ bool Parser::parseFunctionDecl(Decl* parentDecl, DeclGroup* declGroup) {
     if (functionName.identifiers.size() == 0)
         if (!parseName(&functionName, false)) return false;
 
+    // TODO(@Tyler): Remove theses redundant arguments...
+    // basically they don't get actually set to a value until later.
     FunctionDecl* functionDecl = new FunctionDecl(
         parentDecl,
         keywordLoc,
@@ -348,27 +351,39 @@ bool Parser::parseFunctionDecl(Decl* parentDecl, DeclGroup* declGroup) {
         if (!parseTemplateDecl(functionDecl, declGroup, &functionTemplateDecl)) return false;
     }
     */
+    // Parse the function arguments.
+    {
+        if (!expectConsume(TokenKind::LParen)) return false;
 
-    if (!expectConsume(TokenKind::LParen)) return false;
+        while (valid()) {
+            if (current.kind == TokenKind::RParen) break;
 
-    while (valid()) {
-        if (current.kind == TokenKind::RParen) break;
+            FunctionArgDecl* functionArgDecl = 0;
+            if (!parseFunctionArgDecl(functionDecl, &functionArgDecl)) return false;
 
-        FunctionArgDecl* functionArgDecl = 0;
-        if (!parseFunctionArgDecl(functionDecl, &functionArgDecl)) return false;
+            functionArgs.push_back(functionArgDecl);
 
-        functionArgs.push_back(functionArgDecl);
+            if (current.kind == TokenKind::Comma) consume();
+            else break;
+        }
 
-        if (current.kind == TokenKind::Comma) consume();
-        else break;
+        if (!expectConsume(TokenKind::RParen)) return false;
     }
 
-    if (!expectConsume(TokenKind::RParen)) return false;
-
     SourceLocation type_start = loc();
+
     if (!parseType(&functionReturnType)) {
         //report_error(lexer->fb, type_start, "function type specifier is missing!\n");
         return false;
+    }
+
+    // Check for a named variable return declaration.
+    if (current.kind == TokenKind::Identifier) {
+        Name returnName;
+        if (!parseName(&returnName, false)) {
+            return false;
+        }
+        functionNamedReturn = new VarDecl(functionDecl, type_start, functionReturnType, returnName, 0);
     }
 
     if (current.kind == TokenKind::LBrace) {
@@ -385,6 +400,7 @@ bool Parser::parseFunctionDecl(Decl* parentDecl, DeclGroup* declGroup) {
     functionDecl->args = functionArgs;
     functionDecl->body = functionBodyStmt;
     functionDecl->returnType = functionReturnType;
+    functionDecl->namedReturnDecl = functionNamedReturn;
 
     declGroup->add(functionDecl);
 

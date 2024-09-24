@@ -49,6 +49,9 @@ void printDecl(Decl* decl, i32 indent) {
             std::cout << "[FunctionDecl] '" << functionDecl->name << "' ReturnType: ";
             printType(functionDecl-> returnType);
             std::cout << std::endl;
+            if (functionDecl->namedReturnDecl) {
+                printDecl(functionDecl->namedReturnDecl, indent + 1);
+            }
             for (int i = 0; i < functionDecl->args.size(); i++) {
                 Decl* functionArgDecl = functionDecl->args[i];
                 printDecl(functionArgDecl, indent + 1);

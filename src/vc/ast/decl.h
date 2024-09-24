@@ -111,6 +111,7 @@ struct FunctionDecl : Decl {
     Name name;
     std::vector<FunctionArgDecl*> args;
     Type* returnType;
+    VarDecl* namedReturnDecl;
     Stmt* body;
     //TemplateDecl* templateDecl;
 
@@ -248,10 +249,10 @@ struct UsingDecl : Decl {
 struct IntegerLiteralExpr;
 
 struct VarDecl : Decl {
-    Type* type;
+    Type* type = 0;
     Name name;
-    Expr* assignment;
-    Expr* bitsize;
+    Expr* assignment = 0;
+    Expr* bitsize = 0;
 
     VarDecl(
         Decl* parent,

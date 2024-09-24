@@ -11,11 +11,21 @@ struct Stmt;
 struct Expr;
 struct Type;
 
+/*
 void printDecl(Decl* decl, i32 indent);
 void printDeclGroup(DeclGroup* declGroup, i32 indent);
 void printStmt(Stmt* stmt, i32 indent);
 void printExpr(Expr* expr, i32 indent);
 void printType(Type* type);
+*/
+
+void printDeclGroup(DeclGroup* declGroup, i32 indent);
+
+void printDecl(Decl* decl, i32 indent);
+void printStmt(Stmt* stmt, i32 indent);
+void printExpr(Expr* expr, i32 indent);
+void printType(Type* type);
+void printIndent(i32 indent, bool isLast);
 
 } // namespace vc
 
