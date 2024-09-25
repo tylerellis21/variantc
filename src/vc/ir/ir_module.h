@@ -10,6 +10,7 @@ struct ir_module {
     std::string name;
     std::vector<ir_ssa_value> globals;
     std::vector<ir_function> functions;
+    ir_string_table string_table;
 };
 
 } // namespace vc

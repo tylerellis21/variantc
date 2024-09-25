@@ -1,4 +1,11 @@
-def add(vec2i lhs, vec2i rhs) vec2i {
+def add(vec2i lhs, vec2i rhs) vec2i result {
+    result.x = lhs.x + rhs.x;
+    result.y = lhs.y + rhs.y;
+    return result;
+}
+
+def add2(vec2i lhs, vec2i rhs) vec2i {
+    vec2i result;
     result.x = lhs.x + rhs.x;
     result.y = lhs.y + rhs.y;
     return result;

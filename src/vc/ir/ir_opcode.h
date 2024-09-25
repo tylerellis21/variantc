@@ -8,6 +8,16 @@
 
 namespace vc {
 
+
+struct ir_string {
+    u64 index;
+    char* ptr;
+};
+
+struct ir_string_table {
+    std::vector<ir_string> strings;
+};
+
 enum class ir_binop_type {
     ADD,
     SUB,
@@ -113,15 +123,15 @@ struct ir_phi {
 };
 
 struct ir_label {
-    const std::string& name;
-    ir_label(const std::string& name) : name(name) {}
+    ir_string name;
+    ir_label(ir_string name) : name(name) {}
 };
 
 struct ir_nop {};
 
 struct ir_jump {
     ir_jump_type jump_type;
-    const std::string& target;
+    std::string target;
 
     ir_jump(ir_jump_type jump_type, const std::string& target)
         : jump_type(jump_type), target(target) {}
@@ -147,8 +157,8 @@ struct ir_unaryop {
 };
 
 struct ir_call {
-    const std::string& name;
-    ir_call(const std::string& name) : name(name) {}
+    ir_string name;
+    ir_call(ir_string name) : name(name) {}
 };
 
 struct ir_ret {};
