@@ -1,34 +1,25 @@
-/*
-    LLTA
-    low level typed assembly
-
-    u8 -> u2048
-
-    i8 -> i2048
-
-    mov
-        register -> register
-        register -> memory
-        memory -> register
-        memory -> memory
-
-        r2r
-        r2m
-        m2m
-        m2r
-
-        r2r 0, 1
-        r2m 0, 0xff
-*/
-
-def add(i32 a, i32 b) i32 {
+def test_add(i32 a, i32 b) i32 {
     return a + b;
 }
 
-def alloc() void {
-    i32 x = 0;
+/*
+def test_add(i32 $0, i32 $1) i32 $3 {
+    $4 = add i32 $0, $1
+    store i32 $4, $3
+    ret
+}
+*/
+
+def test_ref_add(i32* a, i32* b) i32 {
+    return *a + *b;
 }
 
-add(i32 $0, i32 $1):
-
-alloc:
+/*
+def test_ref_add(i32* $0, i32* $1) i32 $3 {
+    $4 = load i32* $0
+    $5 = load i32* $1
+    $6 = add i32 $4, $5
+    store i32 $6, $3
+    ret
+}
+*/

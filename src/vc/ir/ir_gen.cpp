@@ -7,9 +7,8 @@
 namespace vc {
 
 ir_module IRGen::generateModule(ModuleDecl* decl) {
-    ir_module result;
-
-    return result;
+    generateDecl(decl);
+    return current_module;
 }
 
 void IRGen::generateDeclGroup(DeclGroup* declGroup) {
@@ -28,13 +27,21 @@ void IRGen::generateDecl(Decl* decl) {
         case DeclKind::EnumDecl: {
             EnumDecl* enumDecl = static_cast<EnumDecl*>(decl);
         } break;
-
+/*
         case DeclKind::FunctionArgDecl: {
             FunctionArgDecl* functionArgDecl = static_cast<FunctionArgDecl*>(decl);
         } break;
+*/
 
         case DeclKind::FunctionDecl: {
             FunctionDecl* functionDecl = static_cast<FunctionDecl*>(decl);
+
+            for (auto& arg : functionDecl->args) {
+                VarDecl* varDecl = arg->varDecl;
+                //std::vector<ir_ssa_value> test = generate_ssa_storage(varDecl->type);
+            }
+
+            //ir_function ir_func = ir_function{
         } break;
 
         case DeclKind::ImportDecl: {

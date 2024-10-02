@@ -5,12 +5,15 @@ namespace vc {
 
 std::ostream& operator <<(std::ostream& out, const ir_opcode& opcode) {
     switch (opcode.opcodeId) {
+        default:
+            std::cout << "Unhandled opcode id: " << (u64)opcode.opcodeId << std::endl;
+        break;
         case ir_opcode_id::NOP:
             out << "NOP" << std::endl;
         break;
 
         case ir_opcode_id::Label:
-            out << opcode.label.name << ":" << std::endl;
+            out << opcode.label.name.value << ":" << std::endl;
             break;
 
         case ir_opcode_id::CALL:

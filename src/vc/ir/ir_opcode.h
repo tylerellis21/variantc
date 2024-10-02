@@ -5,17 +5,53 @@
 #include <vector>
 #include <vc/types.h>
 #include <vc/basic/builtinkind.h>
+#include <unordered_map>
 
 namespace vc {
 
 
 struct ir_string {
     u64 index;
-    char* ptr;
+    const char* value;
+    ir_string(u64 index, const char* value) : index(index), value(value) { }
 };
 
 struct ir_string_table {
-    std::vector<ir_string> strings;
+    // Vector to store the actual strings
+    std::vector<std::string> table;
+
+    // Hashmap for fast lookups (string -> index)
+    std::unordered_map<std::string, size_t> string_map;
+
+    // Function to add a string, returns the index
+    ir_string add_string(const std::string& str) {
+        // Check if the string is already in the map
+        auto it = string_map.find(str);
+        if (it != string_map.end()) {
+            // If found, return the existing index
+            return ir_string((u64)it->second, table[it->second].c_str());
+        }
+
+        // Otherwise, add the string to the vector
+        table.push_back(str);
+        size_t index = table.size() - 1;
+
+        // Update the map with the new index
+        string_map[str] = index;
+
+        // Return the index of the newly added string
+        return ir_string((u64)index, table[index].c_str());
+    }
+
+    // Function to get a string by its index
+    const std::string& getString(size_t index) const {
+        return table.at(index);
+    }
+
+    // Function to check if a string exists (optional, if you need it)
+    bool contains(const std::string& str) const {
+        return string_map.find(str) != string_map.end();
+    }
 };
 
 enum class ir_binop_type {
@@ -84,7 +120,9 @@ enum class ir_opcode_id {
     ALLOC,
     DEALLOC,
     LOAD,
+    LOAD_REF,
     STORE,
+    STORE_REF,
     STORE_CONST,
     CMP,
     JUMP,
@@ -131,9 +169,9 @@ struct ir_nop {};
 
 struct ir_jump {
     ir_jump_type jump_type;
-    std::string target;
+    ir_string target;
 
-    ir_jump(ir_jump_type jump_type, const std::string& target)
+    ir_jump(ir_jump_type jump_type, ir_string target)
         : jump_type(jump_type), target(target) {}
 };
 
@@ -158,6 +196,8 @@ struct ir_unaryop {
 
 struct ir_call {
     ir_string name;
+    // how to pass arguments?? we can't use std::vector :(
+    // i guess we can manually allocate it... maybe we switch to using std::variant or an inheritence structure?
     ir_call(ir_string name) : name(name) {}
 };
 
@@ -193,11 +233,28 @@ struct ir_load {
         : dest(dest), src(src) {}
 };
 
+struct ir_load_ref {
+    ir_ssa_value src;
+    ir_ssa_value dest;
+
+    ir_load_ref(ir_ssa_value dest, ir_ssa_value src)
+        : dest(dest), src(src) {}
+};
+
 struct ir_store {
     ir_ssa_value src;
     ir_ssa_value dest;
 
     ir_store(ir_ssa_value dest, ir_ssa_value src)
+        : dest(dest), src(src) {}
+};
+
+// since this is in the same form of ir_store, same with ir_load, should we just add a boolean to ir_store and ir_load, eg: boolean is_ref;
+struct ir_store_ref {
+    ir_ssa_value src;
+    ir_ssa_value dest;
+
+    ir_store_ref(ir_ssa_value dest, ir_ssa_value src)
         : dest(dest), src(src) {}
 };
 
@@ -263,6 +320,8 @@ struct ir_opcode {
     ir_opcode(ir_unaryop unaryop) : opcodeId(ir_opcode_id::UNARYOP), unaryop(unaryop) {}
     ir_opcode(ir_phi phi) : opcodeId(ir_opcode_id::PHI), phi(phi) {}
 };
+
+using ir_opcode_list = std::vector<ir_opcode>;
 
 constexpr int IR_OPCODE_SIZE = sizeof(ir_opcode);
 

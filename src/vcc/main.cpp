@@ -14,7 +14,6 @@
 
 #include <vc/ir/ir_gen.h>
 #include <vc/ir/ir_opcode.h>
-#include <vc/ir/ir_opcodelist.h>
 #include <vc/ir/ir_optimizer.h>
 #include <vc/ir/ir_printer.h>
 
@@ -72,34 +71,9 @@ int main(int argc, char **args) {
     std::cout << "ir_opcode size: " << IR_OPCODE_SIZE << std::endl;
 
     ir_module module = irGen.generateModule(moduleDecl);
-    {
-        // TODO: Find the module name?!
-        module.name = "test";
 
-        ir_function func;
-        func.name = "add";
-
-        func.args.push_back(ir_ssa_value{0, BuiltinKind::Int32});
-        func.args.push_back(ir_ssa_value{1, BuiltinKind::Int32});
-
-
-        std::string labelName = "hello";
-        module.string_table.strings.push_back("add");
-        module.string_table.strings.push_back("hello");
-
-        ir_opcode labelA(ir_label{labelName});
-        ir_opcode nop(ir_nop{});
-        ir_opcode allocate(ir_alloc(ir_ssa_value(2, BuiltinKind::Uint32), ir_alloc_type::Heap));
-
-        func.opcodes.push_back(labelA);
-        func.opcodes.push_back(nop);
-        func.opcodes.push_back(allocate);
-
-        module.functions.push_back(func);
-
-        IRPrinter printer;
-        printer.print(module);
-    }
+    IRPrinter printer;
+    printer.print(module);
 
     return 0;
 }
