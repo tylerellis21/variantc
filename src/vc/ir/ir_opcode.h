@@ -9,6 +9,13 @@
 
 namespace vc {
 
+// SSA value structure to represent values and types
+struct ir_ssa_value {
+    u64 index;
+    BuiltinKind type;
+
+    ir_ssa_value(u64 index, BuiltinKind type) : index(index), type(type) {}
+};
 
 struct ir_string {
     u64 index;
@@ -79,7 +86,6 @@ enum class ir_unaryop_type {
     NOT,
 };
 
-// Enum for different jump types
 enum class ir_jump_type {
     JO,     // Jump if overflow
     JNO,    // Jump if not overflow
@@ -131,15 +137,6 @@ enum class ir_opcode_id {
     PHI
 };
 
-// SSA value structure to represent values and types
-struct ir_ssa_value {
-    u64 index;
-    BuiltinKind type;
-
-    ir_ssa_value(u64 index, BuiltinKind type) : index(index), type(type) {}
-};
-
-// Phi node structure for SSA
 struct ir_phi {
     ir_ssa_value result;
     ir_ssa_value lhs;
@@ -326,6 +323,29 @@ using ir_opcode_list = std::vector<ir_opcode>;
 constexpr int IR_OPCODE_SIZE = sizeof(ir_opcode);
 
 std::ostream& operator <<(std::ostream& out, const ir_opcode& opcode);
+
+struct ir_module {
+    std::string name;
+    std::vector<ir_ssa_value> globals;
+    std::vector<ir_function> functions;
+    ir_string_table string_table;
+};
+
+struct ir_function {
+    std::string name;
+    std::vector<ir_ssa_value> args;
+    std::vector<ir_opcode> opcodes;
+};
+
+struct ir_struct {
+    std::string name;
+    std::vector<ir_ssa_value> basic_fields;
+    std::vector<ir_struct> struct_fields;
+};
+
+struct ir_type {
+    // what do we need here?
+};
 
 } // namespace vc
 
