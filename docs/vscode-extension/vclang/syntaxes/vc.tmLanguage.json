@@ -1,0 +1,126 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "Variant C",
+    "patterns": [
+        {
+            "include": "#import"
+        },
+        {
+            "include": "#function"
+        },
+        {
+            "include": "#keywords"
+        },
+        {
+            "include": "#strings"
+        },
+        {
+            "include": "#types"
+        },
+        {
+            "include": "#declarations"
+        },
+        {
+            "include": "#comments"
+        },
+        {
+            "include": "#operators"
+        },
+        {
+            "include": "#numbers"
+        }
+    ],
+    "repository": {
+        "declarations": {
+            "patterns": [
+                {
+                    "name": "storage.type.vc",
+                    "match": "\\b(align|allocator|attribute|interface|static|struct|union|volatile|typedef|class|private|protected|public|readonly|virtual)\\b"
+                }
+            ]
+        },
+        "import": {
+            "patterns": [
+                {
+                    "name": "keyword.control.import.vc",
+                    "match": "\\b(import|export|extern|use|using|namespace|package)\\b"
+                }
+            ]
+        },
+        "function": {
+            "patterns": [
+                {
+                    "name": "keyword.control.function.vc",
+                    "match": "\\b(def|delegate|inline|explicit|implicit|operator|params)\\b"
+                }
+            ]
+        },
+        "keywords": {
+            "patterns": [
+                {
+                    "name": "keyword.control.vc",
+                    "match": "\\b(align|allocator|as|async|atomic|await|base|catch|const|continue|defer|delete|do|else|enum|explicit|false|for|foreach|goto|if|lock|nameof|new|null|operator|return|sizeof|static|switch|then|this|throw|true|try|typeof|while|yield|var|void)\\b"
+                }
+            ]
+        },
+        "types": {
+            "patterns": [
+                {
+                    "name": "storage.type.builtin.vc",
+                    "match": "\\b(null|void|bool|rune|nint|int|uint|nuint|ptr|iptr|i8|i16|i32|i64|i128|i256|i512|i1024|u8|u16|u32|u64|u128|u256|u512|u1024|r8|r16|r32|r64|r128|r256|r512|r1024|f8|f16|f32|f64|f128|f256|f512|f1024|utf8|utf16|utf32)\\b"
+                }
+            ]
+        },
+
+        "strings": {
+            "name": "string.quoted.double.vc",
+            "begin": "\"",
+            "end": "\"",
+            "patterns": [
+                {
+                    "name": "constant.character.escape.vc",
+                    "match": "\\\\."
+                }
+            ]
+        },
+        "comments": {
+            "patterns": [
+                {
+                    "name": "comment.line.double-slash.vc",
+                    "begin": "//",
+                    "end": "$"
+                },
+                {
+                    "name": "comment.block.vc",
+                    "begin": "/\\*",
+                    "end": "\\*/"
+                }
+            ]
+        },
+        "operators": {
+            "patterns": [
+                {
+                    "name": "keyword.operator.arithmetic.vc",
+                    "match": "\\+|-|\\*|\\/|%"
+                },
+                {
+                    "name": "keyword.operator.assignment.vc",
+                    "match": "="
+                },
+                {
+                    "name": "keyword.operator.comparison.vc",
+                    "match": "==|!=|<|>|<=|>="
+                }
+            ]
+        },
+        "numbers": {
+            "patterns": [
+                {
+                    "name": "constant.numeric.vc",
+                    "match": "\\b\\d+(\\.\\d+)?\\b"
+                }
+            ]
+        }
+    },
+    "scopeName": "source.vc"
+}

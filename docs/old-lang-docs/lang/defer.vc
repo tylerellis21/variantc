@@ -3,82 +3,23 @@ attribute B { }
 
 struct align(16) C { }
 
-align
-allocator
-as
-async
-atomic
-attribute
-await
-base
-catch
-class
-const
-continue
-def
-defer
-delegate
-delete
-do
-else
-enum
-explicit
-export
-extern
-false
-for
-foreach
-goto
-if
-implicit
-import
-interface
-lock
-nameof
-namespace
-new
-null
-operator
-package
-params
-private
-protected
-public
-readonly
-return
-sizeof
-static
-struct
-switch
-then
-this
-throw
-true
-try
-typeof
-union
-use
-using
-var
-virtual
-void
-volatile
-while
-yield
-
-def free(void* arg) void {
+def atomic free(void* arg) void {
 }
 
 def test() void {
-    
+
     utf8 str = "test";
-    
+    utf16 str_b;
+    utf32 str_c;
+
     if (a == b) {
-    
+        def another_fun_thing() i32 {
+            return u8(8);
+        }
     }
     else {
 
     }
-    
+
     defer free(a);
 }

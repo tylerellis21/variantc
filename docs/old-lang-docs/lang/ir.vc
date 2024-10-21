@@ -5,11 +5,20 @@ def test() void {
     i32 const_a = 22;
     i32 const_b = 11;
 
+    utf8 a;
+    utf16 b;
+    utf32 c;
+
     i32 x = const_a + const_b;
-   
-    if (x == 0) {
+
+    def test2() void { }
+
+    if x == 0 {
         x = 10;
-    } else x = 20;
+    }
+    else {
+        x = 20;
+    }
 }
 // end
 

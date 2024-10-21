@@ -1,4 +1,22 @@
 # TODO
+
+Get the project compiling again...
+
+Work on IR Generation:
+    - TODO... Write TODO..
+- Start with generating the most basic cases.
+    - a module with one function, no types.
+    -
+
+# TODO at some point
+
+ir_visitor
+ir_printer : ir_visitor
+ast_visitor
+
+
+# Language documenation to work on
+
 lang-docs/
 ├── language-reference/
 │   ├── functions/
@@ -35,12 +53,3 @@ lang-docs/
 ├── advanced-topics/
 │   ├── inline-asm.md
 │   └── calling-conventions.md
-
-Finish parser
-    named returns
-        VarDecl? instead of return type?
-
-
-Work on IR Generation
-Work on semantic validation.
-Work on assembly generation.

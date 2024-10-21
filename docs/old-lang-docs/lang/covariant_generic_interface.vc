@@ -31,7 +31,7 @@ interface ICovariant<out R> { }
 interface IExtCovariant<out R> : ICovariant<R> { }
 
 // Implementing covariant interface.
-class Sample<R> : ICovariant<R> { }
+struct Sample<R> : ICovariant<R> { }
 
 def test(): void {
     ICovariant<Object> iobj = new Sample<Object>();
