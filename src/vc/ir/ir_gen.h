@@ -1,7 +1,7 @@
 #ifndef VC_IR_GEN_H_INCLUDE
 #define VC_IR_GEN_H_INCLUDE
 
-#include <vc/ir/ir_module.h>
+#include <vc/ir/ir_opcode.h>
 
 namespace vc {
 

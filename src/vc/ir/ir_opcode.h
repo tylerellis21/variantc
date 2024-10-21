@@ -6,84 +6,27 @@
 #include <vc/types.h>
 #include <vc/basic/builtinkind.h>
 #include <unordered_map>
+#include <vc/ir/ir_type.h>
 
 namespace vc {
 
-// SSA value structure to represent values and types
-struct ir_ssa_value {
-    u64 index;
-    BuiltinKind type;
-
-    ir_ssa_value(u64 index, BuiltinKind type) : index(index), type(type) {}
-};
-
-struct ir_string {
-    u64 index;
-    const char* value;
-    ir_string(u64 index, const char* value) : index(index), value(value) { }
-};
-
-struct ir_string_table {
-    // Vector to store the actual strings
-    std::vector<std::string> table;
-
-    // Hashmap for fast lookups (string -> index)
-    std::unordered_map<std::string, size_t> string_map;
-
-    // Function to add a string, returns the index
-    ir_string add_string(const std::string& str) {
-        // Check if the string is already in the map
-        auto it = string_map.find(str);
-        if (it != string_map.end()) {
-            // If found, return the existing index
-            return ir_string((u64)it->second, table[it->second].c_str());
-        }
-
-        // Otherwise, add the string to the vector
-        table.push_back(str);
-        size_t index = table.size() - 1;
-
-        // Update the map with the new index
-        string_map[str] = index;
-
-        // Return the index of the newly added string
-        return ir_string((u64)index, table[index].c_str());
-    }
-
-    // Function to get a string by its index
-    const std::string& getString(size_t index) const {
-        return table.at(index);
-    }
-
-    // Function to check if a string exists (optional, if you need it)
-    bool contains(const std::string& str) const {
-        return string_map.find(str) != string_map.end();
-    }
-};
-
-enum class ir_binop_type {
-    ADD,
-    SUB,
-    MUL,
-    DIV,
-    MOD,
-    OR,
-    AND,
-    XOR,
-    ROL,
-    ROR,
-    RCL,
-    RCR,
-    SHL,
-    SHR,
-    SAL,
-    SAR,
-};
-
-enum class ir_unaryop_type {
-    INC,
-    DEC,
-    NOT,
+enum class ir_opcode_id {
+    NOP = 0,
+    Label = 1,
+    CALL,
+    RET,
+    ALLOC,
+    DEALLOC,
+    LOAD,
+    LOAD_REF,
+    STORE,
+    STORE_REF,
+    STORE_CONST,
+    CMP,
+    JUMP,
+    BINOP,
+    UNARYOP,
+    PHI
 };
 
 enum class ir_jump_type {
@@ -118,144 +61,122 @@ enum class ir_jump_type {
     UNCONDITIONAL // For unconditional jumps
 };
 
-enum class ir_opcode_id {
-    NOP = 0,
-    Label = 1,
-    CALL,
-    RET,
-    ALLOC,
-    DEALLOC,
-    LOAD,
-    LOAD_REF,
-    STORE,
-    STORE_REF,
-    STORE_CONST,
-    CMP,
-    JUMP,
-    BINOP,
-    UNARYOP,
-    PHI
+enum class ir_binop_type {
+    ADD,
+    SUB,
+    MUL,
+    DIV,
+    MOD,
+    OR,
+    AND,
+    XOR,
+    ROL,
+    ROR,
+    RCL,
+    RCR,
+    SHL,
+    SHR,
+    SAL,
+    SAR,
 };
 
-struct ir_phi {
-    ir_ssa_value result;
-    ir_ssa_value lhs;
-    ir_ssa_value rhs;
-
-    // Constructor
-    ir_phi(ir_ssa_value result, ir_ssa_value lhs, ir_ssa_value rhs)
-        : result(result), lhs(lhs), rhs(rhs) {}
-
-    // Default constructor and destructor
-    ir_phi() = default;
-    ~ir_phi() = default;
-
-    // Copy and move constructors
-    ir_phi(const ir_phi& other) = default;
-    ir_phi& operator=(const ir_phi& other) = default;
-    ir_phi(ir_phi&& other) noexcept = default;
-    ir_phi& operator=(ir_phi&& other) noexcept = default;
+enum class ir_unaryop_type {
+    INC,
+    DEC,
+    NOT,
 };
 
-struct ir_label {
-    ir_string name;
-    ir_label(ir_string name) : name(name) {}
+struct ir_ssa_value {
+    u64 index;
+    ir_type* type;
+
+    ir_ssa_value(u64 index, ir_type* type)
+        : index(index), type(type) {}
 };
 
-struct ir_nop {};
+struct ir_opcode {
+    ir_opcode_id opcode_id;
 
-struct ir_jump {
-    ir_jump_type jump_type;
-    ir_string target;
+    ir_opcode(ir_opcode_id id)
+        : opcode_id(id) {}
 
-    ir_jump(ir_jump_type jump_type, ir_string target)
-        : jump_type(jump_type), target(target) {}
+    virtual ~ir_opcode() = default;
 };
 
-struct ir_binop {
-    ir_binop_type op_type;
-    ir_ssa_value lhs;
-    ir_ssa_value rhs;
-    ir_ssa_value dest;
-
-    ir_binop(ir_binop_type op_type, ir_ssa_value lhs, ir_ssa_value rhs, ir_ssa_value dest)
-        : op_type(op_type), lhs(lhs), rhs(rhs), dest(dest) {}
+struct ir_nop : public ir_opcode {
+    ir_nop() : ir_opcode(ir_opcode_id::NOP) {}
 };
 
-struct ir_unaryop {
-    ir_unaryop_type op_type;
-    ir_ssa_value src;
-    ir_ssa_value dest;
+struct ir_label : public ir_opcode {
+    std::string name;
 
-    ir_unaryop(ir_unaryop_type op_type, ir_ssa_value src, ir_ssa_value dest)
-        : op_type(op_type), src(src), dest(dest) {}
+    ir_label(const std::string& name)
+        : ir_opcode(ir_opcode_id::Label), name(name) {}
 };
 
-struct ir_call {
-    ir_string name;
-    // how to pass arguments?? we can't use std::vector :(
-    // i guess we can manually allocate it... maybe we switch to using std::variant or an inheritence structure?
-    ir_call(ir_string name) : name(name) {}
+struct ir_call : public ir_opcode {
+    std::string name;
+    std::vector<ir_ssa_value> args;
+
+    ir_call(const std::string& name, const std::vector<ir_ssa_value>& args)
+        : ir_opcode(ir_opcode_id::CALL), name(name), args(args) {}
 };
 
-struct ir_ret {};
-
-// Allocation structure
-enum class ir_alloc_type {
-    Stack,
-    Heap
+// should we return include a ir_type like in clang?
+struct ir_ret : public ir_opcode {
+    ir_ret() : ir_opcode(ir_opcode_id::RET) {}
 };
 
-struct ir_alloc {
+struct ir_alloc : public ir_opcode {
     ir_ssa_value value;
-    ir_alloc_type alloc_type;
 
-    ir_alloc(ir_ssa_value value, ir_alloc_type alloc_type)
-        : value(value), alloc_type(alloc_type) {}
+    ir_alloc(ir_ssa_value value)
+        : ir_opcode(ir_opcode_id::ALLOC), value(value) {}
 };
 
-struct ir_dealloc {
+struct ir_dealloc : public ir_opcode {
     ir_ssa_value value;
 
     ir_dealloc(ir_ssa_value value)
-        : value(value) { }
+        : ir_opcode(ir_opcode_id::DEALLOC), value(value) {}
 };
 
-// Load and store structures
-struct ir_load {
+struct ir_load : public ir_opcode {
     ir_ssa_value src;
     ir_ssa_value dest;
 
     ir_load(ir_ssa_value dest, ir_ssa_value src)
-        : dest(dest), src(src) {}
+        : ir_opcode(ir_opcode_id::LOAD),
+            type(type),
+            dest(dest),
+            src(src) {}
 };
 
-struct ir_load_ref {
+struct ir_load_ref : public ir_opcode {
     ir_ssa_value src;
     ir_ssa_value dest;
 
     ir_load_ref(ir_ssa_value dest, ir_ssa_value src)
-        : dest(dest), src(src) {}
+        : ir_opcode(ir_opcode_id::LOAD_REF), dest(dest), src(src) {}
 };
 
-struct ir_store {
+struct ir_store : public ir_opcode {
     ir_ssa_value src;
     ir_ssa_value dest;
 
     ir_store(ir_ssa_value dest, ir_ssa_value src)
-        : dest(dest), src(src) {}
+        : ir_opcode(ir_opcode_id::STORE), dest(dest), src(src) {}
 };
 
-// since this is in the same form of ir_store, same with ir_load, should we just add a boolean to ir_store and ir_load, eg: boolean is_ref;
-struct ir_store_ref {
+struct ir_store_ref : public ir_opcode {
     ir_ssa_value src;
     ir_ssa_value dest;
 
     ir_store_ref(ir_ssa_value dest, ir_ssa_value src)
-        : dest(dest), src(src) {}
+        : ir_opcode(ir_opcode_id::STORE_REF), dest(dest), src(src) {}
 };
 
-struct ir_store_const {
+struct ir_store_const : public ir_opcode {
     union {
         i64 value_i64;
         u64 value_u64;
@@ -263,62 +184,58 @@ struct ir_store_const {
     ir_ssa_value dest;
 
     ir_store_const(ir_ssa_value dest, u64 value)
-        : dest(dest), value_u64(value) {}
+        : ir_opcode(ir_opcode_id::STORE_CONST), dest(dest), value_u64(value) {}
 
     ir_store_const(ir_ssa_value dest, i64 value)
-        : dest(dest), value_i64(value) {}
+        : ir_opcode(ir_opcode_id::STORE_CONST), dest(dest), value_i64(value) {}
 };
 
-// Comparison structure
-struct ir_cmp {
+struct ir_cmp : public ir_opcode {
     ir_ssa_value dest;
     ir_ssa_value lhs;
     ir_ssa_value rhs;
 
     ir_cmp(ir_ssa_value dest, ir_ssa_value lhs, ir_ssa_value rhs)
-        : dest(dest), lhs(lhs), rhs(rhs) {}
+        : ir_opcode(ir_opcode_id::CMP), dest(dest), lhs(lhs), rhs(rhs) {}
 };
 
-// Opcode structure
-struct ir_opcode {
-    ir_opcode_id opcodeId;
-    union {
-        ir_nop nop;
-        ir_label label;
-        ir_call call;
-        ir_ret ret;
-        ir_alloc alloc;
-        ir_dealloc dealloc;
-        ir_load load;
-        ir_store store;
-        ir_store_const store_const;
-        ir_cmp cmp;
-        ir_jump jump;
-        ir_binop binop;
-        ir_unaryop unaryop;
-        ir_phi phi;
-    };
+struct ir_jump : public ir_opcode {
+    ir_jump_type jump_type;
+    std::string target;
 
-    ir_opcode() {}
-    ~ir_opcode() {}
-
-    ir_opcode(ir_nop nop) : opcodeId(ir_opcode_id::NOP), nop(nop) {}
-    ir_opcode(ir_label label) : opcodeId(ir_opcode_id::Label), label(label) {}
-    ir_opcode(ir_call call) : opcodeId(ir_opcode_id::CALL), call(call) {}
-    ir_opcode(ir_load load) : opcodeId(ir_opcode_id::LOAD), load(load) {}
-    ir_opcode(ir_store store) : opcodeId(ir_opcode_id::STORE), store(store) {}
-    ir_opcode(ir_store_const store_const) : opcodeId(ir_opcode_id::STORE_CONST), store_const(store_const) {}
-    ir_opcode(ir_cmp cmp) : opcodeId(ir_opcode_id::CMP), cmp(cmp) {}
-    ir_opcode(ir_ret ret) : opcodeId(ir_opcode_id::RET), ret(ret) {}
-    ir_opcode(ir_alloc alloc) : opcodeId(ir_opcode_id::ALLOC), alloc(alloc) {}
-    ir_opcode(ir_dealloc dealloc) : opcodeId(ir_opcode_id::DEALLOC), dealloc(dealloc) {}
-    ir_opcode(ir_jump jump) : opcodeId(ir_opcode_id::JUMP), jump(jump) {}
-    ir_opcode(ir_binop binop) : opcodeId(ir_opcode_id::BINOP), binop(binop) {}
-    ir_opcode(ir_unaryop unaryop) : opcodeId(ir_opcode_id::UNARYOP), unaryop(unaryop) {}
-    ir_opcode(ir_phi phi) : opcodeId(ir_opcode_id::PHI), phi(phi) {}
+    ir_jump(ir_jump_type jump_type, const std::string& target)
+        : ir_opcode(ir_opcode_id::JUMP), jump_type(jump_type), target(target) {}
 };
 
-using ir_opcode_list = std::vector<ir_opcode>;
+struct ir_binop : public ir_opcode {
+    ir_binop_type op_type;
+    ir_ssa_value dest;
+    ir_ssa_value lhs;
+    ir_ssa_value rhs;
+
+    ir_binop(ir_binop_type op_type, ir_ssa_value dest, ir_ssa_value lhs, ir_ssa_value rhs)
+        : ir_opcode(ir_opcode_id::BINOP), op_type(op_type), dest(dest), lhs(lhs), rhs(rhs) {}
+};
+
+struct ir_unaryop : public ir_opcode {
+    ir_unaryop_type op_type;
+    ir_ssa_value dest;
+    ir_ssa_value src;
+
+    ir_unaryop(ir_unaryop_type op_type, ir_ssa_value dest, ir_ssa_value src)
+        : ir_opcode(ir_opcode_id::UNARYOP), op_type(op_type), dest(dest), src(src) {}
+};
+
+// PHI node for SSA representation
+struct ir_phi : public ir_opcode {
+    ir_ssa_value dest;
+    std::vector<std::pair<ir_ssa_value, ir_string>> sources; // (value, label)
+
+    ir_phi(ir_ssa_value dest, const std::vector<std::pair<ir_ssa_value, ir_string>>& sources)
+        : ir_opcode(ir_opcode_id::PHI), dest(dest), sources(sources) {}
+};
+
+using ir_opcode_list = std::vector<ir_opcode*>;
 
 constexpr int IR_OPCODE_SIZE = sizeof(ir_opcode);
 
@@ -341,10 +258,6 @@ struct ir_struct {
     std::string name;
     std::vector<ir_ssa_value> basic_fields;
     std::vector<ir_struct> struct_fields;
-};
-
-struct ir_type {
-    // what do we need here?
 };
 
 } // namespace vc
