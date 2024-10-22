@@ -10,16 +10,54 @@
         "Programming Languages"
     ],
     "contributes": {
-        "languages": [{
-            "id": "vc",
-            "aliases": ["Variant C", "vc"],
-            "extensions": [".vc"],
-            "configuration": "./language-configuration.json"
-        }],
-        "grammars": [{
-            "language": "vc",
-            "scopeName": "source.vc",
-            "path": "./syntaxes/vc.tmLanguage.json"
-        }]
+        "languages": [
+            {
+                "id": "vc",
+                "aliases": ["Variant C", "vc"],
+                "extensions": [".vc"],
+                "configuration": "./language-configuration.json"
+            },
+            {
+                "id": "vcir",
+                "aliases": ["Variant C IR", "vcir"],
+                "extensions": [".vcir"],
+                "configuration": "./vcir-language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "vc",
+                "scopeName": "source.vc",
+                "path": "./syntaxes/vc.tmLanguage.json"
+            },
+            {
+                "language": "vcir",
+                "scopeName": "source.vcir",
+                "path": "./syntaxes/vcir.tmLanguage.json"
+            },
+            {
+                "scopeName": "source.vcir.markdown",
+                "path": "./syntaxes/vcir.tmLanguage.json",
+                "embeddedLanguages": {
+                    "vcir": "source.vcir"
+                },
+                "injectTo": [
+                    "text.html.markdown",
+                    "text.md"
+                ]
+            },
+            {
+                "scopeName": "source.vc.markdown",
+                "path": "./syntaxes/vc.tmLanguage.json",
+                "embeddedLanguages": {
+                    "vc": "source.vc",
+                    "vcir": "source.vcir"
+                },
+                "injectTo": [
+                    "text.html.markdown",
+                    "text.md"
+                ]
+            }
+        ]
     }
 }

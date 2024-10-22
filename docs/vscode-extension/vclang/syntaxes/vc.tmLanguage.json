@@ -1,6 +1,8 @@
 {
     "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
     "name": "Variant C",
+    "scopeName": "source.vc",
+    "scope": "source.vc",
     "patterns": [
         {
             "include": "#import"
@@ -121,6 +123,5 @@
                 }
             ]
         }
-    },
-    "scopeName": "source.vc"
+    }
 }

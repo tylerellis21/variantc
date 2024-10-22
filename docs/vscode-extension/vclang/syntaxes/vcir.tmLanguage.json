@@ -1,0 +1,66 @@
+{
+    "scopeName": "source.vcir",
+    "name": "Variant C IR",
+    "scope": "source.vcir",
+    "patterns": [
+        {
+            "name": "comment.line.double-slash.vcir",
+            "match": "//.*$"
+        },
+        {
+            "name": "comment.block.vcir",
+            "begin": "/\\*",
+            "end": "\\*/"
+        },
+        {
+            "name": "keyword.control.flow.vcir",
+            "match": "\\b(break|continue|return|goto|if|else|switch|case|default|do|while|for|foreach)\\b"
+        },
+        {
+            "name": "keyword.declaration.vcir",
+            "match": "\\b(def|const|struct|typedef|enum|union|volatile|static|inline)\\b"
+        },
+        {
+            "name": "keyword.operator.vcir",
+            "match": "\\b(add|sub|mul|div|cmp|binop|unaryop|cast|store|store_const|load|load_ref|store_ref|alloc|dealloc|jump|ret|call|phi|and|or|xor|shl|shr|rol|ror)\\b"
+        },
+        {
+            "name": "keyword.general.vcir",
+            "match": "\\b(align|allocator|as|async|atomic|attribute|await|base|explicit|export|extern|implicit|import|interface|lock|nameof|namespace|new|operator|package|params|sizeof|this|typeof|use|using)\\b"
+        },
+        {
+            "name": "constant.numeric.vcir",
+            "match": "\\b(\\d+|0x[0-9A-Fa-f]+)\\b"
+        },
+        {
+            "name": "storage.type.builtin.vcir",
+            "match": "\\b(null|void|bool|rune|nint|int|uint|nuint|ptr|iptr|i8|i16|i32|i64|i128|i256|i512|i1024|u8|u16|u32|u64|u128|u256|u512|u1024|r8|r16|r32|r64|r128|r256|r512|r1024|f8|f16|f32|f64|f128|f256|f512|f1024|utf8|utf16|utf32)\\b"
+        },
+        {
+            "name": "variable.register.vcir",
+            "match": "\\$\\d+"
+        },
+        {
+            "name": "punctuation.separator.vcir",
+            "match": "[,]"
+        },
+        {
+            "name": "punctuation.separator.colon.vcir",
+            "match": "[:]"
+        },
+        {
+            "name": "punctuation.separator.semicolon.vcir",
+            "match": "[;]"
+        },
+        {
+            "name": "punctuation.bracket.curly.vcir",
+            "match": "[{}]"
+        },
+        {
+            "name": "punctuation.bracket.round.vcir",
+            "match": "[()]"
+        }
+    ],
+    "repository": {}
+}
+
